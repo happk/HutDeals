@@ -138,7 +138,8 @@ def history_row(source: str, recs: list[dict], note: str) -> None:
     dead = sum(1 for r in recs if r.get("m1_success") is False)
     scope = "、".join(f"{k}xxx×{v}" for k, v in
                       sorted(Counter(r["code"][:2] for r in recs).items()))
-    append_history_row({"source": source, "count": len(recs), "alive": alive,
+    append_history_row({"time": dt.datetime.now().strftime("%m-%d %H:%M"),
+                        "source": source, "count": len(recs), "alive": alive,
                         "dead": dead, "scope": scope, "note": note})
 
 
@@ -174,6 +175,7 @@ def cmd_confirm(args) -> int:
         d = step2_of(r, fetcher)
         if d is None:
             continue
+        diff = {}
         # 組分類（cat/groupTitle）更動 → 也算內容變更（2026-09-07；需先於 items 覆寫比對）
         old_items = rec.get("items") or []
         new_items = d.get("items") or []
