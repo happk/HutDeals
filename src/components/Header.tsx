@@ -83,7 +83,7 @@ export default function Header({
   // 載入公告
   useEffect(() => {
     let on = true;
-    fetch(`${import.meta.env.BASE_URL}notices.md`)
+    fetch(`${import.meta.env.BASE_URL}notices.md`, { cache: "no-cache" })
       .then((r) => (r.ok ? r.text() : Promise.reject()))
       .then((md) => {
         if (!on) return;

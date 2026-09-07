@@ -37,16 +37,20 @@ jobs:
       - name: Enrich official coupons
         run: python -m script.site.enrich_official
 
+      # sitemap:讀當日 coupons.js 活躍券重產（順序須在 ingest/enrich 之後）
+      - name: Generate sitemap
+        run: python -m script.site.gen_sitemap
+
       - name: Commit if changed
         id: commit
         run: |
-          if git diff --quiet -- public/coupons.js public/coupons_full.js; then
+          if git diff --quiet -- public/coupons.js public/coupons_full.js public/sitemap.xml; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "no coupon changes"
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add public/coupons.js public/coupons_full.js
+            git add public/coupons.js public/coupons_full.js public/sitemap.xml
             git commit -m "daily update coupon information ($(date -u +%F))"
             git push
             echo "changed=true" >> "$GITHUB_OUTPUT"
