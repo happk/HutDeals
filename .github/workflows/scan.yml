@@ -167,5 +167,7 @@ jobs:
       - env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run update.yml --repo "$GITHUB_REPOSITORY"
-          echo "scan 成功，已觸發 update.yml"
+          # repository_dispatch 可用 GITHUB_TOKEN 觸發(workflow_run 需 PAT, 故用 dispatch)
+          gh api -X POST "repos/$GITHUB_REPOSITORY/dispatches" \
+            -f event_type=scan-complete -f "client_payload[from]=scan"
+          echo "scan 成功，已 dispatch scan-complete"

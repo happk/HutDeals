@@ -1,7 +1,9 @@
 name: Daily coupon update
 
 on:
-  # 由 scan.yml 三工成功後 gh workflow run 觸發；也可手動 workflow_dispatch
+  # scan 成功後 repository_dispatch(scan-complete) 觸發；也可手動 workflow_dispatch
+  repository_dispatch:
+    types: [scan-complete]
   workflow_dispatch:
 
 permissions:
@@ -35,20 +37,16 @@ jobs:
       - name: Enrich official coupons
         run: python -m script.site.enrich_official
 
-      # 產生 sitemap.xml(主站 + 各券深連結)
-      - name: Generate sitemap
-        run: python -m script.site.gen_sitemap
-
       - name: Commit if changed
         id: commit
         run: |
-          if git diff --quiet -- public/coupons.js public/coupons_full.js public/sitemap.xml; then
+          if git diff --quiet -- public/coupons.js public/coupons_full.js; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "no coupon changes"
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add public/coupons.js public/coupons_full.js public/sitemap.xml
+            git add public/coupons.js public/coupons_full.js
             git commit -m "daily update coupon information ($(date -u +%F))"
             git push
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -77,5 +75,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run deploy-pages.yml --repo "$GITHUB_REPOSITORY"
-          echo "update 成功，已觸發 deploy-pages.yml"
+          gh api -X POST "repos/$GITHUB_REPOSITORY/dispatches" \
+            -f event_type=update-complete -f "client_payload[from]=update"
+          echo "update 成功，已 dispatch update-complete"

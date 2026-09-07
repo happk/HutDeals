@@ -3,7 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  # update 成功後 gh workflow run 觸發(鏈式)；也可手動
+  # update 成功後 repository_dispatch(update-complete) 觸發(鏈式)；也可手動
+  repository_dispatch:
+    types: [update-complete]
   workflow_dispatch:
 
 permissions:
