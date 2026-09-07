@@ -7,25 +7,20 @@
 
 ```mermaid
 flowchart LR
-  subgraph 每日CI["每日 CI（update.yml，台灣 00:30）"]
-    OFF["官網 promotions 頁<br/>(plu/dgt 列表)"] --> BUILD["build_coupons.py<br/>解析→合併<br/>(60天 offline 規則)"]
-    STATE[("data/scan_state.json<br/>碼池(活/死/空)")] --> INGEST["ingest_external.py<br/>官網驗證外部碼併入<br/>(source=verified-external<br/>官網優先)"]
+  subgraph 每日CI["每日鏈式 workflow（台灣 01:11 scan 起頭）"]
+    SCAN["scan.yml(01:11)<br/>gate→confirm→explore→sample<br/>掃號+歸檔"] -->|"成功 dispatch"| UPDATE["update.yml<br/>build/ingest/enrich/sitemap"]
+    UPDATE -->|"成功 dispatch"| DEPLOY["deploy-pages.yml<br/>npm build → Pages"]
+  end
+
+  subgraph 資料流["資料流"]
+    OFF["官網 promotions 頁"] --> BUILD["build_coupons.py<br/>解析→合併"]
+    STATE[("data/scan_state.json<br/>碼池(活/死/空)")] --> INGEST["ingest_external.py<br/>外部碼併入"]
     BUILD --> INGEST
-    INGEST --> ENRICH["enrich_official.py<br/>官方碼 step_2 補全<br/>(通路/原價/cno直連/items)"]
+    INGEST --> ENRICH["enrich_official.py<br/>官方碼補全"]
     ENRICH --> OUT[("public/coupons.js")]
-    ENRICH --> FULL[("public/coupons_full.js<br/>admin 全量")]
     OUT --> PAGES["GitHub Pages"]
   end
-
-  subgraph 掃號線["掃號線（資料源）"]
-    DUAL["每日三工 daily.py<br/>confirm/explore/sample"] --> STATE
-    STATE --> ARCH["scan_archive.py<br/>自動歸檔 scan-history/<br/>coverage-map"]
-  end
-
-  subgraph 前端
-    OUT --> SITE["React 站<br/>搜尋/篩選/收藏/詳情"]
-    FULL --> ADMIN["admin.html<br/>全量/統計/爬取進度"]
-  end
+  UPDATE -.更新.-> STATE
 ```
 
 ## 2. 碼狀態機（三態）
@@ -40,16 +35,21 @@ stateDiagram-v2
     空號 --> 活 : 掃到新發行
 ```
 
-## 3. 各 CI / 腳本職責
+## 3. 各 CI / 腳本職責（鏈式，2026-09-08）
 
 | 觸發 | 腳本 | 職責 |
 |---|---|---|
-| 每日 00:30（update.yml） | `site.build_coupons` | 官網列表 → coupons.js 本體 |
+| 每日 01:11（scan.yml cron 起頭） | `scan.daily confirm`（gate job 先檢查無 open 失敗 issue） | 現有碼死活＋內容更動確認；死碼 dead_since 滿 7 天→空號 |
+| 〃 串行 | `scan.daily explore` | 16/26 號段 M1 普查，新活碼自動入庫 |
+| 〃 串行 | `scan.daily sample` | 潛在未知號段抽樣（2026-09-08 起減半；命中→admin 警告） |
+| scan 成功 dispatch | `site.build_coupons`（update.yml） | 官網列表 → coupons.js 本體 |
 | 〃 | `site.ingest_external` | scan_state 活碼 → coupons.js（外部碼） |
-| 〃 | `site.enrich_official` | 官方碼 step_2 補全（orderflow 選單版 items；只補缺不覆蓋） |
-| 每日（scan.yml，三順行 job） | `scan.daily confirm` | 現有碼死活＋內容更動確認；死碼 dead_since 滿 7 天→空號 |
-| 〃 | `scan.daily explore` | 16/26 號段 M1 普查，新活碼自動入庫 |
-| 〃 | `scan.daily sample` | 潛在未知號段抽樣（含 15/25 防長期券；命中→admin 警告） |
+| 〃 | `site.enrich_official` | 官方碼 step_2 補全（只補缺不覆蓋） |
+| 〃 | `site.gen_sitemap` | 產 sitemap.xml（主站+券深連結） |
+| update 成功 dispatch | `deploy-pages.yml` | npm build → GitHub Pages（push 亦觸發） |
+
+> 失敗處理：任一步失敗 → 開 `scan-failed`/`scrape-failed` issue → 隔日 gate 見 open issue 即禁掃（防污染）。
+> update/deploy 無固定 cron，完全依賴 scan 成功 dispatch（或手動 workflow_dispatch）。
 
 ## 4. 禮節節奏
 

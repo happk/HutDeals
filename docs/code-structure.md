@@ -51,24 +51,23 @@ script/
 `parse-rules.md`、`refresh_meal_parse.py`、`test_parse_meal_items.py`。
 新 items schema 見 `docs/items-schema.md`。
 
-另 `archive/tool/` 收納一次性分析/驗證腳本（probe_* 等，含 index.md 說明）。
-
 ## 執行方式（套件化後統一）
 
 - 所有腳本一律 **`python -m script.<區>.<模組>`**（例：`python -m script.site.build_coupons`）
 - 不再 `python script/xxx.py`、不再 `sys.path.insert` 土法 import
 - 測試：`python -m unittest discover -s script/support/tests -v`
 
-## CI 對應（誰跑誰）
+## CI 對應（誰跑誰，鏈式 2026-09-08）
 
-| Workflow | cron | 執行的模組 |
+| Workflow | 觸發 | 執行的模組 |
 |---|---|---|
-| scan.yml | 每日 17:30 UTC（三順行 job） | `scan.daily confirm` → `scan.daily explore` → `scan.daily sample` |
-| update.yml | 每日 16:30 UTC | `site.build_coupons` → `site.ingest_external` → `site.enrich_official` |
-| deploy-pages.yml | push main | npm（無 python） |
+| scan.yml | 每日 cron 台灣 01:11 + gate（無 open 失敗 issue 才跑）；手動 dispatch | `scan.daily confirm` → `explore` → `sample`（串行，各 job 自行 commit） |
+| update.yml | scan 成功 repository_dispatch；手動 dispatch（**無固定 cron**） | `site.build_coupons` → `ingest_external` → `enrich_official` → `gen_sitemap` |
+| deploy-pages.yml | push main + update 成功 repository_dispatch | npm（無 python） |
 
-> 註：scan.yml/update.yml 有 setup-node——orderflow session 流程用 node 執行
-> 選單版頁面 JS 抽結構變數（extract_js.cjs）。
+> 鏈式：scan 三工全成功 → dispatch `scan-complete` → update；update 成功 → dispatch `update-complete` → deploy。
+> 任一步失敗 → 開 `scan-failed`/`scrape-failed` issue → 隔日 scan gate 見 open issue 即禁掃。
+> scan.yml/update.yml 有 setup-node——orderflow session 流程用 node 執行選單版頁面 JS（extract_js.cjs）。
 
 ## 命名規約
 
