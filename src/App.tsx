@@ -191,7 +191,7 @@ export default function App() {
               優惠，一頁看完
             </h1>
             <p className="mt-1 text-[15px] text-slate-500 dark:text-slate-400">
-              每日自動抓取必勝客官網並驗證外部聯名碼；代碼點一下即複製。
+              每天蒐羅必勝客優惠資訊；代碼點一下即複製。
             </p>
           </div>
         </div>

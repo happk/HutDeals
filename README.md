@@ -1,6 +1,10 @@
 # HutDeals — 台灣必勝客優惠整理
 
-每日自動抓取[必勝客官網](https://www.pizzahut.com.tw/promotions/?mode=cpSch&type=plu)優惠與官網驗證的聯名/季節優惠碼，整理成可搜尋、篩選、排序、收藏的靜態網站。非官方專案；資料皆經官網頁面或其訂餐驗證端點確認。
+網站: https://happk.github.io/HutDeals/
+
+每天自動蒐集[必勝客官網](https://www.pizzahut.com.tw/promotions/?mode=cpSch&type=plu)優惠與官網驗證的聯名/季節優惠碼，整理成可搜尋、篩選、排序、收藏的靜態網站。
+
+※ 非官方專案；資料皆經官網頁面或其訂餐驗證端點確認。
 
 ## 架構
 
@@ -18,12 +22,12 @@ src/                           React + Vite + TS + Tailwind 前端
 
 完整代碼結構見 `docs/code-structure.md`；資料流見 `docs/workflow.md`。
 
-資料只進不出：爬蟲輸出靜態 `public/coupons.js`(`window.HUTDEALS_COUPONS`)，前端直接載入，無後端。
+資料獲取後輸出靜態 `public/coupons.js`(`window.HUTDEALS_COUPONS`)，前端直接載入，無後端。
 
 ## 開發
 
 ```bash
-# 爬蟲(Python 3.12, stdlib 零依賴, 套件化後用 python -m)
+# 資料獲取(Python 3.12, stdlib 零依賴, 套件化後用 python -m)
 python -m script.site.build_coupons
 python -m unittest discover -s script/support/tests
 
@@ -36,4 +40,5 @@ npm test         # vitest
 
 ## 聲明
 
-非必勝客官方網站；資料來源為必勝客官網公開頁面與官網訂餐驗證端點回傳。價格與供應以官網為準，商標歸屬各權利人。
+非必勝客官方網站；資料來源為必勝客官網公開頁面與官網訂餐驗證端點回傳。
+價格與供應以官網為準，商標歸屬各權利人。

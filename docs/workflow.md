@@ -51,10 +51,24 @@ stateDiagram-v2
 > 失敗處理：任一步失敗 → 開 `scan-failed`/`scrape-failed` issue → 隔日 gate 見 open issue 即禁掃（防污染）。
 > update/deploy 無固定 cron，完全依賴 scan 成功 dispatch（或手動 workflow_dispatch）。
 
-## 4. 禮節節奏
 
-掃號對官網驗證端點請求遵守節奏（`lib/pacing`）：sleep + 隨機浮動、每 N 發中場休息、
-換號段休息。熔斷：429/403 立即停、傳輸失敗記 unknown 不算死。
+
+- 每日更新的 comment 格式
+
+  | Workflow         | commit message                               | 範例（今天）                                 |
+  | ---------------- | -------------------------------------------- | -------------------------------------------- |
+  | scan.yml confirm | daily scan confirm (YYYY-MM-DD)              | daily scan confirm (2026-09-08)              |
+  | scan.yml explore | daily scan explore (YYYY-MM-DD)              | daily scan explore (2026-09-08)              |
+  | scan.yml sample  | daily scan sample (YYYY-MM-DD)               | daily scan sample (2026-09-08)               |
+  | update.yml       | daily update coupon information (YYYY-MM-DD) | daily update coupon information (2026-09-08) |
+
+
+
+## 4. 請求節奏
+
+掃號對官網驗證端點請求遵守節奏（`lib/pacing`）：sleep + 隨機浮動、每 N 發中場休息、換號段休息。
+
+熔斷：429/403 立即停、傳輸失敗記 unknown 不算死。
 
 ## 5. items 來源（orderflow）
 

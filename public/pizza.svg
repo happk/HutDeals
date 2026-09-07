@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#e8a33d" />
+  <circle cx="50" cy="50" r="40" fill="#f6b73c" />
+  <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(142,15,28,.18)" stroke-width="1.5" />
+  <line x1="50" y1="10" x2="50" y2="90" stroke="rgba(142,15,28,.10)" stroke-width="1.5" />
+  <line x1="10" y1="50" x2="90" y2="50" stroke="rgba(142,15,28,.10)" stroke-width="1.5" />
+  <line x1="21.7" y1="21.7" x2="78.3" y2="78.3" stroke="rgba(142,15,28,.10)" stroke-width="1.5" />
+  <line x1="78.3" y1="21.7" x2="21.7" y2="78.3" stroke="rgba(142,15,28,.10)" stroke-width="1.5" />
+  <circle cx="50" cy="30" r="6" fill="#d7182a" />
+  <circle cx="67" cy="43" r="6" fill="#d7182a" />
+  <circle cx="60" cy="66" r="6" fill="#d7182a" />
+  <circle cx="36" cy="60" r="5.4" fill="#d7182a" />
+  <circle cx="30" cy="36" r="5" fill="#d7182a" />
+  <circle cx="43" cy="47" r="4.2" fill="#b3121f" />
+  <ellipse cx="57" cy="55" rx="3.4" ry="2.2" fill="#4f9153" transform="rotate(30 57 55)" />
+  <ellipse cx="38" cy="75" rx="3.4" ry="2.2" fill="#4f9153" transform="rotate(-20 38 75)" />
+  <ellipse cx="73" cy="27" rx="3.2" ry="2" fill="#4f9153" transform="rotate(60 73 27)" />
+</svg>
