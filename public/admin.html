@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>營運後台 ｜ HutDeals</title>
+<meta name="robots" content="noindex">
+<!--
+  HutDeals admin（2-3）：純靜態分頁,零後端零依賴。
+  資料源 = coupons_full.js（build_coupons.py / ingest_external.py 每日寫出,
+  全量含 offline + 統計 + 掃號摘要）。主站 index.html 不連到此頁,網址手打進入。
+-->
+<style>
+  :root {
+    --red: #d7182a;
+    --ink: #1c1917;
+    --muted: #78716c;
+    --line: #e7e5e4;
+    --bg: #fafaf9;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0 16px 48px;
+    font-family: system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    background: var(--bg); color: var(--ink);
+  }
+  header {
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    padding: 20px 0 8px;
+  }
+  header h1 { font-size: 20px; margin: 0; }
+  header h1 a { color: var(--red); text-decoration: none; }
+  header .sub { color: var(--muted); font-size: 12px; }
+  nav { display: flex; gap: 4px; border-bottom: 2px solid var(--line); margin: 12px 0 16px; }
+  nav button {
+    border: none; background: none; padding: 8px 14px; font-size: 14px;
+    color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
+    margin-bottom: -2px; font-family: inherit;
+  }
+  nav button[aria-selected="true"] {
+    color: var(--red); font-weight: 600; border-bottom-color: var(--red);
+  }
+  .cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+    padding: 12px 16px; min-width: 120px;
+  }
+  .stat .num { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .stat .lbl { font-size: 12px; color: var(--muted); }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td.wrap { white-space: normal; }
+  th { color: var(--muted); font-weight: 500; position: sticky; top: 0; background: var(--card); }
+  tr.offline td { color: var(--muted); background: #f5f5f4; }
+  .code { font-family: ui-monospace, Consolas, monospace; font-weight: 600; }
+  .pill { border-radius: 999px; padding: 1px 8px; font-size: 11px; }
+  .pill.active { background: #dcfce7; color: #166534; }
+  .pill.offline { background: #e7e5e4; color: #57534e; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 13px; }
+  .bar-row .bar-label { width: 96px; text-align: right; color: var(--muted); flex-shrink: 0; }
+  .bar-row .bar-track { flex: 1; background: #f5f5f4; border-radius: 4px; }
+  .bar-row .bar-fill { display: block; height: 14px; border-radius: 4px; background: var(--red); opacity: .85; }
+  .bar-row .bar-num { width: 40px; font-variant-numeric: tabular-nums; }
+  .toolbar { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+  .toolbar select, .toolbar input {
+    padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; font-family: inherit;
+  }
+  .warn { background: #fef3c7; color: #92400e; padding: 10px 14px; border-radius: 8px; font-size: 13px; }
+  .meta-line { color: var(--muted); font-size: 12px; margin: 6px 0; }
+  h2.sec { font-size: 14px; margin: 18px 0 8px; color: var(--muted); font-weight: 600; }
+
+  /* ---- 圖表視覺語言（HutDeals 自有風格:墨軸+細格線+品牌紅/驗證綠）---- */
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .chart-grid { grid-template-columns: 1fr; } }
+  .chart-panel svg { width: 100%; height: auto; display: block; font-family: inherit; }
+  .ct-grid     { stroke: #e7e5e4; stroke-width: 1; }
+  .ct-zero     { stroke: #a8a29e; stroke-width: 1.5; }
+  .ct-axis-txt { fill: #78716c; font-size: 10px; font-variant-numeric: tabular-nums; }
+  .ct-cap      { fill: #a8a29e; font-size: 10px; }
+  .ct-official { fill: #d7182a; fill-opacity: .72; }
+  .ct-official:hover { fill-opacity: 1; }
+  .ct-external { fill: #059669; fill-opacity: .6; }
+  .ct-external:hover { fill-opacity: 1; }
+  .ct-bar      { fill: #d7182a; fill-opacity: .88; }
+  .ct-bar:hover { fill-opacity: 1; }
+  .ct-bar-val  { fill: #44403c; font-size: 10px; font-variant-numeric: tabular-nums; }
+  .ct-area     { fill: #d7182a; fill-opacity: .12; }
+  .ct-line     { fill: none; stroke: #d7182a; stroke-width: 2; }
+  .ct-dot      { fill: #d7182a; }
+  .legend      { display: flex; gap: 14px; font-size: 11px; color: #57534e; margin: 2px 0 6px; }
+  .legend i    { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 4px; }
+  .alert {
+    border: 1px solid; border-radius: 8px; padding: 10px 14px; font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .alert b { display: block; margin-bottom: 4px; }
+  .alert ul { margin: 0; padding-left: 18px; }
+  .alert.red    { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
+  .alert.amber  { border-color: #fde68a; background: #fffbeb; color: #92400e; }
+  .alert.green  { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
+  .alert.slate  { border-color: #e7e5e4; background: #f5f5f4; color: #44403c; }
+</style>
+</head>
+<body>
+<header>
+  <h1><a href="./">HutDeals</a> 營運後台</h1>
+  <span class="sub">靜態頁 · 資料每日由 GitHub Actions 更新 · <span id="last-update"></span></span>
+</header>
+
+<nav role="tablist" aria-label="後台分頁">
+  <button role="tab" aria-selected="true" data-tab="all">全量券</button>
+  <button role="tab" aria-selected="false" data-tab="stats">統計</button>
+  <button role="tab" aria-selected="false" data-tab="scan">爬取進度</button>
+</nav>
+
+<div id="no-data" class="warn" hidden>
+  尚未載入 <code>coupons_full.js</code>——每日 build（build_coupons.py → ingest_external.py）
+  跑過一次後會自動產出。本地預覽可先跑 <code>python -m script.site.build_coupons</code>。
+</div>
+
+<main id="app" hidden>
+  <!-- 分頁 1：全量券 -->
+  <section id="tab-all" role="tabpanel">
+    <div class="toolbar">
+      <label>狀態
+        <select id="f-status">
+          <option value="">全部</option>
+          <option value="active">active</option>
+          <option value="offline">offline</option>
+        </select>
+      </label>
+      <label>來源
+        <select id="f-source">
+          <option value="">全部</option>
+          <option value="official">official</option>
+          <option value="verified-external">verified-external</option>
+        </select>
+      </label>
+      <input id="f-q" type="search" placeholder="搜尋代碼/品名">
+      <span class="meta-line" id="all-count"></span>
+    </div>
+    <div class="panel" style="overflow:auto; max-height: 70vh;">
+      <table>
+        <thead>
+          <tr>
+            <th>代碼</th><th>品名</th><th>價格</th><th>狀態</th><th>來源</th>
+            <th>聯名方</th><th>firstSeen</th><th>lastSeen</th><th>offlineSince</th>
+          </tr>
+        </thead>
+        <tbody id="all-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 分頁 2：統計 -->
+  <section id="tab-stats" role="tabpanel" hidden>
+    <div class="cards" id="stat-cards"></div>
+    <p class="meta-line">以下圖表由 coupons_full.js 原始資料即時繪製的手繪 SVG,無圖檔、無外部依賴。圖表語言:HutDeals 紅=官方、綠=外部驗證碼。</p>
+
+    <h2 class="sec">折扣率 × 價格 散點（有原價資訊的券;每點=一張券,懸停看明細）</h2>
+    <div class="panel chart-panel"><svg id="chart-scatter" role="img" aria-label="折扣率與價格散點圖"></svg></div>
+
+    <div class="chart-grid">
+      <div>
+        <h2 class="sec">價格直方（active 有價）</h2>
+        <div class="panel chart-panel"><svg id="chart-hist" role="img" aria-label="價格直方圖"></svg></div>
+      </div>
+      <div>
+        <h2 class="sec">通路組成（active）</h2>
+        <div class="panel chart-panel donut-wrap"><svg id="chart-donut" role="img" aria-label="通路組成環圈圖"></svg></div>
+      </div>
+    </div>
+
+    <h2 class="sec">每日入庫趨勢（firstSeen）</h2>
+    <div class="panel chart-panel"><svg id="chart-intake" role="img" aria-label="每日入庫趨勢圖"></svg></div>
+
+    <div class="chart-grid">
+      <div>
+        <h2 class="sec">聯名方碼數 Top 10（外部驗證碼）</h2>
+        <div class="panel" id="stat-partner"></div>
+      </div>
+      <div>
+        <h2 class="sec">標籤 Top 12（全量）</h2>
+        <div class="panel" id="stat-tags"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 分頁 3：爬取進度 -->
+  <section id="tab-scan" role="tabpanel" hidden>
+    <div id="scan-alerts"></div>
+    <h2 class="sec">掃號池（data/scan_state.json 彙總）</h2>
+    <div id="scan-cards" class="cards"></div>
+    <div id="scan-empty" class="meta-line" hidden>尚無掃號摘要（coupons_full.js 的 scan 欄為 null）。</div>
+    <h2 class="sec">官網每日 build</h2>
+    <div class="panel" id="build-info"></div>
+  </section>
+</main>
+
+<script src="coupons_full.js"></script>
+<script>
+(function () {
+  "use strict";
+  var FULL = window.HUTDEALS_FULL || null;
+  var app = document.getElementById("app");
+  var noData = document.getElementById("no-data");
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  if (!FULL || !Array.isArray(FULL.coupon_list)) {
+    noData.hidden = false;
+    bindTabs(); // 分頁仍可點,內容區留空
+    return;
+  }
+  app.hidden = false;
+  document.getElementById("last-update").textContent = "資料更新 " + (FULL.last_update || "—");
+
+  /* ---- 分頁 1：全量券 ---- */
+  var rows = FULL.coupon_list;
+  function renderAll() {
+    var st = document.getElementById("f-status").value;
+    var src = document.getElementById("f-source").value;
+    var q = document.getElementById("f-q").value.trim().toLowerCase();
+    var body = document.getElementById("all-body");
+    var shown = 0;
+    var html = rows.filter(function (c) {
+      if (st && c.status !== st) return false;
+      if (src && c.source !== src) return false;
+      if (q && (c.name + " " + (c.code || "")).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    }).map(function (c) {
+      shown++;
+      return "<tr" + (c.status === "offline" ? ' class="offline"' : "") + ">"
+        + "<td class='code'>" + esc(c.code || c.key) + "</td>"
+        + "<td class='wrap'>" + esc(c.name) + "</td>"
+        + "<td>" + (c.price != null ? "$" + esc(c.price) : "—") + "</td>"
+        + "<td><span class='pill " + esc(c.status) + "'>" + esc(c.status) + "</span></td>"
+        + "<td>" + esc(c.source || "official") + "</td>"
+        + "<td>" + esc(c.partner || "—") + "</td>"
+        + "<td>" + esc(c.firstSeen) + "</td>"
+        + "<td>" + esc(c.lastSeen) + "</td>"
+        + "<td>" + esc(c.offlineSince || "—") + "</td></tr>";
+    }).join("");
+    body.innerHTML = html || "<tr><td colspan='9'>無符合資料</td></tr>";
+    document.getElementById("all-count").textContent = "顯示 " + shown + " / " + rows.length + " 筆";
+  }
+  ["f-status", "f-source"].forEach(function (id) {
+    document.getElementById(id).addEventListener("change", renderAll);
+  });
+  document.getElementById("f-q").addEventListener("input", renderAll);
+  renderAll();
+
+  /* ---- 分頁 2：統計（手繪 SVG,對原始資料即時繪製）---- */
+  function statCard(num, lbl) {
+    return "<div class='stat'><div class='num'>" + num + "</div><div class='lbl'>" + esc(lbl) + "</div></div>";
+  }
+  var active = rows.filter(function (c) { return c.status === "active"; });
+  var offline = rows.filter(function (c) { return c.status === "offline"; });
+  var ext = rows.filter(function (c) { return c.source === "verified-external"; });
+  document.getElementById("stat-cards").innerHTML =
+    statCard(rows.length, "全量券") + statCard(active.length, "active")
+    + statCard(offline.length, "offline") + statCard(ext.length, "外部碼(聯名)");
+
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function drawInto(id, w, h, build) {
+    var svg = document.getElementById(id);
+    svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+    build(svg, w, h);
+  }
+  function hoverTip(node, tip) {
+    node.appendChild(el("title", {}, tip));
+    return node;
+  }
+
+  /* 1) 散點:折扣率 × 價格(主視覺)。priceNote「原價$NNN」→ msrp。 */
+  (function () {
+    var W = 880, H = 320, L = 52, R = 14, T = 12, B = 34, YMAX = 800;
+    var pts = [];
+    rows.forEach(function (c) {
+      if (c.price == null || !c.priceNote) return;
+      var m = /原價\$(\d+)/.exec(c.priceNote);
+      if (!m || !+m[1]) return;
+      var msrp = +m[1];
+      if (c.price > msrp) return; // 價>原價的髒資料不上圖
+      pts.push({ d: c.price / msrp, p: c.price, c: c.code || c.key, n: c.name, msrp: msrp,
+                 src: c.source === "verified-external" });
+    });
+    drawInto("chart-scatter", W, H, function (svg) {
+      var X = function (d) { return L + d * (W - L - R); };
+      var Y = function (p) { return H - B - (p / YMAX) * (H - B - T); };
+      for (var g = 0; g <= 10; g++) {
+        var gx = g / 10;
+        svg.appendChild(el("line", { x1: X(gx), y1: T, x2: X(gx), y2: H - B, "class": "ct-grid" }));
+        svg.appendChild(el("text", { x: X(gx), y: H - B + 14, "text-anchor": "middle", "class": "ct-axis-txt" }, g * 10 + "%"));
+      }
+      for (var py = 0; py <= YMAX; py += 100) {
+        svg.appendChild(el("line", { x1: L, y1: Y(py), x2: W - R, y2: Y(py), "class": py ? "ct-grid" : "ct-zero" }));
+        svg.appendChild(el("text", { x: L - 8, y: Y(py) + 3.5, "text-anchor": "end", "class": "ct-axis-txt" }, "$" + py));
+      }
+      svg.appendChild(el("text", { x: W / 2, y: H - 4, "text-anchor": "middle", "class": "ct-cap" },
+        "折扣率(售價/原價) — n=" + pts.length + "（無原價資訊的券不在圖上）"));
+      pts.forEach(function (q) {
+        svg.appendChild(hoverTip(
+          el("circle", { cx: X(q.d), cy: Y(q.p), r: 4.2, "class": q.src ? "ct-external" : "ct-official" }),
+          q.c + " " + q.n + "｜$" + q.p + " / 原價$" + q.msrp + "（" + Math.round(q.d * 100) + "%折）｜" + (q.src ? "外部驗證碼" : "官方")));
+      });
+    });
+  })();
+
+  /* 2) 價格直方（縱向柱） */
+  (function () {
+    var bands = [[0, 100], [100, 200], [200, 300], [300, 400], [400, 600], [600, 10000]];
+    var W = 430, H = 280, L = 40, R = 8, T = 14, B = 30;
+    var counts = bands.map(function (b) {
+      return active.filter(function (c) { return c.price != null && c.price >= b[0] && c.price < b[1]; }).length;
+    });
+    var labels = bands.map(function (b) { return b[1] <= 1000 ? "$" + b[0] + "-" + (b[1] - 1) : "$" + b[0] + "↑"; });
+    var max = Math.max.apply(null, counts.concat([1]));
+    drawInto("chart-hist", W, H, function (svg) {
+      var n = counts.length, step = (W - L - R) / n;
+      var Y = function (v) { return H - B - (v / max) * (H - T - B); };
+      for (var g = 0; g <= 2; g++) {
+        var gv = Math.round(max / 2) * g;
+        svg.appendChild(el("line", { x1: L, y1: Y(gv), x2: W - R, y2: Y(gv), "class": g ? "ct-grid" : "ct-zero" }));
+        svg.appendChild(el("text", { x: L - 6, y: Y(gv) + 3.5, "text-anchor": "end", "class": "ct-axis-txt" }, gv));
+      }
+      counts.forEach(function (v, i) {
+        var x = L + i * step + step * 0.14, bw = step * 0.72;
+        svg.appendChild(hoverTip(el("rect", { x: x, y: Y(v), width: bw, height: H - B - Y(v), rx: 2, "class": "ct-bar" }),
+          labels[i] + "：" + v + " 張"));
+        svg.appendChild(el("text", { x: x + bw / 2, y: Y(v) - 4, "text-anchor": "middle", "class": "ct-bar-val" }, v));
+        svg.appendChild(el("text", { x: x + bw / 2, y: H - B + 14, "text-anchor": "middle", "class": "ct-axis-txt" }, labels[i]));
+      });
+    });
+  })();
+
+  /* 3) 通路組成（環圈） */
+  (function () {
+    var W = 430, H = 280;
+    function bucket(c) {
+      var ot = c.orderType || "";
+      if (ot.indexOf("外送") >= 0 && ot.indexOf("外帶") >= 0) return "外送/外帶";
+      if (ot.indexOf("外送") >= 0) return "外送";
+      if (ot.indexOf("外帶") >= 0) return "外帶";
+      return "通路未標";
+    }
+    var order = ["外送/外帶", "外帶", "外送", "通路未標"];
+    var colors = ["#d7182a", "#f59e0b", "#0284c7", "#a8a29e"];
+    var counts = order.map(function (k) {
+      return active.filter(function (c) { return bucket(c) === k; }).length;
+    });
+    var total = counts.reduce(function (a, b) { return a + b; }, 0) || 1;
+    drawInto("chart-donut", W, H, function (svg) {
+      var cx = 120, cy = H / 2, rOut = 92, rIn = 56, a0 = -Math.PI / 2;
+      counts.forEach(function (v, i) {
+        if (!v) return;
+        var frac = v / total, a1 = a0 + frac * Math.PI * 2;
+        var large = frac > 0.5 ? 1 : 0;
+        var d = "M " + (cx + rOut * Math.cos(a0)) + " " + (cy + rOut * Math.sin(a0))
+          + " A " + rOut + " " + rOut + " 0 " + large + " 1 " + (cx + rOut * Math.cos(a1)) + " " + (cy + rOut * Math.sin(a1))
+          + " L " + (cx + rIn * Math.cos(a1)) + " " + (cy + rIn * Math.sin(a1))
+          + " A " + rIn + " " + rIn + " 0 " + large + " 0 " + (cx + rIn * Math.cos(a0)) + " " + (cy + rIn * Math.sin(a0)) + " Z";
+        svg.appendChild(hoverTip(el("path", { d: d, fill: colors[i], "fill-opacity": .85 }),
+          order[i] + "：" + v + "（" + Math.round(frac * 100) + "%）"));
+        a0 = a1;
+      });
+      svg.appendChild(el("text", { x: cx, y: cy - 2, "text-anchor": "middle", "class": "ct-bar-val" }, total));
+      svg.appendChild(el("text", { x: cx, y: cy + 14, "text-anchor": "middle", "class": "ct-cap" }, "active 張"));
+      order.forEach(function (k, i) {
+        var y = 40 + i * 22;
+        svg.appendChild(el("rect", { x: 260, y: y - 9, width: 10, height: 10, rx: 2, fill: colors[i] }));
+        svg.appendChild(el("text", { x: 276, y: y, "class": "ct-axis-txt" }, k + " " + counts[i]));
+      });
+    });
+  })();
+
+  /* 4) 每日入庫趨勢（面積+折線） */
+  (function () {
+    var W = 880, H = 240, L = 46, R = 14, T = 16, B = 30;
+    var intake = {};
+    rows.forEach(function (c) {
+      var d = (c.firstSeen || "").slice(0, 10);
+      if (/^\d{4}-\d{2}-\d{2}$/.test(d)) intake[d] = (intake[d] || 0) + 1;
+    });
+    var days = Object.keys(intake).sort().slice(-14);
+    drawInto("chart-intake", W, H, function (svg) {
+      if (!days.length) return;
+      var max = Math.max.apply(null, days.map(function (d) { return intake[d]; }));
+      var X = function (i) { return L + i * (W - L - R) / (days.length - 1 || 1); };
+      var Y = function (v) { return H - B - (v / max) * (H - T - B); };
+      for (var g = 0; g <= 2; g++) {
+        var gv = Math.round(max / 2) * g;
+        svg.appendChild(el("line", { x1: L, y1: Y(gv), x2: W - R, y2: Y(gv), "class": g ? "ct-grid" : "ct-zero" }));
+        svg.appendChild(el("text", { x: L - 6, y: Y(gv) + 3.5, "text-anchor": "end", "class": "ct-axis-txt" }, gv));
+      }
+      var pts = days.map(function (d, i) { return [X(i), Y(intake[d])]; });
+      svg.appendChild(el("polygon", { points: L + "," + (H - B) + " " + pts.map(function (q) { return q.join(","); }).join(" ") + " " + (W - R) + "," + (H - B), "class": "ct-area" }));
+      svg.appendChild(el("polyline", { points: pts.map(function (q) { return q.join(","); }).join(" "), "class": "ct-line" }));
+      pts.forEach(function (q, i) {
+        svg.appendChild(hoverTip(el("circle", { cx: q[0], cy: q[1], r: 3.5, "class": "ct-dot" }),
+          days[i] + "：" + intake[days[i]] + " 張入庫"));
+        if (i === 0 || i === pts.length - 1 || intake[days[i]] === max)
+          svg.appendChild(el("text", { x: q[0], y: H - B + 14, "text-anchor": "middle", "class": "ct-axis-txt" }, days[i].slice(5)));
+      });
+    });
+  })();
+
+  /* 5) 聯名方/標籤排行（橫條保留——排行型資料的最佳形態） */
+  function bars(container, pairs) {
+    var max = Math.max.apply(null, pairs.map(function (p) { return p[1]; }).concat([1]));
+    document.getElementById(container).innerHTML = pairs.map(function (p) {
+      return "<div class='bar-row'><span class='bar-label'>" + esc(p[0])
+        + "</span><span class='bar-track'><span class='bar-fill' style='width:"
+        + Math.round(p[1] / max * 100) + "%'></span></span><span class='bar-num'>"
+        + p[1] + "</span></div>";
+    }).join("");
+  }
+  var pCounts = {};
+  ext.forEach(function (c) {
+    if (c.partner) pCounts[c.partner] = (pCounts[c.partner] || 0) + 1;
+  });
+  bars("stat-partner", Object.keys(pCounts).map(function (k) { return [k, pCounts[k]]; })
+    .sort(function (a, b) { return b[1] - a[1]; }).slice(0, 10));
+  var tagCounts = {};
+  rows.forEach(function (c) {
+    (c.tags || []).forEach(function (t) { tagCounts[t] = (tagCounts[t] || 0) + 1; });
+  });
+  bars("stat-tags", Object.keys(tagCounts).map(function (t) { return [t, tagCounts[t]]; })
+    .sort(function (a, b) { return b[1] - a[1]; }).slice(0, 12));
+
+  /* ---- 分頁 3：爬取進度 ---- */
+  var scan = FULL.scan;
+  if (scan && scan.total != null) {
+    document.getElementById("scan-cards").innerHTML =
+      statCard(scan.total, "掃號池碼數") + statCard(scan.alive, "alive")
+      + statCard(scan.dead, "dead") + statCard(scan.unknown, "unknown")
+      + "<div class='stat' style='min-width:200px'><div class='lbl'>state 更新時間</div><div class='num' style='font-size:14px'>"
+      + esc(scan.updatedAt || "—") + "</div></div>";
+  } else {
+    document.getElementById("scan-empty").hidden = false;
+  }
+  document.getElementById("build-info").innerHTML =
+    "<div class='meta-line'>coupons_full.js 寫出時間：" + esc(FULL.last_update || "—") + "</div>"
+    + "<div class='meta-line'>全量筆數：" + rows.length + "（active " + active.length
+    + " / offline " + offline.length + "）</div>"
+    + "<div class='meta-line'>主站資料檔同源,每日 cron 由 .github/workflows/update.yml 驅動。</div>";
+
+  /* ---- 掃號警告（scan_alerts.json,scan.yml sample 工複製進 public/;缺檔靜默）---- */
+  fetch("scan_alerts.json").then(function (r) { return r.ok ? r.json() : null; }).then(function (a) {
+    if (!a) return;
+    function listItems(entries) {
+      return "<ul>" + entries.map(function (e) {
+        if (typeof e === "string") return "<li>" + esc(e) + "</li>";
+        var t = "<li><span class='code'>" + esc(e.code) + "</span>"
+          + (e.title ? " " + esc(e.title) : "")
+          + (e.partner ? "（" + esc(e.partner) + "）" : "")
+          + (e.zone ? " [" + esc(e.zone) + "]" : "");
+        if (e.diff) {
+          var fields = Object.keys(e.diff).map(function (k) {
+            var v = e.diff[k];
+            return esc(k) + ": " + esc(v[0] == null ? "—" : v[0]) + " → " + esc(v[1]);
+          });
+          t += "<br>" + fields.join("<br>");
+        }
+        return t + "</li>";
+      }).join("") + "</ul>";
+    }
+    var SECTIONS = [
+      ["unknown_hits", "未知號段命中（抽樣掃到非預期活碼）", "red"],
+      ["content_changes", "內容更動（官網券內容與昨日不同）", "amber"],
+      ["new_codes", "新活碼入庫", "green"],
+      ["pending_empty", "待退役（死碼期滿轉空號）", "slate"],
+    ];
+    var html = "";
+    var count = 0;
+    SECTIONS.forEach(function (s) {
+      var entries = a[s[0]];
+      if (Array.isArray(entries) && entries.length) {
+        count += entries.length;
+        html += "<div class='alert " + s[2] + "'><b>" + s[1]
+          + "（" + entries.length + "）</b>" + listItems(entries) + "</div>";
+      }
+    });
+    if (count) {
+      document.getElementById("scan-alerts").innerHTML =
+        "<h2 class='sec'>警告（updatedAt " + esc(a.updatedAt || "—") + "）</h2>" + html;
+    }
+  }).catch(function () { /* 缺檔/離線預覽:靜默 */ });
+
+  bindTabs();
+
+  /* ---- 分頁切換 ---- */
+  function bindTabs() {
+    var tabs = document.querySelectorAll("nav [role=tab]");
+    tabs.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        tabs.forEach(function (b) { b.setAttribute("aria-selected", String(b === btn)); });
+        ["all", "stats", "scan"].forEach(function (name) {
+          var el = document.getElementById("tab-" + name);
+          if (el) el.hidden = btn.getAttribute("data-tab") !== name;
+        });
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

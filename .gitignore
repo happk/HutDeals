@@ -1,0 +1,10 @@
+.venv/
+data/raw/
+__pycache__/
+*.pyc
+node_modules/
+dist/
+
+# build 產物 / 工具目錄
+*.tsbuildinfo
+.zcode/

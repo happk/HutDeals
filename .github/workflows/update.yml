@@ -1,0 +1,70 @@
+name: Daily coupon update
+
+on:
+  schedule:
+    # UTC 16:30 = 台灣時間 00:30
+    - cron: "30 16 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  update-coupons:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # orderflow session 流程（enrich_official 抽選單版 JS 變數）需要 node
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # 抓取 + 解析 + 合併 + 輸出 public/coupons.js(stdlib 零依賴,無需 pipenv)
+      - name: Build coupon data
+        run: python -m script.site.build_coupons
+
+      # 併入掃號驗證的外部碼(source=verified-external,聯名/季節),資料在 scan_state.json
+      - name: Ingest external codes
+        run: python -m script.site.ingest_external
+
+      # 官方碼 step_2 補全(通路/原價/cno直連/items),只補缺不覆蓋
+      - name: Enrich official coupons
+        run: python -m script.site.enrich_official
+
+      - name: Commit if changed
+        id: commit
+        run: |
+          if git diff --quiet -- public/coupons.js public/coupons_full.js; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "no coupon changes"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/coupons.js public/coupons_full.js
+            git commit -m "daily update coupon information ($(date -u +%F))"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # 爬蟲失敗告警:開 Issue(已有開啟中的告警票則不重複開)
+      - name: Create failure issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TITLE="每日爬蟲失敗 $(date -u +%F)"
+          COUNT=$(gh issue list --label scrape-failed --state open --json number --jq 'length')
+          if [ "$COUNT" -eq 0 ]; then
+            gh issue create \
+              --title "$TITLE" \
+              --label "scrape-failed" \
+              --body "script.site.build_coupons 執行失敗(可能是官網改版)。舊的 public/coupons.js 未被覆蓋,網站仍顯示前一日資料。請查看 Actions log。"
+          else
+            echo "open scrape-failed issue already exists, skip"
+          fi

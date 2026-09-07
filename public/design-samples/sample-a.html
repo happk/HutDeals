@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>方案 A（暗）· 公開站樣品 ｜ HutDeals</title>
+<style>
+  :root {
+    --bg: #16120e;
+    --card: rgba(255,255,255,.055);
+    --card-line: rgba(255,255,255,.09);
+    --ink: #f5efe7;
+    --muted: #b8ab9c;
+    --red: #ff5a4e;
+    --red-deep: #d7182a;
+    --cheese: #f6b73c;
+    --basil: #7fb069;
+    --header-bg: rgba(22,18,14,.62);
+    --btn-bg: rgba(255,255,255,.07);
+    --modal-bg: #1d1813;
+    --warn-ink: #f6b73c;
+    --warn-line: rgba(246,183,60,.35);
+    --warn-bg: rgba(246,183,60,.06);
+    --scroll-thumb: rgba(184,171,156,.35);
+    --items-bg: rgba(255,255,255,.05);
+    --ex-bg: #57534e;
+    --ex-ink: #f5efe7;
+    --body-bg:
+      radial-gradient(circle at 12% 18%, rgba(215,24,42,.14), transparent 42%),
+      radial-gradient(circle at 88% 8%, rgba(246,183,60,.10), transparent 40%),
+      /* 點點火光:紅/起司雙層炭火餘燼 */
+      radial-gradient(rgba(255,90,78,.10) 1.6px, transparent 1.6px) 0 0/26px 26px,
+      radial-gradient(rgba(246,183,60,.07) 1.3px, transparent 1.3px) 13px 13px/26px 26px,
+      var(--bg);
+  }
+  /* ===== 亮色主題（原方案 C 的配色語言）— 高對比字體 ===== */
+  html.light {
+    --bg: #fff8ef;
+    --card: rgba(255,255,255,.94);
+    --card-line: rgba(142,15,28,.16);
+    --ink: #1f1610;
+    --muted: #6d5f52;
+    --red: #d7182a;
+    --red-deep: #8e0f1c;
+    --cheese: #d98f0f;
+    --basil: #3f7a43;
+    --header-bg: rgba(255,250,242,.8);
+    --btn-bg: rgba(215,24,42,.07);
+    --modal-bg: #ffffff;
+    --warn-ink: #7c3a06;
+    --warn-line: #f3ce7c;
+    --warn-bg: #fff8e6;
+    --scroll-thumb: rgba(109,95,82,.4);
+    --items-bg: rgba(215,24,42,.05);
+    --ex-bg: #c9c1b4;
+    --ex-ink: #2b2118;
+    --body-bg:
+      radial-gradient(ellipse 62% 42% at 16% -6%, rgba(246,183,60,.38), transparent 62%),
+      radial-gradient(ellipse 46% 34% at 97% 4%, rgba(215,24,42,.13), transparent 62%),
+      radial-gradient(ellipse 42% 26% at 76% 102%, rgba(127,176,105,.14), transparent 60%),
+      radial-gradient(rgba(142,15,28,.04) 1.4px, transparent 1.4px) 0 0/22px 22px,
+      linear-gradient(#fff8ef, #ffefd9);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: var(--ink);
+    font-family: system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    background: var(--body-bg);
+    min-height: 100vh;
+  }
+  /* 亮色主題的「烤箱暖光」:header 底緣起司金光暈+暖色卡片陰影（對應暗色的炭火紅光） */
+  html.light header { box-shadow: 0 6px 24px rgba(240,169,46,.4); border-bottom: 1px solid rgba(240,169,46,.45); }
+  html.light .card { box-shadow: 0 6px 18px rgba(240,169,46,.16); }
+  html.light .card:hover { box-shadow: 0 12px 28px rgba(240,169,46,.3); }
+  html.light .modal { box-shadow: 0 20px 50px rgba(240,169,46,.35); }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--card-line);
+  }
+  .bar { max-width: 1100px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 14px; }
+  .mark { flex-shrink: 0; filter: drop-shadow(0 2px 8px rgba(255,90,78,.45)); }
+  .word .logo {
+    font-size: 21px; font-weight: 800;
+    background: linear-gradient(100deg, var(--red) 30%, var(--cheese) 85%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .word .sub { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+  .bar .spacer { margin-left: auto; }
+  .update { font-size: 11px; color: var(--muted); }
+  .theme { font-size: 12px; color: var(--ink); background: var(--btn-bg); border: 1px solid var(--card-line); border-radius: 999px; padding: 6px 11px; cursor: pointer; text-decoration: none; display: inline-block; font-family: inherit; }
+  /* header 常駐圖示:GitHub / 通知 / 收藏 */
+  .hicons { display: flex; align-items: center; gap: 7px; }
+  .hicon {
+    width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+    background: var(--btn-bg); border: 1px solid var(--card-line); border-radius: 10px;
+    color: var(--muted); cursor: pointer; transition: .15s; text-decoration: none;
+  }
+  .hicon:hover { color: var(--ink); }
+  .hicon.on { color: var(--cheese); border-color: rgba(246,183,60,.55); }
+  .bellwrap { position: relative; }
+  .pop {
+    position: absolute; right: 0; top: 40px; width: 260px; z-index: 70;
+    background: var(--modal-bg); border: 1px solid var(--card-line); border-radius: 14px;
+    box-shadow: 0 14px 34px rgba(0,0,0,.28); padding: 14px 16px; font-size: 12.5px;
+  }
+  .pop b { display: block; margin-bottom: 6px; color: var(--red); }
+  .pop p { margin: 0; color: var(--muted); }
+  main { max-width: 1100px; margin: 0 auto; padding: 26px 20px 70px; }
+  .note { display: inline-block; font-size: 11px; color: var(--cheese); border: 1px dashed rgba(246,183,60,.5); border-radius: 999px; padding: 4px 12px; margin-bottom: 18px; }
+  h1 { font-size: 28px; margin: 0 0 4px; font-weight: 800; }
+  h1 em { font-style: normal; color: var(--red); }
+  .lead { color: var(--muted); font-size: 13.5px; margin: 0 0 20px; }
+  /* ===== hero 發光披薩:暖光從披薩本體發出(亮色主題的核心光源) ===== */
+  .hero { display: flex; align-items: center; gap: 24px; margin-bottom: 6px; }
+  .pizza-glow { position: relative; flex-shrink: 0; width: 84px; height: 84px; }
+  .pizza-glow::before {
+    content: ""; position: absolute; inset: -30px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(246,183,60,.5), rgba(215,24,42,.2) 55%, transparent 72%);
+    filter: blur(8px);
+  }
+  html.light .pizza-glow::before {
+    background: radial-gradient(circle, rgba(246,196,83,.65), rgba(215,24,42,.16) 55%, transparent 72%);
+  }
+  .pizza-glow svg { position: relative; }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .search {
+    flex: 1; min-width: 220px; display: flex; align-items: center; gap: 8px;
+    backdrop-filter: blur(10px); background: var(--card); border: 1px solid var(--card-line);
+    border-radius: 12px; padding: 9px 14px;
+  }
+  .search input { flex: 1; background: none; border: 0; outline: none; color: var(--ink); font-size: 13px; font-family: inherit; }
+  .search input::placeholder { color: var(--muted); }
+  /* 排序:下拉選欄位 + 按鈕切升降 */
+  .sorter { display: flex; gap: 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--card-line); }
+  .sorter select { border: 0; border-radius: 0; background: var(--card); color: var(--ink); padding: 9px 12px; font-size: 13px; font-family: inherit; }
+  .sorter button {
+    border: 0; border-left: 1px solid var(--card-line); background: rgba(255,255,255,.08);
+    color: var(--red); font-size: 14px; padding: 0 13px; cursor: pointer; font-family: inherit;
+  }
+  /* 價格篩選 */
+  .pricebox {
+    display: flex; align-items: center; gap: 6px;
+    backdrop-filter: blur(10px); background: var(--card); border: 1px solid var(--card-line);
+    border-radius: 12px; padding: 9px 14px; color: var(--muted); font-size: 13px;
+  }
+  .pricebox input {
+    width: 64px; background: none; border: 0; outline: none; color: var(--ink);
+    font-size: 13px; font-family: inherit; font-variant-numeric: tabular-nums; text-align: center;
+  }
+  .pricebox input::-webkit-outer-spin-button, .pricebox input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .pricebox input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+  .pricebox input::placeholder { color: var(--muted); opacity: .75; }
+  /* 雙點拖曳價格滑桿(步進 10) */
+  .rangeslider { position: relative; height: 20px; margin: 0 6px 10px; touch-action: none; }
+  .rangeslider .track { position: absolute; left: 0; right: 0; top: 8px; height: 4px; border-radius: 2px; background: var(--card-line); }
+  .rangeslider .fill { position: absolute; top: 8px; height: 4px; border-radius: 2px; background: linear-gradient(95deg, var(--red-deep), var(--red)); }
+  .rangeslider .thumb {
+    position: absolute; top: 2px; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--red); border: 2.5px solid var(--modal-bg);
+    box-shadow: 0 1px 5px rgba(0,0,0,.35); cursor: grab;
+  }
+  .rangeslider .thumb.drag { cursor: grabbing; transform: scale(1.12); }
+  .toggles { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .toggle { font-size: 12px; color: var(--muted); border: 1px solid var(--card-line); background: var(--card); border-radius: 999px; padding: 6px 13px; cursor: pointer; font-family: inherit; }
+  .toggle.on { color: #fff; background: linear-gradient(95deg, var(--red-deep), var(--red)); border-color: transparent; }
+  .toggle.ex {
+    color: var(--ex-ink); background: var(--ex-bg); border-color: var(--ex-bg);
+    text-decoration: line-through; font-weight: 600;
+  }
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--red); outline-offset: 2px;
+  }
+  .meta { color: var(--muted); font-size: 12px; margin: 14px 0; }
+  .meta a { color: var(--red); cursor: pointer; }
+  /* ===== 券卡:全域固定尺寸(每一張一樣大),內容裝不下→卡片內部滾動 ===== */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 250px; gap: 16px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; grid-auto-rows: 250px; } }
+  .card {
+    display: flex; flex-direction: column; height: 100%; overflow: hidden;
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    background: var(--card); border: 1px solid var(--card-line);
+    border-radius: 14px; padding: 13px 15px; transition: transform .18s, border-color .18s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: rgba(255,90,78,.45); }
+  .titlerow { display: flex; align-items: center; gap: 7px; min-height: 24px; }
+  .chan { font-size: 10px; color: var(--cheese); border: 1px solid rgba(246,183,60,.4); border-radius: 999px; padding: 2px 9px; flex-shrink: 0; }
+  .star { margin-left: auto; background: none; border: 0; color: var(--muted); font-size: 17px; cursor: pointer; line-height: 1; flex-shrink: 0; }
+  .star.on { color: var(--cheese); }
+  .name {
+    flex: 1; min-width: 0; font-size: 13.5px; font-weight: 700; line-height: 1.4; cursor: pointer;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  /* 內容物:卡片彈性區,裝不下時內部滾動;符號明顯;帶底色便於分辨 */
+  .scroll {
+    flex: 1; min-height: 0; overflow-y: auto; margin-top: 8px;
+    background: var(--items-bg); border-radius: 10px; padding: 7px 9px;
+    scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent;
+  }
+  .scroll::-webkit-scrollbar { width: 5px; }
+  .scroll::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 3px; }
+  .items { font-size: 12.5px; line-height: 1.65; margin: 0; padding: 0; list-style: none; color: var(--ink); }
+  .items li { position: relative; padding-left: 15px; margin-bottom: 3px; }
+  .items li::before {
+    content: ""; position: absolute; left: 0; top: .52em;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--red); box-shadow: 0 0 0 2px rgba(255,90,78,.18);
+  }
+  .sub { display: block; color: var(--muted); font-size: 11.5px; margin-top: 2px; }
+  /* 價格為主視覺 */
+  .price-row { display: flex; align-items: baseline; gap: 8px; margin-top: 10px; }
+  .price { font-size: 22px; font-weight: 800; }
+  .price s { font-size: 11px; font-weight: 400; color: var(--muted); margin-left: 4px; }
+  /* 底列:前往訂購 + 代碼膠囊(代碼+複製)同列 */
+  .buy-row { display: flex; gap: 8px; margin-top: 8px; flex-shrink: 0; }
+  .buy-row .cta { flex: 1; margin-top: 0; padding: 9px 0; font-size: 12.5px; }
+  .code-chip {
+    display: flex; align-items: center; gap: 7px; flex-shrink: 0;
+    background: var(--btn-bg); border: 1px solid var(--card-line); border-radius: 9px; padding: 0 4px 0 10px;
+  }
+  .code-chip .cd { font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; font-weight: 600; color: var(--muted); letter-spacing: 1px; }
+  .icon-copy {
+    border: 1px solid var(--card-line); background: var(--btn-bg); color: var(--ink);
+    border-radius: 8px; padding: 5px 8px; font-size: 11px; cursor: pointer; font-family: inherit;
+  }
+  .icon-copy.ok { color: var(--basil); border-color: rgba(127,176,105,.5); }
+  .detail-btn {
+    margin-top: 9px; width: 100%; cursor: pointer; font-family: inherit; flex-shrink: 0;
+    color: var(--red); background: rgba(255,90,78,.08); border: 1px solid rgba(255,90,78,.4);
+    border-radius: 9px; padding: 8px 0; font-size: 12.5px; font-weight: 600;
+  }
+  .detail-btn:hover { background: rgba(255,90,78,.16); }
+  .cta {
+    margin-top: 7px; width: 100%; border: 0; cursor: pointer; color: #fff; font-weight: 700; font-size: 12.5px;
+    padding: 9px 0; border-radius: 9px; font-family: inherit; flex-shrink: 0;
+    background: var(--red-deep); background: linear-gradient(95deg, var(--red-deep), var(--red));
+  }
+  .empty { color: var(--muted); font-size: 13px; padding: 30px 0; text-align: center; }
+  footer { border-top: 1px solid var(--card-line); color: var(--muted); font-size: 11px; }
+  .foot-in { max-width: 1100px; margin: 0 auto; padding: 22px 20px 40px; line-height: 1.9; }
+  .modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; z-index: 90; }
+  .modal-mask.open { display: flex; }
+  .modal { width: 100%; max-width: 560px; border-radius: 18px; padding: 24px; background: var(--modal-bg); border: 1px solid var(--card-line); }
+  .modal h2 { margin: 0 30px 6px 0; font-size: 16px; }
+  .modal .close { float: right; background: none; border: 0; color: var(--muted); font-size: 16px; cursor: pointer; }
+  .dl { margin: 14px 0 0; font-size: 13px; }
+  .dl div { display: flex; gap: 10px; padding: 4px 0; }
+  .dl dt { color: var(--muted); width: 70px; flex-shrink: 0; }
+  .modal .code-big { font-family: ui-monospace, monospace; font-weight: 700; font-size: 17px; color: var(--red); letter-spacing: 1px; }
+  .warnline {
+    margin-top: 12px; font-size: 12px; color: var(--warn-ink);
+    border: 1px solid var(--warn-line); border-radius: 10px; padding: 9px 12px; background: var(--warn-bg);
+  }
+  .acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .mbtn { border: 1px solid var(--card-line); background: var(--btn-bg); color: var(--ink); border-radius: 10px; padding: 9px 14px; font-size: 12px; cursor: pointer; font-family: inherit; }
+  .mbtn.pri { border: 0; background: linear-gradient(95deg, var(--red-deep), var(--red)); color: #fff; font-weight: 700; }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <svg class="mark" width="34" height="34" viewBox="0 0 48 48" aria-hidden="true">
+      <path d="M24 44 6 12 a22 22 0 0 1 36 0 Z" fill="#d7182a"/>
+      <path d="M6 12 a22 22 0 0 1 36 0 l-2.6 4.6 a18 18 0 0 0-30.8 0 Z" fill="#f6b73c"/>
+      <circle cx="24" cy="24" r="3.6" fill="#ff5a4e"/>
+      <circle cx="17" cy="32" r="3" fill="#ff5a4e"/>
+      <circle cx="30" cy="33" r="2.7" fill="#ff5a4e"/>
+    </svg>
+    <div class="word">
+      <div class="logo">HutDeals</div>
+      <div class="sub">台灣必勝客 (Pizza Hut) 優惠券</div>
+    </div>
+    <span class="spacer"></span>
+    <span class="update">資料更新 2026-09-05 18:01</span>
+    <div class="hicons">
+      <a class="hicon" href="#" title="專案倉庫（佔位）" aria-label="GitHub 專案倉庫">
+        <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+        </svg>
+      </a>
+      <div class="bellwrap">
+        <button class="hicon" id="bellBtn" title="更新通知" aria-label="更新通知">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
+          </svg>
+        </button>
+        <div class="pop" id="bellPop" hidden>
+          <b>更新通知</b>
+          <p>Hello Pizza!</p>
+        </div>
+      </div>
+      <button class="hicon" id="favStar" title="收藏夾（只看收藏）" aria-label="只看收藏">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </button>
+    </div>
+    <button class="theme" id="themeBtn" title="切換亮色/暗色主題">☀ 亮色</button>
+  </div>
+</header>
+<main>
+  <span class="note">公開站互動樣品（暗/亮雙主題,右上切換）· 卡片:內容物為主/固定尺寸內部滾動/大按鈕開詳情 — 捲動看 header 常駐</span>
+  <div class="hero">
+    <div class="pizza-glow">
+      <svg width="84" height="84" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="48" fill="#e8a33d"/>
+        <circle cx="50" cy="50" r="40" fill="#f6b73c"/>
+        <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(142,15,28,.18)" stroke-width="1.5"/>
+        <line x1="50" y1="10" x2="50" y2="90" stroke="rgba(142,15,28,.10)" stroke-width="1.5"/>
+        <line x1="10" y1="50" x2="90" y2="50" stroke="rgba(142,15,28,.10)" stroke-width="1.5"/>
+        <line x1="21.7" y1="21.7" x2="78.3" y2="78.3" stroke="rgba(142,15,28,.10)" stroke-width="1.5"/>
+        <line x1="78.3" y1="21.7" x2="21.7" y2="78.3" stroke="rgba(142,15,28,.10)" stroke-width="1.5"/>
+        <circle cx="50" cy="30" r="6" fill="#d7182a"/>
+        <circle cx="67" cy="43" r="6" fill="#d7182a"/>
+        <circle cx="60" cy="66" r="6" fill="#d7182a"/>
+        <circle cx="36" cy="60" r="5.4" fill="#d7182a"/>
+        <circle cx="30" cy="36" r="5" fill="#d7182a"/>
+        <circle cx="43" cy="47" r="4.2" fill="#b3121f"/>
+        <ellipse cx="57" cy="55" rx="3.4" ry="2.2" fill="#4f9153" transform="rotate(30 57 55)"/>
+        <ellipse cx="38" cy="75" rx="3.4" ry="2.2" fill="#4f9153" transform="rotate(-20 38 75)"/>
+        <ellipse cx="73" cy="27" rx="3.2" ry="2" fill="#4f9153" transform="rotate(60 73 27)"/>
+      </svg>
+    </div>
+    <div>
+      <h1>今天的<em>必勝客</em>優惠，一頁看完</h1>
+      <p class="lead">每日自動抓取必勝客官網並驗證外部聯名碼；代碼點一下即複製。</p>
+    </div>
+  </div>
+  <div class="toolbar">
+    <div class="search">🔍<input id="q" placeholder="搜尋餐點或關鍵字（空格分隔多重條件）"></div>
+    <div class="pricebox">$<input id="pmin" type="number" min="0" placeholder="最低"> – $<input id="pmax" type="number" min="0" placeholder="最高"></div>
+    <div class="sorter">
+      <select id="sortKey">
+        <option value="price">價格</option>
+        <option value="seen">加入時間</option>
+        <option value="code">優惠代碼順序</option>
+      </select>
+      <button id="sortDir" title="切換升冪/降冪">↑</button>
+    </div>
+  </div>
+  <div class="rangeslider" id="rangeSlider" aria-label="價格範圍滑桿(步進10)">
+    <div class="track"></div>
+    <div class="fill" id="rsFill"></div>
+    <div class="thumb" id="rsMin" title="最低價"></div>
+    <div class="thumb" id="rsMax" title="最高價"></div>
+  </div>
+  <div class="toggles" id="row1">
+    <button class="toggle on" data-chan="外送" aria-pressed="true">外送</button>
+    <button class="toggle on" data-chan="外帶" aria-pressed="true">外帶</button>
+    <button class="toggle" id="favOnly" aria-pressed="false">只看收藏</button>
+  </div>
+  <div class="toggles" id="row2"></div>
+  <p class="meta"><span id="count"></span> · <a id="reset">重置</a></p>
+  <div class="grid" id="cards"></div>
+</main>
+<footer><div class="foot-in">
+  HutDeals 非官方網站。優惠資料整理自必勝客官網與公開資訊，價格與供應以官網為準；商標屬各自權利人所有。資料最後更新：2026-09-05 18:01。
+</div></footer>
+
+<div class="modal-mask" id="mask">
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="優惠詳情"></div>
+</div>
+
+<script>
+/* items = [{text, choices?[], add?}] — 與主站 MealItems 同構:卡片顯示短標題,choices 收在詳情 */
+var DATA = [
+  { code:"26975", name:"26975 新素歡聚餐", partner:"素易聯名", price:388, msrp:989, chan:"外送/外帶", seen:"2026-09-04", tags:["素食","比薩","個人比薩","副食","飲料"],
+    items:[{text:"1個9吋松露起司丁鬆厚比薩(奶素)"},{text:"1個9吋彩蔬鮮菇鬆厚比薩(奶素)"},{text:"副餐 3選1", choices:["薯金幣(全素)","麻糬QQ球(奶蛋素)","1.25L可樂"]}] },
+  { code:"26880", name:"26880 兆豐信用卡刷卡干", partner:"兆豐信用卡聯名", price:489, msrp:null, chan:"外帶", seen:"2026-09-04", tags:["比薩","個人比薩","副食"],
+    items:[{text:"2個6吋個人鬆厚比薩(4選2)"},{text:"四種小福"},{text:"日式醬燒雞"},{text:"雙層美味腿庫"}] },
+  { code:"91111", name:"91111 開學優惠！個人比薩$101餐", partner:null, price:101, msrp:null, chan:"外帶", seen:"2026-09-03", tags:["比薩","個人比薩","副食","飲料"],
+    items:[{text:"經典系列個人比薩1個"},{text:"副餐 1"},{text:"飲料 1"}] },
+  { code:"93020", name:"93020 外帶買一送五", partner:null, price:410, msrp:null, chan:"外帶", seen:"2026-09-03", tags:["比薩","買一送一","副食","飲料"],
+    items:[{text:"外帶買大比薩"},{text:"小比薩 2個"},{text:"副餐 5選2"},{text:"可樂 1.25L", add:"小比薩$410以上需加價"}] },
+  { code:"16142", name:"16142 全支付大送大", partner:"全支付聯名", price:355, msrp:715, chan:"外送/外帶", seen:"2026-09-04", tags:["比薩","折扣","副食"],
+    items:[{text:"1個9吋鬆厚比薩"},{text:"1個6吋鬆厚比薩"},{text:"炸雞 2塊"}] },
+  { code:"16054", name:"16054 foodpanda66", partner:"foodpanda聯名", price:132, msrp:218, chan:"外送/外帶", seen:"2026-09-04", tags:["比薩","個人比薩","折扣"],
+    items:[{text:"2個6吋個人鬆厚比薩(4選2)"}] },
+  { code:"92117", name:"92117 開學優惠！墨西哥辣椒芝心腸3條 買一送一", partner:null, price:109, msrp:209, chan:"外帶", seen:"2026-09-03", tags:["折扣","買一送一"],
+    items:[{text:"墨西哥辣椒芝心腸3條 買一送一"}] },
+  { code:"26701", name:"26701 統黃金御膳", partner:"統一超商聯名", price:399, msrp:null, chan:"外送/外帶", seen:"2026-09-04", tags:["套餐","比薩","副食","飲料"],
+    items:[{text:"黃金御膳比薩1個"},{text:"副餐 2份"},{text:"飲料 2杯"}] },
+  { code:"91112", name:"91112 開學優惠！個人比薩五亭餐$199", partner:null, price:199, msrp:null, chan:"外帶", seen:"2026-09-03", tags:["比薩","個人比薩","套餐","副食"],
+    items:[{text:"個人比薩 5份"},{text:"副餐 1"}] },
+  { code:"26976", name:"26976 新素幫你送", partner:"素易聯名", price:479, msrp:null, chan:"外送/外帶", seen:"2026-09-04", tags:["素食","比薩","副食","飲料"],
+    items:[{text:"2個9吋素食鬆厚比薩(奶素)"},{text:"薯金幣(全素)"},{text:"飲料 2杯"}] },
+  { code:"94199", name:"94199 平日外帶超值單點大比薩$199", partner:null, price:199, msrp:null, chan:"外帶", seen:"2026-09-03", tags:["比薩","大比薩"],
+    items:[{text:"13吋大比薩1個，10種超值口味任選(免費升級薄脆餅皮)"}] },
+  { code:"26977", name:"26977 素享時光", partner:"素易聯名", price:123, msrp:null, chan:"外送/外帶", seen:"2026-09-04", tags:["素食","比薩","個人比薩","副食","折扣"],
+    items:[{text:"1個9吋松露起司丁鬆厚比薩(奶素)"},{text:"副餐 2選1", choices:["薯金幣(小)","巧克力QQ球5顆(蛋奶素)"]}] }
+];
+/* 收藏持久化(localStorage;與主站 useFavorites 同 key 語意) */
+var FAV_KEY = "hutdeals-favs";
+var favs = {};
+try {
+  JSON.parse(localStorage.getItem(FAV_KEY) || "[]").forEach(function (k) { favs[k] = true; });
+} catch (e) {}
+DATA.forEach(function (c) { c.fav = !!favs[c.code]; c.orderUrl = "https://www.pizzahut.com.tw/order/?mode=step_2&type_id=1025&cno=" + c.code; });
+function saveFavs() {
+  try { localStorage.setItem(FAV_KEY, JSON.stringify(Object.keys(favs))); } catch (e) {}
+}
+
+var state = { q: "", chan: ["外送", "外帶"], favOnly: false, tags: [], exTags: [], sortKey: "price", sortDir: "asc", pmin: null, pmax: null };
+
+/* 標籤 chips:三態循環 中性→包含→排除→中性(與主站一致) */
+var TAG_ORDER = ["大比薩", "個人比薩", "副食", "飲料", "買一送一", "折扣", "套餐", "素食"];
+var row2 = document.getElementById("row2");
+TAG_ORDER.forEach(function (t) {
+  var n = DATA.filter(function (c) { return c.tags.indexOf(t) >= 0; }).length;
+  if (!n) return;
+  var b = document.createElement("button");
+  b.className = "toggle"; b.textContent = t + " " + n; b.dataset.tag = t; b.dataset.n = n;
+  b.setAttribute("aria-pressed", "false");
+  b.onclick = function () {
+    if (state.tags.indexOf(t) >= 0) {          /* 包含 → 排除 */
+      state.tags.splice(state.tags.indexOf(t), 1);
+      state.exTags.push(t);
+      b.classList.remove("on"); b.classList.add("ex");
+      b.setAttribute("aria-pressed", "mixed");
+    } else if (state.exTags.indexOf(t) >= 0) { /* 排除 → 中性 */
+      state.exTags.splice(state.exTags.indexOf(t), 1);
+      b.classList.remove("ex");
+      b.setAttribute("aria-pressed", "false");
+    } else {                                   /* 中性 → 包含 */
+      state.tags.push(t);
+      b.classList.add("on");
+      b.setAttribute("aria-pressed", "true");
+    }
+    render();
+  };
+  row2.appendChild(b);
+});
+
+function copyText(text, btn, okText) {
+  function done() {
+    if (!btn) return;
+    var old = btn.textContent;
+    btn.textContent = okText || "✓ 已複製";
+    if (btn.classList) btn.classList.add("ok");
+    setTimeout(function () { btn.textContent = old; if (btn.classList) btn.classList.remove("ok"); }, 1200);
+  }
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, done);
+  else done();
+}
+
+/* 標籤 chips 文字:包含加「+」、排除加「−」(多標籤 AND 組合時一目了然) */
+function refreshChips() {
+  document.querySelectorAll("#row2 .toggle").forEach(function (b) {
+    var t = b.dataset.tag, n = b.dataset.n;
+    var inc = state.tags.indexOf(t) >= 0, ex = state.exTags.indexOf(t) >= 0;
+    b.textContent = (inc ? "+ " : ex ? "− " : "") + t + " " + n;
+  });
+}
+
+function visible() {
+  var terms = state.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  var list = DATA.filter(function (c) {
+    if (!state.chan.some(function (x) { return c.chan.indexOf(x) >= 0; })) return false;
+    if (state.favOnly && !c.fav) return false;
+    if (state.tags.length && !state.tags.every(function (t) { return c.tags.indexOf(t) >= 0; })) return false;
+    if (state.exTags.length && state.exTags.some(function (t) { return c.tags.indexOf(t) >= 0; })) return false;
+    if (state.pmin != null && (c.price == null || c.price < state.pmin)) return false;
+    if (state.pmax != null && (c.price == null || c.price > state.pmax)) return false;
+    if (terms.length) {
+      var hay = (c.name + " " + c.code + " " + c.items.map(function (i) { return i.text + " " + (i.choices || []).join(" "); }).join(" ")).toLowerCase();
+      if (!terms.every(function (t) { return hay.indexOf(t) >= 0; })) return false;
+    }
+    return true;
+  });
+  var dir = state.sortDir === "asc" ? 1 : -1;
+  if (state.sortKey === "price") list.sort(function (a, b) { return dir * ((a.price == null ? 1e9 : a.price) - (b.price == null ? 1e9 : b.price)); });
+  if (state.sortKey === "seen") list.sort(function (a, b) { return dir * (a.seen < b.seen ? -1 : a.seen > b.seen ? 1 : 0); });
+  if (state.sortKey === "code") list.sort(function (a, b) { return dir * (a.code.localeCompare(b.code, "zh-Hans-CN", { numeric: true })); });
+  return list;
+}
+
+/* 展示層剝代碼前綴:「26976 新素幫你送」→「新素幫你送」;資料層 name 保留原樣(僅 5位數字+分隔符 開頭才剝) */
+function displayName(c) {
+  return c.name.replace(/^\d{5}\s*[-－－]?\s*/, "");
+}
+function chanBadges(c) {
+  var both = c.chan.indexOf("外送") >= 0 && c.chan.indexOf("外帶") >= 0;
+  if (both) return '<span class="chan">外送</span><span class="chan">外帶</span>';
+  return '<span class="chan">' + c.chan + '</span>';
+}
+function itemHtml(i, sub) {
+  var h = '<li' + (sub ? ' class="sub"' : '') + '>' + i;
+  return h + '</li>';
+}
+
+var cards = document.getElementById("cards");
+function render() {
+  var list = visible();
+  document.getElementById("count").textContent = "共 " + list.length + " 筆優惠（全站 565 筆，收藏 " + DATA.filter(function (c) { return c.fav; }).length + " 筆）";
+  refreshChips();
+  cards.innerHTML = "";
+  if (!list.length) {
+    cards.innerHTML = '<div class="empty">沒有符合的優惠——試著放寬條件，或按「重置」。</div>';
+    return;
+  }
+  list.forEach(function (c) {
+    var d = document.createElement("div");
+    d.className = "card";
+    d.innerHTML =
+      '<div class="titlerow">' + chanBadges(c)
+      + '<div class="name" title="' + c.name + '">' + displayName(c) + '</div>'
+      + '<button class="star' + (c.fav ? ' on' : '') + '" title="收藏" aria-pressed="' + !!c.fav + '">' + (c.fav ? "★" : "☆") + '</button></div>'
+      + '<div class="scroll"><ul class="items">'
+      + c.items.map(function (i) {
+          return '<li>' + i.text
+            + (i.choices ? '<span class="sub">' + i.choices.map(function (ch) { return "· " + ch; }).join("<br>") + '</span>' : '')
+            + (i.add ? '<span class="sub">※ ' + i.add + '</span>' : '')
+            + '</li>';
+        }).join("")
+      + '</ul></div>'
+      + '<button class="detail-btn">查看完整資訊</button>'
+      + '<div class="price-row"><span class="price">$' + c.price + (c.msrp ? '<s>原價$' + c.msrp + '</s>' : '') + '</span></div>'
+      + '<div class="buy-row"><button class="cta">前往訂購</button>'
+      + '<span class="code-chip"><span class="cd">' + c.code + '</span>'
+      + '<button class="icon-copy" title="複製代碼 ' + c.code + '">⧉</button></span></div>';
+    d.querySelector(".star").onclick = function () {
+      c.fav = !c.fav;
+      if (c.fav) favs[c.code] = true; else delete favs[c.code];
+      saveFavs();
+      render();
+    };
+    d.querySelector(".icon-copy").onclick = function (e) { e.stopPropagation(); copyText(c.code, e.target); };
+    d.querySelector(".detail-btn").onclick = function () { show(c); };
+    d.querySelector(".cta").onclick = function () { window.open(c.orderUrl, "_blank"); };
+    cards.appendChild(d);
+  });
+  updateUrl();
+}
+
+document.getElementById("q").addEventListener("input", function () { state.q = this.value; render(); });
+document.getElementById("sortKey").addEventListener("change", function () { state.sortKey = this.value; render(); });
+document.getElementById("sortDir").onclick = function () {
+  state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+  this.textContent = state.sortDir === "asc" ? "↑" : "↓";
+  render();
+};
+/* 價格輸入 + 雙點滑桿(步進10;輸入小數無條件退位、非法字元回前值、最小1) */
+var PRICE_MAX = 1000, PRICE_STEP = 10;
+var rsMin = document.getElementById("rsMin"), rsMax = document.getElementById("rsMax");
+var rsFill = document.getElementById("rsFill"), rsSlider = document.getElementById("rangeSlider");
+function syncSlider() {
+  var lo = state.pmin == null ? 0 : state.pmin;
+  var hi = state.pmax == null ? PRICE_MAX : state.pmax;
+  var loPct = lo / PRICE_MAX * 100, hiPct = hi / PRICE_MAX * 100;
+  rsMin.style.left = loPct + "%";
+  rsMax.style.left = hiPct + "%";
+  rsFill.style.left = loPct + "%";
+  rsFill.style.width = (hiPct - loPct) + "%";
+}
+function priceInput() {
+  function read(id) {
+    var el = document.getElementById(id);
+    var raw = el.value.trim();
+    if (raw === "") { el.dataset.prev = ""; return null; }
+    var n = Math.floor(Number(raw)); /* 小數無條件退位 */
+    if (!isFinite(n)) { /* 非法字符 → 前一次數值 */
+      return el.dataset.prev === "" || el.dataset.prev == null ? null : +el.dataset.prev;
+    }
+    n = Math.max(1, n); /* 最小 1 */
+    el.dataset.prev = String(n);
+    el.value = String(n);
+    return n;
+  }
+  state.pmin = read("pmin");
+  state.pmax = read("pmax");
+  syncSlider();
+  render();
+}
+document.getElementById("pmin").addEventListener("input", priceInput);
+document.getElementById("pmax").addEventListener("input", priceInput);
+syncSlider();
+function dragThumb(thumb, isMin) {
+  thumb.addEventListener("pointerdown", function (e) {
+    e.preventDefault();
+    thumb.classList.add("drag");
+    thumb.setPointerCapture(e.pointerId);
+    function pos(ev) {
+      var r = rsSlider.getBoundingClientRect();
+      var v = Math.round((ev.clientX - r.left) / r.width * PRICE_MAX / PRICE_STEP) * PRICE_STEP;
+      v = Math.max(0, Math.min(PRICE_MAX, v));
+      if (isMin) {
+        var hi = state.pmax == null ? PRICE_MAX : state.pmax;
+        v = Math.min(v, hi);
+        state.pmin = v <= 0 ? null : v;
+      } else {
+        var lo = state.pmin == null ? 0 : state.pmin;
+        v = Math.max(v, lo);
+        state.pmax = v >= PRICE_MAX ? null : v;
+      }
+      var el = document.getElementById(isMin ? "pmin" : "pmax");
+      var val = state[isMin ? "pmin" : "pmax"];
+      el.value = val == null ? "" : val;
+      if (val != null) el.dataset.prev = String(val);
+      syncSlider();
+      render();
+    }
+    function mv(ev) { pos(ev); }
+    function up() {
+      thumb.classList.remove("drag");
+      thumb.removeEventListener("pointermove", mv);
+      thumb.removeEventListener("pointerup", up);
+    }
+    pos(e);
+    thumb.addEventListener("pointermove", mv);
+    thumb.addEventListener("pointerup", up);
+  });
+}
+dragThumb(rsMin, true);
+dragThumb(rsMax, false);
+document.querySelectorAll("[data-chan]").forEach(function (b) {
+  b.onclick = function () {
+    var ch = b.dataset.chan;
+    var i = state.chan.indexOf(ch);
+    if (i >= 0) { if (state.chan.length === 1) return; state.chan.splice(i, 1); b.classList.remove("on"); }
+    else { state.chan.push(ch); b.classList.add("on"); }
+    b.setAttribute("aria-pressed", String(b.classList.contains("on")));
+    render();
+  };
+});
+/* 只看收藏:header 星星 與 篩選列按鈕 雙向同步 */
+function setFavOnly(v) {
+  state.favOnly = v;
+  document.getElementById("favOnly").classList.toggle("on", v);
+  document.getElementById("favOnly").setAttribute("aria-pressed", String(v));
+  document.getElementById("favStar").classList.toggle("on", v);
+  document.getElementById("favStar").setAttribute("aria-pressed", String(v));
+  render();
+}
+document.getElementById("favOnly").onclick = function () { setFavOnly(!state.favOnly); };
+document.getElementById("favStar").onclick = function () { setFavOnly(!state.favOnly); };
+
+/* 通知彈窗 */
+var bellPop = document.getElementById("bellPop");
+document.getElementById("bellBtn").onclick = function (e) {
+  e.stopPropagation();
+  bellPop.hidden = !bellPop.hidden;
+};
+document.addEventListener("click", function (e) {
+  if (!bellPop.hidden && !bellPop.contains(e.target)) bellPop.hidden = true;
+});
+
+document.getElementById("reset").onclick = function () {
+  state = { q: "", chan: ["外送", "外帶"], favOnly: false, tags: [], exTags: [], sortKey: "price", sortDir: "asc", pmin: null, pmax: null };
+  syncControls();
+  render();
+};
+
+var lastFocus = null; /* 關閉詳情後把焦點還給開啟者 */
+function show(c) {
+  lastFocus = document.activeElement;
+  openCode = c.code;
+  var issueUrl = "https://github.com/happk/HutDeals/issues/new?title="
+    + encodeURIComponent("[問題回報] " + c.code + " " + displayName(c))
+    + "&body=" + encodeURIComponent("優惠代碼：" + c.code + "\n品名：" + c.name + "\n\n問題描述：\n\n—\n資料更新：2026-09-05 18:01");
+  document.getElementById("modal").innerHTML =
+    '<button class="close" onclick="closeModal()">✕</button>'
+    + '<h2>' + displayName(c) + '</h2>'
+    + '<dl class="dl">'
+    + '<div><dt>優惠代碼</dt><dd><span class="code-big">' + c.code + '</span> <button class="mbtn" style="padding:4px 10px;margin-left:6px" onclick="copyText(\'' + c.code + '\', this)">⧉ 複製</button></dd></div>'
+    + '<div><dt>來源</dt><dd>' + (c.partner ? c.partner + "（外部收集）" : "官網列表") + '</dd></div>'
+    + '<div><dt>活動期間</dt><dd style="color:var(--muted)">—（待資料來源提供）</dd></div>'
+    + '<div><dt>價格</dt><dd><b style="color:var(--red)">$' + c.price + '</b>' + (c.msrp ? ' <s style="color:var(--muted)">原價$' + c.msrp + '</s>' : '') + '</dd></div>'
+    + '<div><dt>適用</dt><dd>' + c.chan + '</dd></div>'
+    + '<div><dt>標籤</dt><dd>' + c.tags.join("、") + '</dd></div>'
+    + '</dl>'
+    + '<ul class="items" style="margin-top:10px">'
+    + c.items.map(function (i) {
+        return '<li>' + i.text
+          + (i.choices ? '<span class="sub">' + i.choices.map(function (ch) { return "· " + ch; }).join("<br>") + '</span>' : '')
+          + (i.add ? '<span class="sub">※ ' + i.add + '</span>' : '')
+          + '</li>';
+      }).join("")
+    + '</ul>'
+    + (c.partner ? '<div class="warnline">⚠ 此代碼由外部社群收集，未經必勝客官方確認；實際可兌換性以官網下單結果為準。</div>' : '')
+    + '<div class="acts"><button class="mbtn pri" onclick="copyText(\'' + c.code + '\', this); setTimeout(function(){window.open(\'' + c.orderUrl + '\',\'_blank\');},450)">複製代碼並前往訂購</button>'
+    + '<button class="mbtn" onclick="copyText(location.href.split(\'?\')[0] + \'?code=' + c.code + '\', this)">複製分享連結</button>'
+    + '<a class="mbtn" href="' + issueUrl + '" target="_blank" rel="noopener noreferrer">回報問題/失效</a></div>';
+  var mask = document.getElementById("mask");
+  mask.classList.add("open");
+  updateUrl();
+  mask.querySelector(".close").focus();
+}
+function closeModal() {
+  openCode = null;
+  document.getElementById("mask").classList.remove("open");
+  updateUrl();
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+document.getElementById("mask").onclick = function (e) { if (e.target === this) closeModal(); };
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && document.getElementById("mask").classList.contains("open")) closeModal();
+});
+
+/* 主題:localStorage 優先,首次訪客跟隨系統 */
+var themeBtn = document.getElementById("themeBtn");
+function applyTheme(t) {
+  document.documentElement.classList.toggle("light", t === "light");
+  themeBtn.textContent = t === "light" ? "☾ 夜色" : "☀ 亮色";
+  try { localStorage.setItem("hutdeals-theme", t); } catch (e) {}
+}
+(function () {
+  var saved = null;
+  try { saved = localStorage.getItem("hutdeals-theme"); } catch (e) {}
+  if (!saved) saved = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  applyTheme(saved);
+  themeBtn.onclick = function () {
+    applyTheme(document.documentElement.classList.contains("light") ? "dark" : "light");
+  };
+})();
+
+/* ===== URL 狀態同步 + 深連結(可分享重現) ===== */
+var urlReady = false, openCode = null;
+(function initFromUrl() {
+  var p = new URLSearchParams(location.search);
+  state.q = p.get("q") || "";
+  state.tags = (p.get("in") || "").split(",").filter(Boolean);
+  state.exTags = (p.get("ex") || "").split(",").filter(Boolean);
+  var chan = p.get("chan");
+  if (chan === "外送" || chan === "外帶") state.chan = [chan];
+  state.favOnly = p.get("fav") === "1";
+  if (p.get("min")) state.pmin = +p.get("min");
+  if (p.get("max")) state.pmax = +p.get("max");
+  if (["price", "seen", "code"].indexOf(p.get("sort")) >= 0) state.sortKey = p.get("sort");
+  if (p.get("dir") === "desc") state.sortDir = "desc";
+  openCode = p.get("code");
+})();
+function updateUrl() {
+  if (!urlReady) return;
+  var p = new URLSearchParams();
+  if (state.q) p.set("q", state.q);
+  if (state.tags.length) p.set("in", state.tags.join(","));
+  if (state.exTags.length) p.set("ex", state.exTags.join(","));
+  if (state.chan.length === 1) p.set("chan", state.chan[0]);
+  if (state.favOnly) p.set("fav", "1");
+  if (state.pmin != null) p.set("min", state.pmin);
+  if (state.pmax != null) p.set("max", state.pmax);
+  if (state.sortKey !== "price") p.set("sort", state.sortKey);
+  if (state.sortDir === "desc") p.set("dir", "desc");
+  if (openCode) p.set("code", openCode);
+  var qs = p.toString();
+  history.replaceState(null, "", location.pathname + (qs ? "?" + qs : ""));
+}
+/* 把 UI 控制項同步成 state 的樣子(初始載入/重置共用) */
+function syncControls() {
+  document.getElementById("q").value = state.q;
+  document.getElementById("sortKey").value = state.sortKey;
+  document.getElementById("sortDir").textContent = state.sortDir === "asc" ? "↑" : "↓";
+  document.querySelectorAll("[data-chan]").forEach(function (b) {
+    var on = state.chan.indexOf(b.dataset.chan) >= 0;
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-pressed", String(on));
+  });
+  setFavOnly(state.favOnly);
+  document.querySelectorAll("#row2 .toggle").forEach(function (b) {
+    var t = b.dataset.tag;
+    var inc = state.tags.indexOf(t) >= 0, ex = state.exTags.indexOf(t) >= 0;
+    b.classList.toggle("on", inc);
+    b.classList.toggle("ex", ex);
+    b.setAttribute("aria-pressed", inc ? "true" : ex ? "mixed" : "false");
+  });
+  document.getElementById("pmin").value = state.pmin == null ? "" : state.pmin;
+  document.getElementById("pmax").value = state.pmax == null ? "" : state.pmax;
+  syncSlider();
+}
+syncControls();
+render();
+urlReady = true;
+if (openCode) {
+  var deepCoupon = DATA.filter(function (c) { return c.code === openCode; })[0];
+  if (deepCoupon) show(deepCoupon);
+}
+</script>
+</body>
+</html>

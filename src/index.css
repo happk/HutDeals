@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/* dark 改由 <html class="dark"> 驅動（供月亮/太陽切換），非純 media */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light dark;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* ===== 主題背景:亮色=烤箱暖光(奶油起司底+金紅光暈+羅勒綠),暗色=炭火夜烤(炭底+餘燼點點+紅光) ===== */
+body {
+  background:
+    radial-gradient(ellipse 62% 42% at 16% -6%, rgba(246, 196, 83, 0.38), transparent 62%),
+    radial-gradient(ellipse 46% 34% at 97% 4%, rgba(215, 24, 42, 0.13), transparent 62%),
+    radial-gradient(ellipse 42% 26% at 76% 102%, rgba(127, 176, 105, 0.14), transparent 60%),
+    radial-gradient(rgba(142, 15, 28, 0.04) 1.4px, transparent 1.4px) 0 0 / 22px 22px,
+    linear-gradient(#fff8ef, #ffefd9);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+html.dark body {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(215, 24, 42, 0.14), transparent 42%),
+    radial-gradient(circle at 88% 8%, rgba(246, 183, 60, 0.1), transparent 40%),
+    radial-gradient(rgba(255, 90, 78, 0.1) 1.6px, transparent 1.6px) 0 0 / 26px 26px,
+    radial-gradient(rgba(246, 183, 60, 0.07) 1.3px, transparent 1.3px) 13px 13px / 26px 26px,
+    #16120e;
+}

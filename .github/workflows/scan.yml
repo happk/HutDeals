@@ -1,0 +1,143 @@
+name: Daily coupon scan
+
+on:
+  schedule:
+    # 台灣 01:30 = UTC 17:30（與每日 update.yml 00:30 錯開）
+    - cron: "30 17 * * *"
+  workflow_dispatch:
+    inputs:
+      smoke:
+        description: 煙霧模式（每工只掃前 N 碼，驗證 runner→官網通道）
+        type: boolean
+        default: false
+      limit:
+        description: 煙霧模式每工碼數（confirm 為 alive/dead 各 N）
+        default: '5'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  # 軌道①：現有碼死活+內容確認（死碼 dead_since 滿 7 天→空號）；~1130 發 ≈ 1.8h
+  confirm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # daily 三工用 orderflow session 流程（抽選單版 JS 變數）需要 node
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm existing codes
+        env:
+          LIMIT: ${{ inputs.smoke && inputs.limit || '0' }}
+        run: python -m script.scan.daily confirm --limit "$LIMIT"
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/scan_state.json data/scan_alerts.json \
+            data/scan-records/scan-history.md; then
+            echo "no changes"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/scan_state.json data/scan_alerts.json \
+              data/scan-records/scan-history.md
+            git commit -m "daily scan confirm ($(date -u +%F))" && git push
+          fi
+
+  # 軌道②：16/26 全段 M1 普查（段窄期全掃，掃描窗留作未來引子）；~2000 發 ≈ 3.2h
+  explore:
+    needs: confirm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main  # 取 confirm 推完後的最新狀態（預設會抓觸發時的舊 SHA，push 被拒）
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Explore active ranges
+        env:
+          LIMIT: ${{ inputs.smoke && inputs.limit || '0' }}
+        run: python -m script.scan.daily explore --limit "$LIMIT"
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/scan_state.json data/scan_coverage.json \
+            data/scan_alerts.json \
+            data/scan-records/scan-history.md; then
+            echo "no changes"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/scan_state.json data/scan_coverage.json data/scan_alerts.json \
+              data/scan-records/scan-history.md
+            git commit -m "daily scan explore ($(date -u +%F))" && git push
+          fi
+
+  # 軌道③：潛在未知號段抽樣（每日隨機重抽，命中→admin 警告）；~1200 發 ≈ 1.9h
+  sample:
+    needs: explore
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main  # 取 explore 推完後的最新狀態
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Sample unknown ranges
+        env:
+          LIMIT: ${{ inputs.smoke && inputs.limit || '0' }}
+        run: python -m script.scan.daily sample --limit "$LIMIT"
+
+      # admin.html(部署自 public/)讀得到警告檔;sample 是三工最後一工,此時 alerts 已是當日定稿
+      - name: Publish alerts to public
+        run: cp data/scan_alerts.json public/scan_alerts.json
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/scan_state.json data/scan_coverage.json \
+            data/scan_alerts.json public/scan_alerts.json \
+            data/scan-records/scan-history.md; then
+            echo "no changes"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/scan_state.json data/scan_coverage.json data/scan_alerts.json \
+              public/scan_alerts.json \
+              data/scan-records/scan-history.md
+            git commit -m "daily scan sample ($(date -u +%F))" && git push
+          fi
+
+  # 掃描失敗告警（熔斷/官網改版）：開 Issue，已有開啟中告警則不重複
+  alert:
+    needs: [confirm, explore, sample]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create scan-failed --color red --force 2>/dev/null || true
+          TITLE="每日掃號失敗 $(date -u +%F)"
+          COUNT=$(gh issue list --label scan-failed --state open --json number --jq 'length')
+          if [ "$COUNT" -eq 0 ]; then
+            gh issue create \
+              --title "$TITLE" \
+              --label "scan-failed" \
+              --body "script.scan.daily 某工執行失敗（熔斷或官網改版）。已完成部分已由各 job 自行 commit。請看 Actions log。"
+          else
+            echo "open scan-failed issue already exists, skip"
+          fi
