@@ -1,9 +1,7 @@
 name: Daily coupon update
 
 on:
-  schedule:
-    # UTC 16:30 = 台灣時間 00:30
-    - cron: "30 16 * * *"
+  # 由 scan.yml 三工成功後 gh workflow run 觸發；也可手動 workflow_dispatch
   workflow_dispatch:
 
 permissions:
@@ -37,7 +35,7 @@ jobs:
       - name: Enrich official coupons
         run: python -m script.site.enrich_official
 
-      # 產生 sitemap.xml(主站 + 各券深連結,券每日增減故每日重建)
+      # 產生 sitemap.xml(主站 + 各券深連結)
       - name: Generate sitemap
         run: python -m script.site.gen_sitemap
 
@@ -72,3 +70,12 @@ jobs:
           else
             echo "open scrape-failed issue already exists, skip"
           fi
+
+      # update 成功 → 觸發 deploy(鏈式)
+      - name: Dispatch deploy
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run deploy-pages.yml --repo "$GITHUB_REPOSITORY"
+          echo "update 成功，已觸發 deploy-pages.yml"

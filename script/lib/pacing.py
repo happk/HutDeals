@@ -11,7 +11,7 @@ __all__ = ["sleep_scan"]
 DEFAULT_SLEEP = 2.0   # 基礎間隔秒（策略定稿為 ~2s 浮動）
 DEFAULT_JITTER = 2.0  # 每發浮動上限
 DEFAULT_SEG_GAP = 15.0
-DEFAULT_BREAK_EVERY = 40
+DEFAULT_BREAK_EVERY = 50  # 中場休息間隔：對齊 BatchFetcher 50 張換 session(2026-09-08)
 DEFAULT_BREAK_BASE = 90.0
 
 

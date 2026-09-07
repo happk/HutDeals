@@ -2,8 +2,8 @@ name: Daily coupon scan
 
 on:
   schedule:
-    # 台灣 01:30 = UTC 17:30（與每日 update.yml 00:30 錯開）
-    - cron: "30 17 * * *"
+    # 台灣 01:11 = UTC 17:11（掃號起頭；update 靠 scan 成功 dispatch，非寫死時間）
+    - cron: "11 17 * * *"
   workflow_dispatch:
     inputs:
       smoke:
@@ -19,8 +19,24 @@ permissions:
   issues: write
 
 jobs:
+  # 熔斷檢查：前一日有未關的 scan-failed/scrape-failed issue → 禁止今日掃號(防污染)
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          OPEN=$(gh issue list --label scan-failed --state open --json number --jq 'length' 2>/dev/null || echo 0)
+          OPEN2=$(gh issue list --label scrape-failed --state open --json number --jq 'length' 2>/dev/null || echo 0)
+          if [ "$OPEN" -gt 0 ] || [ "$OPEN2" -gt 0 ]; then
+            echo "有未關閉的失敗告警 issue(scan-failed=$OPEN, scrape-failed=$OPEN2)，禁止今日掃號"
+            exit 1
+          fi
+          echo "gate 通過，可掃號"
+
   # 軌道①：現有碼死活+內容確認（死碼 dead_since 滿 7 天→空號）；~1130 發 ≈ 1.8h
   confirm:
+    needs: gate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -141,3 +157,15 @@ jobs:
           else
             echo "open scan-failed issue already exists, skip"
           fi
+
+  # 三工全成功 → 觸發 update(鏈式, 非寫死時間)
+  dispatch-update:
+    needs: [confirm, explore, sample]
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run update.yml --repo "$GITHUB_REPOSITORY"
+          echo "scan 成功，已觸發 update.yml"
