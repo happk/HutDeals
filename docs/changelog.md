@@ -8,6 +8,7 @@
 ## 未發佈
 
 - 連結預覽圖：新增 `og-image.png`（深色底 + 披薩 + 漸層 HutDeals），`twitter:card` 升為 `summary_large_image`
+- 內部維護：測試快照移除官網公開金鑰（無功能影響）
 
 ## v1.0.1（2026-09-08）— 公告即時性 + sitemap 自動更新
 
