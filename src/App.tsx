@@ -343,6 +343,27 @@ export default function App() {
         <div ref={sentinelRef} aria-hidden="true" className="h-1" />
       </main>
 
+      {/* 頁尾：非官方聲明(資料來源官網/商標歸屬) + 更新時間 + repo 連結 */}
+      <footer className="border-t border-red-900/10 bg-[#fff8ef]/40 py-5 text-center text-[12px] leading-relaxed text-slate-400 dark:border-white/10 dark:bg-white/[0.02] dark:text-slate-500">
+        <p className="mx-auto max-w-3xl px-4">
+          HutDeals 非必勝客官方網站。優惠資料來自必勝客官網公開頁面與官網訂餐驗證端點，
+          <br />
+          價格與供應以官網為準；Pizza Hut、必勝客等商標屬各權利人。
+        </p>
+        <p className="mt-1.5">
+          資料最後更新：{data.last_update.slice(0, 10)}
+          <span aria-hidden="true">　·　</span>
+          <a
+            href="https://github.com/happk/HutDeals"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400"
+          >
+            GitHub 原始碼
+          </a>
+        </p>
+      </footer>
+
       {detail && (
         <CouponDetail
           coupon={detail}

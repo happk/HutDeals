@@ -35,9 +35,30 @@ function hiconCls(active: boolean) {
   }`;
 }
 
+/** 公告（作者訊息）：解析 public/notices.md（## 日期 + 內容，越新越上）。 */
+interface Notice { date: string; body: string }
+
+function parseNotices(md: string): Notice[] {
+  const out: Notice[] = [];
+  let cur: Notice | null = null;
+  for (const line of md.split("\n")) {
+    const m = /^##\s+(\d{4}-\d{2}-\d{2})/.exec(line.trim());
+    if (m) {
+      if (cur) out.push(cur);
+      cur = { date: m[1], body: "" };
+    } else if (cur && line.trim()) {
+      cur.body += (cur.body ? "\n" : "") + line.trim();
+    }
+  }
+  if (cur) out.push(cur);
+  return out;
+}
+
+const NOTICE_SEEN_KEY = "hutdeals:notices-seen";
+
 /**
  * 常駐毛玻璃 header:Pizza logo+副標題、資料更新時間、
- * GitHub 倉庫(佔位)/通知鈴鐺(彈窗佔位)/收藏夾星(=只看收藏) / 主題切換。
+ * GitHub 倉庫/通知鈴鐺(公告,作者訊息,有新版自動開)/收藏夾星(=只看收藏) / 主題切換。
  */
 export default function Header({
   lastUpdate,
@@ -55,7 +76,34 @@ export default function Header({
   onHome: () => void;
 }) {
   const [bellOpen, setBellOpen] = useState(false);
+  const [notices, setNotices] = useState<Notice[] | null>(null);
+  const [hasNew, setHasNew] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
+
+  // 載入公告
+  useEffect(() => {
+    let on = true;
+    fetch(`${import.meta.env.BASE_URL}notices.md`)
+      .then((r) => (r.ok ? r.text() : Promise.reject()))
+      .then((md) => {
+        if (!on) return;
+        const list = parseNotices(md);
+        setNotices(list);
+        if (list.length > 0) {
+          const latest = list[0].date;
+          const seen = localStorage.getItem(NOTICE_SEEN_KEY) || "";
+          if (seen !== latest) {
+            setHasNew(true);
+            setBellOpen(true); // 有新版公告 → 自動展開
+            localStorage.setItem(NOTICE_SEEN_KEY, latest);
+          }
+        }
+      })
+      .catch(() => on && setNotices([]));
+    return () => {
+      on = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!bellOpen) return;
@@ -65,6 +113,14 @@ export default function Header({
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
   }, [bellOpen]);
+
+  const openBell = () => {
+    setBellOpen((v) => !v);
+    if (hasNew && notices && notices.length > 0) {
+      setHasNew(false);
+      localStorage.setItem(NOTICE_SEEN_KEY, notices[0].date);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-red-900/10 bg-[#fff8ef]/75 shadow-[0_6px_24px_rgba(240,169,46,0.35)] backdrop-blur-xl dark:border-white/10 dark:bg-[#16120e]/65 dark:shadow-none">
@@ -91,8 +147,10 @@ export default function Header({
           </span>
           <div className="flex items-center gap-1.5">
             <a
-              href="#"
-              title="專案倉庫(佔位)"
+              href="https://github.com/happk/HutDeals"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="GitHub 專案倉庫"
               aria-label="GitHub 專案倉庫"
               className={hiconCls(false)}
             >
@@ -102,9 +160,9 @@ export default function Header({
             </a>
             <div className="relative" ref={bellRef}>
               <button
-                onClick={() => setBellOpen((v) => !v)}
-                title="更新通知"
-                aria-label="更新通知"
+                onClick={openBell}
+                title="公告"
+                aria-label="公告"
                 aria-expanded={bellOpen}
                 className={hiconCls(false)}
               >
@@ -113,16 +171,25 @@ export default function Header({
                   <path d="M13.7 21a2 2 0 0 1-3.4 0" />
                 </svg>
               </button>
+              {/* 新公告紅點 */}
+              {hasNew && (
+                <span className="absolute right-0.5 top-0.5 h-2 w-2 rounded-full bg-red-500" aria-hidden="true" />
+              )}
               {bellOpen && (
-                <div className="absolute right-0 top-10 z-50 w-64 rounded-2xl border border-red-900/10 bg-white p-4 text-[13px] shadow-xl dark:border-white/10 dark:bg-[#1d1813]">
-                  <b className="mb-1.5 block text-red-600 dark:text-red-400">更新通知</b>
-                  {/* 永久佔位：無通知/資料時顯示（2026-09-07） */}
-                  <p className="m-0 text-slate-400 dark:text-slate-500">Hello Pizza!</p>
-                  {/* 互動提示（2026-09-07）：放通知而非彩蛋視窗 */}
-                  <ul className="mt-2 space-y-1 border-t border-red-900/10 pt-2 text-slate-500 dark:border-white/10 dark:text-slate-400">
-                    <li>• 點左上 HutDeals logo 回首頁（清篩選）</li>
-                    <li>• 點首頁大披薩看尺寸對照</li>
-                  </ul>
+                <div className="absolute right-0 top-10 z-50 max-h-[70vh] w-80 overflow-y-auto rounded-2xl border border-red-900/10 bg-white p-4 text-[13px] shadow-xl dark:border-white/10 dark:bg-[#1d1813]">
+                  <b className="mb-2 block text-red-600 dark:text-red-400">公告</b>
+                  {notices === null ? (
+                    <p className="m-0 text-slate-400">載入中…</p>
+                  ) : notices.length === 0 ? (
+                    <p className="m-0 text-slate-400 dark:text-slate-500">Hello Pizza!</p>
+                  ) : (
+                    notices.map((n) => (
+                      <div key={n.date} className="mb-2.5 border-b border-red-900/5 pb-2.5 last:mb-0 last:border-0 last:pb-0 dark:border-white/5">
+                        <div className="text-[12px] font-bold text-red-600 dark:text-red-400">{n.date}</div>
+                        <p className="m-0 mt-0.5 whitespace-pre-line text-slate-600 dark:text-slate-300">{n.body}</p>
+                      </div>
+                    ))
+                  )}
                 </div>
               )}
             </div>
