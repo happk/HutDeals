@@ -5,6 +5,10 @@
 > - Y 功能
 > - Z 修正
 
+## 未發佈
+
+- 連結預覽圖：新增 `og-image.png`（深色底 + 披薩 + 漸層 HutDeals），`twitter:card` 升為 `summary_large_image`
+
 ## v1.0.1（2026-09-08）— 公告即時性 + sitemap 自動更新
 
 - 公告：`notices.md` fetch 改用 `no-cache`，每次載入都驗證新版（未改回 304），免等 CDN 10 分鐘快取
