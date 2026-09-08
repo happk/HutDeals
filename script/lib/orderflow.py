@@ -158,7 +158,8 @@ def parse_menu_html(code: str, html: str) -> dict | None:
         tmp = f.name
     try:
         proc = subprocess.run(["node", node_script, tmp],
-                              capture_output=True, text=True, timeout=60)
+                              capture_output=True, text=True, timeout=60,
+                              encoding="utf-8")
         if proc.returncode != 0:
             return None
         extract = json.loads(proc.stdout)

@@ -10,7 +10,7 @@ import os
 import subprocess
 import unittest
 
-from script.scan.parse_orderflow import flatten_items, parse_orderflow
+from script.scan.parse_orderflow import _all_drink, flatten_items, parse_orderflow
 
 FIXTURES = os.path.join(os.path.dirname(__file__), "fixtures", "orderflow")
 NODE = os.path.join(os.path.dirname(__file__), "..", "..", "..", "script",
@@ -23,7 +23,7 @@ def load(code: str):
     with open(hp, encoding="utf-8") as f:
         html = f.read()
     proc = subprocess.run(["node", os.path.normpath(NODE), hp],
-                          capture_output=True, text=True)
+                          capture_output=True, text=True, encoding="utf-8")
     extract = json.loads(proc.stdout)
     struct = parse_orderflow(html, extract)
     items = flatten_items(struct)
@@ -118,6 +118,26 @@ class TestCat(unittest.TestCase):
         self.assertEqual(g[("main", 1)][0], "大比薩")
         self.assertEqual(g[("main", 2)][0], "個人比薩")
         self.assertEqual(g[("second", 1)][0], "副食")
+
+    def test_91113_fivefold(self):
+        """91113 五享餐：主食個人比薩4選1 + 副食×3(各1) + 飲料3選1。
+
+        守護 2026-09-08：second g4（含茉香柚茶）須為飲料（_DRINK_KW 柚茶），
+        不可因單品漏關鍵字而整組誤判副食。
+        """
+        g = self._groups("91113")
+        self.assertEqual(g[("main", 1)][0], "個人比薩")
+        self.assertEqual(g[("second", 1)][0], "副食")
+        self.assertEqual(g[("second", 2)][0], "副食")
+        self.assertEqual(g[("second", 3)][0], "副食")
+        self.assertEqual(g[("second", 4)][0], "飲料")
+        self.assertEqual(g[("second", 4)][1], "請選擇1份飲料")
+
+    def test_youcha_is_drink_chawanmushi_is_not(self):
+        # 柚茶納入飲料；茶碗蒸仍不可誤判（2026-09-07 精準化紅線）
+        self.assertTrue(_all_drink(["茉香柚茶", "百事可樂330ml", "七喜330ml"]))
+        self.assertFalse(_all_drink(["茶碗蒸"]))
+        self.assertFalse(_all_drink(["檸檬雞翅", "百事可樂330ml"]))
 
 
 class TestCatRules(unittest.TestCase):
