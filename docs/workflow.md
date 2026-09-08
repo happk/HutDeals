@@ -1,14 +1,14 @@
 # HutDeals 工作流總覽（data pipeline）
 
 > 本檔是**流程圖與現狀的權威文件**（與 `code-structure.md` 同級）；動線改動時同步更新。
-> 更新：2026-09-08（orderflow items、分類 cat、公開版）。
+> 更新：2026-09-09（explore 去重、cron-job.org 主要＋GitHub cron 備援讓賢、pacing 中場 30s）。
 
 ## 1. 全域資料流
 
 ```mermaid
 flowchart LR
-  subgraph 每日CI["每日鏈式 workflow（台灣 01:11 scan 起頭）"]
-    SCAN["scan.yml(01:11)<br/>gate→confirm→explore→sample<br/>掃號+歸檔"] -->|"成功 dispatch"| UPDATE["update.yml<br/>build/ingest/enrich/sitemap"]
+  subgraph 每日CI["每日鏈式 workflow（cron-job.org 01:11 dispatch 主要；GitHub cron 01:11 備援，gate 讓賢）"]
+    SCAN["scan.yml<br/>gate→confirm→explore→sample<br/>掃號+歸檔"] -->|"成功 dispatch"| UPDATE["update.yml<br/>build/ingest/enrich/sitemap"]
     UPDATE -->|"成功 dispatch"| DEPLOY["deploy-pages.yml<br/>npm build → Pages"]
   end
 
@@ -35,12 +35,12 @@ stateDiagram-v2
     空號 --> 活 : 掃到新發行
 ```
 
-## 3. 各 CI / 腳本職責（鏈式，2026-09-08）
+## 3. 各 CI / 腳本職責（鏈式，2026-09-09）
 
 | 觸發 | 腳本 | 職責 |
 |---|---|---|
-| 每日 01:11（scan.yml cron 起頭） | `scan.daily confirm`（gate job 先檢查無 open 失敗 issue） | 現有碼死活＋內容更動確認；死碼 dead_since 滿 7 天→空號 |
-| 〃 串行 | `scan.daily explore` | 16/26 號段 M1 普查，新活碼自動入庫 |
+| cron-job.org dispatch 01:11（主要）；GitHub cron 01:11（備援，gate 讓賢） | `scan.daily confirm`（gate job 先檢查：無 open 失敗 issue 且無他場在跑） | 現有碼死活＋內容更動確認；死碼 dead_since 滿 7 天→空號 |
+| 〃 串行 | `scan.daily explore` | 16/26 潛在碼位 M1 普查（**去重**：剔除當日 confirm 已確認的 alive/dead），新活碼自動入庫 |
 | 〃 串行 | `scan.daily sample` | 潛在未知號段抽樣（2026-09-08 起減半；命中→admin 警告） |
 | scan 成功 dispatch | `site.build_coupons`（update.yml） | 官網列表 → coupons.js 本體 |
 | 〃 | `site.ingest_external` | scan_state 活碼 → coupons.js（外部碼） |
@@ -49,7 +49,8 @@ stateDiagram-v2
 | update 成功 dispatch | `deploy-pages.yml` | npm build → GitHub Pages（push 亦觸發） |
 
 > 失敗處理：任一步失敗 → 開 `scan-failed`/`scrape-failed` issue → 隔日 gate 見 open issue 即禁掃（防污染）。
-> update/deploy 無固定 cron，完全依賴 scan 成功 dispatch（或手動 workflow_dispatch）。
+> **備援讓賢**：GitHub cron 排程觸發時，gate 偵測到另一場 `workflow_dispatch` 掃號在跑/排隊（排除自己）
+> → `should_run=false`，後續 job 全 skip、整場綠色收尾（不會並跑、不會兩邊都讓）。
 
 
 
@@ -66,7 +67,8 @@ stateDiagram-v2
 
 ## 4. 請求節奏
 
-掃號對官網驗證端點請求遵守節奏（`lib/pacing`）：sleep + 隨機浮動、每 N 發中場休息、換號段休息。
+掃號對官網驗證端點請求遵守節奏（`lib/pacing`）：每發 ~2s＋隨機浮動、換號段休息、
+每 50 發中場休息 ~30s（2026-09-09 由 ~90s 調降；`DEFAULT_BREAK_BASE=30`）。
 
 熔斷：429/403 立即停、傳輸失敗記 unknown 不算死。
 
@@ -77,9 +79,9 @@ stateDiagram-v2
   `BatchFetcher` K 張共用 session。
 - `scan/parse_orderflow.py` + `extract_js.cjs`：選單版內嵌 JS 變數（psidss/pprcss/ctidss）→
   結構化候選 items（含組分類 cat）。
-- 新 items schema：`{text, group, groupIdx, priceAdd, flavors[], cat}`（見 `docs/items-schema.md`）。
+- 新 items schema：`{text, group, groupIdx, priceAdd, flavors[], cat}`。
 
 ## 6. 價格與 desc 原則（2026-09-07）
 
 - 結構化欄位一律從結構化 HTML（descPrice/套餐價格/price_selling/組標題），desc 只當備用。
-- 起價券（無結構化固定價）以 desc「$N 起」兜底，`priceNote="起"` 標記（見 `docs/crawler-data-sources.md`）。
+- 起價券（無結構化固定價）以 desc「$N 起」兜底，`priceNote="起"` 標記。

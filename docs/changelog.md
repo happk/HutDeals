@@ -5,9 +5,7 @@
 > - Y 功能
 > - Z 修正
 
-## 未分配（2026-09-09）
-
-> 待發行版本號；發行時再合併進對應的 vX.Y.Z。
+## v1.0.4（2026-09-09）— 掃號去重、cron-job 備援讓賢、節奏調降
 
 **掃號去重**
 - explore 對 confirm 去重：explore 只探 16/26 潛在碼位，剔除當日 confirm 已確認的
@@ -20,6 +18,18 @@
   在跑/排隊（排除自己）即讓賢（`should_run=false`），後續 job 全 skip、整場綠色收尾；
   不會與主要場並跑、也不會兩邊都讓。新增 `actions: read` 權限。
   排除自己採 `${GITHUB_RUN_ID}` 內插（避免 jq 當變數 null 而自我讓賢）。
+
+**掃號節奏**
+- 中場休息 ~90s → ~30s（`lib/pacing.py` `DEFAULT_BREAK_BASE`；每日約省 1 小時）。
+
+**文件**
+- `docs/code-structure.md` / `docs/workflow.md`：同步 explore 去重、cron-job.org 主要＋
+  GitHub cron 備援讓賢、pacing 30s、repo.py 與新測試檔入樹、移除已不存在的
+  `items-schema.md`/`crawler-data-sources.md` 引用。
+- `docs/todo.md`：9f44bb9 條目行號刷新至現行 scan.yml。
+
+**版本**
+- `package.json` 同步至 1.0.4
 
 ## v1.0.3（2026-09-09）— 掃號穩定性修正
 

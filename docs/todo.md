@@ -13,6 +13,6 @@
 
 ### 9f44bb9
 
-- `.github/workflows/scan.yml` 三工（confirm:54-65 / explore:86-98 / sample:124-137）的「Commit if changed」step 無 `if: always()`：step2 層級熔斷或未預期例外使 job 失敗時，`script/scan/daily.py` 已 `save_state()`/寫 alerts 的當日結果不會被 commit → 熔斷日資料只留 runner 工作區、不上 remote；且 alert job（`.github/workflows/scan.yml:139-159`）issue body「已完成部分已由各 job 自行 commit」（:156）與實際不符。修法方向：commit step 加 `if: always()`（熔斷 exit 3 時資料已寫檔，可安全提交），或改 issue body 措辭。
-- `public/scan_alerts.json` 僅在 `.github/workflows/scan.yml:121-122`（sample 尾工）與 `.github/workflows/update.yml:44-49` 複製：confirm/explore 熔斷中斷鏈時 public 警報停在昨日、admin 看不出當日熔斷（當日唯一警示是 GitHub issue）。修法方向：各 job commit 時一併複製，或 alert job 補一份。
+- `.github/workflows/scan.yml` 三工（confirm:73-84 / explore:106-118 / sample:144-156）的「Commit if changed」step 無 `if: always()`：step2 層級熔斷或未預期例外使 job 失敗時，`script/scan/daily.py` 已 `save_state()`/寫 alerts 的當日結果不會被 commit → 熔斷日資料只留 runner 工作區、不上 remote；且 alert job（`.github/workflows/scan.yml:160-184`）issue body「已完成部分已由各 job 自行 commit」（:182）與實際不符。修法方向：commit step 加 `if: always()`（熔斷 exit 3 時資料已寫檔，可安全提交），或改 issue body 措辭。
+- `public/scan_alerts.json` 僅在 `.github/workflows/scan.yml:141-142`（sample 尾工）與 `.github/workflows/update.yml:44-49` 複製：confirm/explore 熔斷中斷鏈時 public 警報停在昨日、admin 看不出當日熔斷（當日唯一警示是 GitHub issue）。修法方向：各 job commit 時一併複製，或 alert job 補一份。
 - `script/lib/orderflow.py:fetch_and_parse()`（`script/lib/orderflow.py:186-221`）`except Exception` 對程式內部錯誤也當瞬時錯誤重試（吞自身 bug、至多 3 次），且失敗期間無任何 log。修法方向：限縮可重試的例外類型，或每輪失敗 print 一筆。
