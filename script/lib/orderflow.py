@@ -23,7 +23,9 @@ from __future__ import annotations
 
 import datetime as dt
 import http.cookiejar
+import random
 import re
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -40,6 +42,15 @@ DEFAULT_STORE = "346"
 # 選單版特徵：含內嵌 ctidss 結構資料且長度遠大於文字版(~134KB)。
 # 各券型 select 數差異大(11~43)，不能以 select 數判定。
 MENU_MIN_LEN = 180_000
+
+# 抓取重試（2026-09-08）：瞬時錯誤（timeout/傳輸失敗/空回應/node 抽取失敗）
+# 最多 3 次，線性退避 n×1s + U(0,0.5)；429/403 熔斷直拋不重試；M1 不在此函式。
+FETCH_RETRIES = 3
+
+
+def _sleep_retry(attempt: int) -> None:
+    """第 attempt 次重試前等待（attempt 從 1 起算）：n×1s + U(0,0.5)。"""
+    time.sleep(attempt * 1.0 + random.uniform(0, 0.5))
 
 
 class OrderFlowSession:
@@ -172,28 +183,42 @@ def parse_menu_html(code: str, html: str) -> dict | None:
     return {"meta": meta, "items": items, "struct": struct}
 
 
-def fetch_and_parse(code: str, fetcher=None) -> dict | None:
+def fetch_and_parse(code: str, fetcher=None, retries: int = FETCH_RETRIES,
+                    sleep=_sleep_retry) -> dict | None:
     """抓一碼選單版並解析。fetcher=BatchFetcher（共用 session）；None=新 session。
 
     回 {html, meta, items, struct} 或 None（抓取/解析失敗）。
     429/403（熔斷）原樣往上拋，由呼叫端處理。
+    瞬時錯誤（timeout/傳輸失敗/空回應/node 抽取失敗）重試至多 retries 次，
+    間隔線性退避（見 _sleep_retry）；sleep 可注入（測試用）。
     """
-    try:
-        if fetcher is not None:
-            html = fetcher.fetch(code)
-        else:
-            html = fetch_menu_single(code)
-    except urllib.error.HTTPError as e:
-        if is_rate_limited(e):
-            raise  # 熔斷給呼叫端處理
-        return None
-    except Exception:  # noqa: BLE001
-        return None
-    parsed = parse_menu_html(code, html)
-    if parsed is None:
-        return None
-    parsed["html"] = html
-    return parsed
+    for attempt in range(retries):
+        try:
+            if fetcher is not None:
+                html = fetcher.fetch(code)
+            else:
+                html = fetch_menu_single(code)
+        except urllib.error.HTTPError as e:
+            if is_rate_limited(e):
+                raise  # 熔斷給呼叫端處理（不重試）
+            if attempt + 1 >= retries:
+                return None
+            sleep(attempt + 1)
+            continue
+        except Exception:  # noqa: BLE001
+            if attempt + 1 >= retries:
+                return None
+            sleep(attempt + 1)
+            continue
+        parsed = parse_menu_html(code, html)
+        if parsed is None:
+            if attempt + 1 >= retries:
+                return None
+            sleep(attempt + 1)
+            continue
+        parsed["html"] = html
+        return parsed
+    return None
 
 
 class BatchFetcher:
