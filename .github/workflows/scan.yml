@@ -146,7 +146,11 @@ jobs:
       - env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh label create scan-failed --color red --force 2>/dev/null || true
+          # gh label create 建不出「不存在」的 label(只會改已存在者)→ 不存在(GET 404)才用 REST 建立
+          gh api "repos/$GITHUB_REPOSITORY/labels/scan-failed" >/dev/null 2>&1 \
+            || gh api -X POST "repos/$GITHUB_REPOSITORY/labels" \
+                 -f name=scan-failed -f color=ff0000 \
+                 -f "description=每日掃號失敗(熔斷/官網改版)" >/dev/null
           TITLE="每日掃號失敗 $(date -u +%F)"
           COUNT=$(gh issue list --label scan-failed --state open --json number --jq 'length')
           if [ "$COUNT" -eq 0 ]; then

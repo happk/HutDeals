@@ -207,7 +207,8 @@ def cmd_confirm(args) -> int:
         cats_old = {(i.get("cat"), i.get("groupTitle")) for i in old_items}
         cats_new = {(i.get("cat"), i.get("groupTitle")) for i in new_items}
         if cats_new and cats_new != cats_old:
-            diff["cats"] = [sorted(cats_old), sorted(cats_new)]
+            # key=str：item 的 cat/groupTitle 可能為 None(純選項無群組)，None 與 str 不能直接排序
+            diff["cats"] = [sorted(cats_old, key=str), sorted(cats_new, key=str)]
         for f in CONTENT_FIELDS:
             old, new = rec.get(f), d.get(f)
             if old != new and new is not None:

@@ -5,6 +5,17 @@
 > - Y 功能
 > - Z 修正
 
+## v1.0.3（2026-09-09）— 掃號穩定性修正
+
+- 修 `cmd_confirm` 崩潰：券選項無群組時 `cat`/`groupTitle` 為 `None`，與字串同列
+  `sorted()` 觸發 `TypeError`（每日掃號 confirm 中斷，run 34263828448）。排序加 `key=str`。
+- 修失敗告警 issue 從未發成：`gh label create` 建不出「不存在」的 label、錯誤又被
+  `|| true` 吞掉，`gh issue create --label scan-failed` 因 label 不存在而失敗。
+  改 REST `POST /repos/{repo}/labels`（不存在才建）；`scan.yml`/`update.yml` 同修
+  （`scan-failed`/`scrape-failed`）。
+- 新增回歸測試 `test_confirm_cats_none`（離線 mock：含 None 的組分類比對不崩潰）。
+- 版本：`package.json` 同步至 1.0.3
+
 ## v1.0.2（2026-09-08）— step_2 抓取穩定化 + 失敗可視化
 
 - 掃號 step_2 抓取更穩：瞬時錯誤自動重試（至多 3 次、線性退避），429/403 熔斷不重試
