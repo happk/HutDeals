@@ -457,7 +457,7 @@
     + " / offline " + offline.length + "）</div>"
     + "<div class='meta-line'>主站資料檔同源,每日 cron 由 .github/workflows/update.yml 驅動。</div>";
 
-  /* ---- 掃號警告（scan_alerts.json,scan.yml sample 工複製進 public/;缺檔靜默）---- */
+  /* ---- 掃號警告（scan_alerts.json；scan.yml sample 工 / update.yml 複製進 public/；缺檔靜默）---- */
   fetch("scan_alerts.json").then(function (r) { return r.ok ? r.json() : null; }).then(function (a) {
     if (!a) return;
     function listItems(entries) {
@@ -466,7 +466,8 @@
         var t = "<li><span class='code'>" + esc(e.code) + "</span>"
           + (e.title ? " " + esc(e.title) : "")
           + (e.partner ? "（" + esc(e.partner) + "）" : "")
-          + (e.zone ? " [" + esc(e.zone) + "]" : "");
+          + (e.zone ? " [" + esc(e.zone) + "]" : "")
+          + (e.error ? " — " + esc(e.error) : "");
         if (e.diff) {
           var fields = Object.keys(e.diff).map(function (k) {
             var v = e.diff[k];
@@ -479,6 +480,7 @@
     }
     var SECTIONS = [
       ["unknown_hits", "未知號段命中（抽樣掃到非預期活碼）", "red"],
+      ["step2_failures", "step2 解析失敗（下次自動重試）", "red"],
       ["content_changes", "內容更動（官網券內容與昨日不同）", "amber"],
       ["new_codes", "新活碼入庫", "green"],
       ["pending_empty", "待退役（死碼期滿轉空號）", "slate"],

@@ -41,16 +41,23 @@ jobs:
       - name: Generate sitemap
         run: python -m script.site.gen_sitemap
 
+      # enrich 的 step2 失敗併入 alerts；同步到 public 供 admin 顯示
+      - name: Publish alerts to public
+        run: |
+          if [ -f data/scan_alerts.json ]; then
+            cp data/scan_alerts.json public/scan_alerts.json
+          fi
+
       - name: Commit if changed
         id: commit
         run: |
-          if git diff --quiet -- public/coupons.js public/coupons_full.js public/sitemap.xml; then
+          if git diff --quiet -- public/coupons.js public/coupons_full.js public/sitemap.xml data/scan_alerts.json public/scan_alerts.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "no coupon changes"
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add public/coupons.js public/coupons_full.js public/sitemap.xml
+            git add public/coupons.js public/coupons_full.js public/sitemap.xml data/scan_alerts.json public/scan_alerts.json
             git commit -m "daily update coupon information ($(date -u +%F))"
             git push
             echo "changed=true" >> "$GITHUB_OUTPUT"

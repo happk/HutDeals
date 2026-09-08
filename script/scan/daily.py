@@ -26,7 +26,7 @@ from script.lib.net import is_rate_limited, m1_probe
 from script.lib.orderflow import BatchFetcher, fetch_and_parse
 from script.lib.pacing import sleep_scan
 from script.lib.repo import REPO
-from script.lib.state import STATE_PATH, load_state, save_state
+from script.lib.state import STATE_PATH, load_state, merge_step2_failures, save_state
 from script.scan.coverage_sync import merge_alive_records
 from script.scan.parse_step2 import parse_step2
 from script.scan.scan_archive import append_history_row
@@ -84,16 +84,25 @@ def step2_of(rec: dict, fetcher: BatchFetcher | None = None) -> dict | None:
         {..., items: 結構化候選 | None, struct: 完整中介 | None}
     fetcher：BatchFetcher 共用 session；None = 每碼新 session。
     429/403（熔斷）原樣往上拋由 cmd 層處理。
+    2026-09-08：失敗寫 rec step2_error/step2At（alerts 可見，不再靜默）；
+    成功清除舊痕。
     """
+    now = dt.datetime.now().isoformat(timespec="seconds")
     try:
         r = fetch_and_parse(rec["code"], fetcher)
     except urllib.error.HTTPError:
         raise  # 熔斷（fetch_and_parse 已只放行 rate-limited）
     except Exception as err:  # noqa: BLE001
         log(f"  {rec['code']} step_2 FAIL {err}")
+        rec["step2_error"] = str(err)[:150]
+        rec["step2At"] = now
         return None
     if r is None:
+        rec["step2_error"] = "fetch/parse 失敗"
+        rec["step2At"] = now
         return None
+    rec.pop("step2_error", None)
+    rec.pop("step2At", None)
     out = dict(r["meta"])
     out["items"] = r["items"]
     return out
@@ -161,6 +170,9 @@ def cmd_confirm(args) -> int:
     revived: list[str] = []
 
     fetcher = BatchFetcher()  # 共用 session：所有 alive 碼共享前置
+    step2_failures: list[dict] = []
+    step2_ok: list[str] = []
+    step2_clear: list[str] = []
     for code in alive:
         r = by_code.get(code)
         rec = codes[code]
@@ -168,13 +180,26 @@ def cmd_confirm(args) -> int:
             continue  # 熔斷沒掃到
         if r.get("m1_success") is False:
             rec.update(status="dead", dead_since=today)
+            # 死碼不會再自動重試 step2：清掉殘留警告（2026-09-08）
+            rec.pop("step2_error", None)
+            rec.pop("step2At", None)
+            step2_clear.append(code)
             log(f"  {code} 活→死（觀察期開始）")
             continue
         if r.get("m1_success") is None:
             continue
         d = step2_of(r, fetcher)
         if d is None:
+            # step2 失敗留痕（state + alerts 可見；2026-09-08，不再靜默）
+            if r.get("step2_error"):
+                rec["step2_error"] = r["step2_error"]
+                rec["step2At"] = r["step2At"]
+                step2_failures.append({"code": code, "title": rec.get("title"),
+                                       "error": r["step2_error"], "at": r["step2At"]})
             continue
+        rec.pop("step2_error", None)
+        rec.pop("step2At", None)
+        step2_ok.append(code)
         diff = {}
         # 組分類（cat/groupTitle）更動 → 也算內容變更（2026-09-07；需先於 items 覆寫比對）
         old_items = rec.get("items") or []
@@ -210,6 +235,10 @@ def cmd_confirm(args) -> int:
             days = (dt.date.today() - dt.date.fromisoformat(since)).days
             if days >= DEAD_TO_EMPTY_DAYS:
                 codes[code].update(status="empty")
+                # 退役即不再重試：清殘留警告
+                codes[code].pop("step2_error", None)
+                codes[code].pop("step2At", None)
+                step2_clear.append(code)
                 log(f"  {code} 死→空號（退役，死亡 {days} 天）")
                 retired.append(code)
 
@@ -217,6 +246,7 @@ def cmd_confirm(args) -> int:
     save_state(STATE_PATH, state)
     update_alerts("content_changes", changes)
     update_alerts("pending_empty", retired)
+    merge_step2_failures(step2_failures, step2_ok + step2_clear)
     history_row("daily.confirm", recs,
                 f"內容更動 {len(changes)}、復活 {len(revived)}、退役空號 {len(retired)}"
                 + ("；熔斷" if blown else ""))
@@ -241,6 +271,8 @@ def cmd_explore(args) -> int:
     known = {c for c, r in state.get("codes", {}).items() if r.get("status") == "alive"}
     fresh = [r for r in recs if r.get("m1_success") is True and r["code"] not in known]
     new_alerts: list[dict] = []
+    step2_failures: list[dict] = []
+    step2_ok: list[str] = []
     if fresh:
         log(f"新活碼 {len(fresh)}，補 step_2")
         fetcher = BatchFetcher()
@@ -248,8 +280,13 @@ def cmd_explore(args) -> int:
             d = step2_of(r, fetcher)
             if d:
                 r.update(d)
+                step2_ok.append(r["code"])
                 new_alerts.append({"code": r["code"], "title": d.get("title"),
                                    "partner": d.get("partner")})
+            elif r.get("step2_error"):
+                step2_failures.append({"code": r["code"], "error": r["step2_error"],
+                                       "at": r["step2At"]})
+    merge_step2_failures(step2_failures, step2_ok)
     added, updated = merge_alive_records(recs, "daily.explore")
     update_alerts("new_codes", new_alerts)
     history_row("daily.explore", recs, f"新入庫 {added}" + ("；熔斷" if blown else ""))
@@ -276,6 +313,8 @@ def cmd_sample(args) -> int:
     update_coverage(recs)
     hits = [r for r in recs if r.get("m1_success") is True]
     hit_alerts: list[dict] = []
+    step2_failures: list[dict] = []
+    step2_ok: list[str] = []
     if hits:
         log(f"未知號段命中 {len(hits)}，補 step_2")
         fetcher = BatchFetcher()
@@ -283,9 +322,14 @@ def cmd_sample(args) -> int:
             d = step2_of(r, fetcher)
             if d:
                 r.update(d)
+                step2_ok.append(r["code"])
                 hit_alerts.append({"code": r["code"], "title": d.get("title"),
                                    "partner": d.get("partner"),
                                    "zone": SAMPLE_PLAN.get(r["code"][:2], ("", "?"))[1]})
+            elif r.get("step2_error"):
+                step2_failures.append({"code": r["code"], "error": r["step2_error"],
+                                       "at": r["step2At"]})
+    merge_step2_failures(step2_failures, step2_ok)
     added, updated = merge_alive_records(recs, "daily.sample")
     update_alerts("unknown_hits", hit_alerts)
     history_row("daily.sample", recs,
