@@ -17,13 +17,19 @@ on:
 permissions:
   contents: write
   issues: write
+  actions: read  # gate 查 actions/runs 需 read（備援讓賢判斷）
 
 jobs:
-  # 熔斷檢查：前一日有未關的 scan-failed/scrape-failed issue → 禁止今日掃號(防污染)
+  # 閘門：(1) 熔斷檢查——前一日有未關的 scan-failed/scrape-failed issue → 禁止掃號(防污染)
+  #      (2) 備援讓賢——偵測到另一場 workflow_dispatch 掃號在跑/排隊(排除自己) → should_run=false。
+  #      GitHub 排程是 cron-job.org 的備援(兩者都 01:11;cron-job 準時先開跑,GitHub 浮動晚到即讓賢)。
   gate:
     runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
     steps:
-      - env:
+      - id: check
+        env:
           GH_TOKEN: ${{ github.token }}
         run: |
           OPEN=$(gh issue list --label scan-failed --state open --json number --jq 'length' 2>/dev/null || echo 0)
@@ -32,11 +38,24 @@ jobs:
             echo "有未關閉的失敗告警 issue(scan-failed=$OPEN, scrape-failed=$OPEN2)，禁止今日掃號"
             exit 1
           fi
-          echo "gate 通過，可掃號"
+          # GITHUB_RUN_ID 直接內插進 jq(數字,安全)排除自己,否則主場會把自己誤判成「另一場」而自我讓賢
+          RUNNING=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?workflow_id=scan.yml&per_page=100" \
+            --jq "[.workflow_runs[] | select(.id != ${GITHUB_RUN_ID}) \
+                    | select(.event == \"workflow_dispatch\") \
+                    | select(.status == \"in_progress\" or .status == \"queued\")] | length" \
+            2>/dev/null || echo 0)
+          if [ "$RUNNING" -gt 0 ]; then
+            echo "偵測到另一場 workflow_dispatch 掃號在跑，GitHub 排程備援讓賢"
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "gate 通過，可掃號"
+          fi
 
   # 軌道①：現有碼死活+內容確認（死碼 dead_since 滿 7 天→空號）；~1130 發 ≈ 1.8h
   confirm:
     needs: gate
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -64,7 +83,8 @@ jobs:
             git commit -m "daily scan confirm ($(date -u +%F))" && git push
           fi
 
-  # 軌道②：16/26 全段 M1 普查（段窄期全掃，掃描窗留作未來引子）；~2000 發 ≈ 3.2h
+  # 軌道②：16/26 潛在碼位 M1 普查（confirm 已確認的 alive/dead 不重探，去重於 cmd_explore；
+  # 讓賢時 confirm skip → 本 job 因 needs: confirm 自動 skip）
   explore:
     needs: confirm
     runs-on: ubuntu-latest

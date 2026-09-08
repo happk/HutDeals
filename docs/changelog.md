@@ -15,6 +15,12 @@
   confirm 也順手 `update_coverage`（alive 碼 last_checked 不再只靠 explore）。
 - 新增回歸測試 `test_explore_dedup`（去重集合、當天/昨天 empty 的不同處理）。
 
+**排程備援**
+- GitHub 排程改為 cron-job.org 的備援：gate 偵測到另一場 `workflow_dispatch` 掃號
+  在跑/排隊（排除自己）即讓賢（`should_run=false`），後續 job 全 skip、整場綠色收尾；
+  不會與主要場並跑、也不會兩邊都讓。新增 `actions: read` 權限。
+  排除自己採 `${GITHUB_RUN_ID}` 內插（避免 jq 當變數 null 而自我讓賢）。
+
 ## v1.0.3（2026-09-09）— 掃號穩定性修正
 
 - 修 `cmd_confirm` 崩潰：券選項無群組時 `cat`/`groupTitle` 為 `None`，與字串同列
