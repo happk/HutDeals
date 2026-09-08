@@ -7,6 +7,10 @@
 
 ## 未發佈
 
+- 掃號 step_2 抓取更穩：瞬時錯誤自動重試（至多 3 次、線性退避），429/403 熔斷不重試
+- 官方券 step_2 失敗不再靜默：寫入 `scan_alerts.json` step2_failures、admin 警告區顯示；補抓成功／該碼退役自動清除；補全端（enrich）熔斷中止，與掃號端一致觸發失敗告警
+- 券內容分類修正：飲料關鍵字補「柚茶」（91113 個人比薩五享餐飲料組含茉香柚茶，不再誤判副食）
+- 內部維護：Windows 本機跑 step_2 parser 的中文 JSON 解碼修正（cp950 → utf-8）
 - 連結預覽圖：新增 `og-image.png`（深色底 + 披薩 + 漸層 HutDeals），`twitter:card` 升為 `summary_large_image`
 - 內部維護：測試快照移除官網公開金鑰（無功能影響）
 
