@@ -2,7 +2,7 @@
 
 三個獨立子命令 = CI 三個順行 job（未來可個別優化，如 explore 換掃描窗）：
     confirm  軌道①：確認現有碼死活＋內容更動；死碼 dead_since 滿 7 天 → 空號
-    explore  軌道②：16/26 全段 M1 普查（現階段段窄全掃；掃描窗留作未來引子）
+    explore  軌道②：16/26 潛在碼位 M1 普查（剔除當日 confirm 已確認的 alive/dead）
     sample   軌道③：潛在未知號段抽樣（16/26 ±1/±2，每日隨機重抽，防長期券遺漏；
              命中活碼 → admin 警告）
 
@@ -163,6 +163,7 @@ def cmd_confirm(args) -> int:
         alive, dead = alive[:args.limit], dead[:args.limit]
     log(f"confirm：alive {len(alive)} + dead（觀察中）{len(dead)}")
     recs, blown = probe_batch(alive + dead)
+    update_coverage(recs)  # confirm 也更新 coverage（alive 碼 last_checked 不再只靠 explore）
     today = dt.date.today().isoformat()
     by_code = {r["code"]: r for r in recs}
     changes: list[dict] = []
@@ -278,17 +279,25 @@ def cmd_confirm(args) -> int:
     return 3 if blown else 0
 
 
-# ---------------- 軌道②：活躍區段全段普查 ----------------
+# ---------------- 軌道②：活躍區段潛在碼位普查（去重於 confirm） ----------------
 
 def cmd_explore(args) -> int:
-    codes = [str(c) for lo, hi in ACTIVE_RANGES for c in range(lo, hi + 1)]
+    # 去重：explore 只探「confirm 沒確認」的潛在碼位。state 此刻 = confirm 今天剛 commit 的版本
+    # （explore job needs: confirm 成功才跑）。alive/dead 由 confirm 探；當天退役的 empty
+    # （dead_since=今天）confirm 剛探過也剔除；隔天起 status=empty 者回歸 explore 盯復活。
+    state = load_state()
+    today = dt.date.today().isoformat()
+    confirmed = {c for c, r in state.get("codes", {}).items()
+                 if r.get("status") in ("alive", "dead")
+                 or (r.get("status") == "empty" and r.get("dead_since") == today)}
+    codes = [str(c) for lo, hi in ACTIVE_RANGES for c in range(lo, hi + 1)
+             if str(c) not in confirmed]
     if args.limit:
         codes = codes[:args.limit]
-    log(f"explore：16/26 全段 {len(codes)} 碼")
+    log(f"explore：16/26 潛在碼位 {len(codes)} 碼（剔除 confirm 已探 {len(confirmed)}）")
     recs, blown = probe_batch(codes)
     update_coverage(recs)
     # 新活碼（state 沒有或非 alive）→ step_2 → 入 state
-    state = load_state()
     known = {c for c, r in state.get("codes", {}).items() if r.get("status") == "alive"}
     fresh = [r for r in recs if r.get("m1_success") is True and r["code"] not in known]
     new_alerts: list[dict] = []

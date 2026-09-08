@@ -46,7 +46,8 @@ class ConfirmReviveTest(unittest.TestCase):
         }}
         self._orig = {k: getattr(daily, k) for k in (
             "load_state", "save_state", "update_alerts", "history_row",
-            "merge_step2_failures", "probe_batch", "fetch_and_parse")}
+            "merge_step2_failures", "update_coverage", "probe_batch",
+            "fetch_and_parse")}
         daily.load_state = lambda: state
         self.saved = {}
         daily.save_state = lambda path, s: self.saved.update(s)
@@ -58,6 +59,8 @@ class ConfirmReviveTest(unittest.TestCase):
             (list(fails), list(clears)))
         self.history = []
         daily.history_row = lambda *a: self.history.append(a)
+        self.coverage = []
+        daily.update_coverage = lambda recs: self.coverage.append(list(recs))
         # 16001 活著內容更新；16002 活→死；16003 死→活（復活）
         daily.probe_batch = lambda codes: ([
             _probe_rec("16001", True), _probe_rec("16002", False),

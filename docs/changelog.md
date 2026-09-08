@@ -5,6 +5,16 @@
 > - Y 功能
 > - Z 修正
 
+## 未分配（2026-09-09）
+
+> 待發行版本號；發行時再合併進對應的 vX.Y.Z。
+
+**掃號去重**
+- explore 對 confirm 去重：explore 只探 16/26 潛在碼位，剔除當日 confirm 已確認的
+  alive/dead（及當天退役的 empty）；每天省約 551 次 M1 請求（16/26 段約 28%）。
+  confirm 也順手 `update_coverage`（alive 碼 last_checked 不再只靠 explore）。
+- 新增回歸測試 `test_explore_dedup`（去重集合、當天/昨天 empty 的不同處理）。
+
 ## v1.0.3（2026-09-09）— 掃號穩定性修正
 
 - 修 `cmd_confirm` 崩潰：券選項無群組時 `cat`/`groupTitle` 為 `None`，與字串同列

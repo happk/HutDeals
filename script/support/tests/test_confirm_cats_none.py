@@ -34,7 +34,8 @@ class ConfirmCatsNoneTest(unittest.TestCase):
         }}
         self._orig = {k: getattr(daily, k) for k in (
             "load_state", "save_state", "update_alerts", "history_row",
-            "merge_step2_failures", "probe_batch", "fetch_and_parse")}
+            "merge_step2_failures", "update_coverage", "probe_batch",
+            "fetch_and_parse")}
         daily.load_state = lambda: state
         self.saved = {}
         daily.save_state = lambda path, s: self.saved.update(s)
@@ -46,6 +47,7 @@ class ConfirmCatsNoneTest(unittest.TestCase):
             (list(fails), list(clears)))
         self.history = []
         daily.history_row = lambda *a: self.history.append(a)
+        daily.update_coverage = lambda recs: None
         daily.probe_batch = lambda codes: ([_probe_rec("16010")], False)
         # 官網回傳：原本的有群組選項 + 一筆無群組選項（cat/groupTitle = None）
         daily.fetch_and_parse = lambda code, fetcher: {
