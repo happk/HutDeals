@@ -226,10 +226,30 @@ def cmd_confirm(args) -> int:
         if r is None:
             continue
         if r.get("m1_success") is True:
-            codes[code].update(status="alive")
-            codes[code].pop("dead_since", None)
+            rec = codes[code]
+            rec.update(status="alive")
+            rec.pop("dead_since", None)
             revived.append(code)
             log(f"  {code} 死→活（觀察期復活）")
+            # 復活當次即補 step_2：內容不落後一天（2026-09-08 拍板，取代 todo 條目）。
+            # 成功覆寫內容欄位；失敗留 step2_error/step2At（隔日 alive 迴圈會重試）。
+            # 復活本身已記錄，跨死亡期的內容差異不當「內容更動」alert。
+            d = step2_of(r, fetcher)
+            if d is None:
+                if r.get("step2_error"):
+                    rec["step2_error"] = r["step2_error"]
+                    rec["step2At"] = r["step2At"]
+                    step2_failures.append({"code": code, "title": rec.get("title"),
+                                           "error": r["step2_error"], "at": r["step2At"]})
+            else:
+                rec.pop("step2_error", None)
+                rec.pop("step2At", None)
+                step2_ok.append(code)
+                for f in CONTENT_FIELDS:
+                    if d.get(f) is not None:
+                        rec[f] = d[f]
+                if d.get("items") is not None:
+                    rec["items"] = d["items"]
         elif r.get("m1_success") is False:
             since = codes[code].get("dead_since", today)
             days = (dt.date.today() - dt.date.fromisoformat(since)).days
