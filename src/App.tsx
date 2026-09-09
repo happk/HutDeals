@@ -203,7 +203,7 @@ export default function App() {
               type="search"
               value={state.q}
               onChange={(e) => patch({ q: e.target.value })}
-              placeholder="搜尋餐點或關鍵字(空格分隔多重條件)"
+              placeholder="搜尋餐點、優惠代碼或關鍵字(空格分隔多重條件)"
               className="w-full rounded-xl border border-red-900/10 bg-white/80 py-2.5 pl-3.5 pr-3.5 text-[15px] shadow-sm outline-none backdrop-blur placeholder:text-slate-400 focus:border-red-400/60 dark:border-white/10 dark:bg-white/5 dark:placeholder:text-slate-500"
             />
           </div>

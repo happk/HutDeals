@@ -284,15 +284,14 @@
     return node;
   }
 
-  /* 1) 散點:折扣率 × 價格(主視覺)。priceNote「原價$NNN」→ msrp。 */
+  /* 1) 散點:折扣率 × 價格(主視覺)。原價已改存結構化 msrp 欄位
+     （priceNote 只剩「起」），故改讀 c.msrp。 */
   (function () {
     var W = 880, H = 320, L = 52, R = 14, T = 12, B = 34, YMAX = 800;
     var pts = [];
     rows.forEach(function (c) {
-      if (c.price == null || !c.priceNote) return;
-      var m = /原價\$(\d+)/.exec(c.priceNote);
-      if (!m || !+m[1]) return;
-      var msrp = +m[1];
+      if (c.price == null || c.msrp == null || !c.msrp) return;
+      var msrp = c.msrp;
       if (c.price > msrp) return; // 價>原價的髒資料不上圖
       pts.push({ d: c.price / msrp, p: c.price, c: c.code || c.key, n: c.name, msrp: msrp,
                  src: c.source === "verified-external" });
@@ -411,6 +410,9 @@
       pts.forEach(function (q, i) {
         svg.appendChild(hoverTip(el("circle", { cx: q[0], cy: q[1], r: 3.5, "class": "ct-dot" }),
           days[i] + "：" + intake[days[i]] + " 張入庫"));
+        // 資料點數值（2026-09-09）：標在點上方，一眼看趨勢不用 hover
+        svg.appendChild(el("text", { x: q[0], y: q[1] - 7, "text-anchor": "middle", "class": "ct-bar-val" },
+          intake[days[i]]));
         if (i === 0 || i === pts.length - 1 || intake[days[i]] === max)
           svg.appendChild(el("text", { x: q[0], y: H - B + 14, "text-anchor": "middle", "class": "ct-axis-txt" }, days[i].slice(5)));
       });

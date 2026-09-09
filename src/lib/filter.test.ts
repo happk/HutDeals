@@ -45,6 +45,24 @@ describe("filterCoupons", () => {
     expect(filterCoupons(coupons, s, new Set()).map((c) => c.key)).toEqual(["a"]);
   });
 
+  it("search: 優惠代碼命中品名不含碼的券（93014 型）", () => {
+    const list = [
+      ...coupons,
+      mk({
+        key: "93014",
+        code: "93014",
+        name: "大比薩分享餐$399",
+        description: "指定大比薩+黃金和風鱈魚塊",
+        price: 399,
+      }),
+    ];
+    const s = { ...DEFAULT_STATE, q: "93014" };
+    expect(filterCoupons(list, s, new Set()).map((c) => c.key)).toEqual(["93014"]);
+    // 代碼可與其他關鍵字並用（空格分隔全部命中）
+    const both = { ...DEFAULT_STATE, q: "93014 分享" };
+    expect(filterCoupons(list, both, new Set()).map((c) => c.key)).toEqual(["93014"]);
+  });
+
   it("include tags are OR, exclude tags remove", () => {
     const inc = { ...DEFAULT_STATE, includeTags: ["個人比薩", "折扣"] };
     expect(filterCoupons(coupons, inc, new Set()).map((c) => c.key)).toEqual(["b", "c"]);

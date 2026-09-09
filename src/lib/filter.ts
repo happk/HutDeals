@@ -60,7 +60,8 @@ export function filterCoupons(
     if (c.status !== "active") return false;
     if (state.favOnly && !favorites.has(c.key)) return false;
     if (terms.length > 0) {
-      const haystack = `${c.name} ${c.description ?? ""}`.toLowerCase();
+      // 代碼也進搜尋索引：部分券的 name 不含 5 位碼（如 93014「大比薩分享餐$399」）
+      const haystack = `${c.name} ${c.description ?? ""} ${c.code ?? ""}`.toLowerCase();
       if (!terms.every((t) => haystack.includes(t))) return false;
     }
     if (state.orderType && !supportsOrderType(c.orderType, state.orderType)) return false;
