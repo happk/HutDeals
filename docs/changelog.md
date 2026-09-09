@@ -23,6 +23,15 @@
   `YYYY-MM-DD HH:mm`＋動態 UTC 偏移（如 `2026-09-10 04:33（UTC+8）`，半小時時區亦成立）。
   套用 header／頁尾（原只取 UTC 日期，會差一天）／回報單（附 UTC 原文方便對 CI log）。
   新增 `format.test.ts` 8 例；寫入端格式不動。
+- **admin 資料改 no-cache 載入**：`coupons_full.js` 檔名永不變，`<script src>` 會命中瀏覽器快取、
+  看起來像沒更新；改 `fetch(..., {cache:"no-cache"})` 解析後啟動（`scan_alerts.json` 同）。
+- **admin 入庫趨勢連續窗口＋區間切換**：舊寫法只取有入庫的日子，0 入庫的日子直接消失
+  （圖上停在舊日期、看起來像沒更新）；改連續日曆窗口、0 補 0 顯示。新增 近14天／近30天／
+  至今 下拉（切換重繪、選擇記 `localStorage`；點多時逐點數值只標峰值）。窗口用 UTC 日曆
+  （`firstSeen` 是 runner 的 UTC 日期）。
+- **admin 爬取進度雙時間**：`state 更新時間` 改名「上次更新時間」（套時區格式）；
+  同框新增「上次更動時間」：`scan_summary()` 新增 `lastChanged`＝全池 `contentChangedAt`／
+  `dead_since`／`firstSeen` 最晚日期，要下次每日更新寫出新 `coupons_full.js` 後才出現。
 
 ## v1.0.4（2026-09-09）— 掃號去重、cron-job 備援讓賢、節奏調降
 

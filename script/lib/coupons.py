@@ -111,18 +111,27 @@ def write_coupons_js(coupons: list[dict], last_update: str,
 
 
 def scan_summary() -> dict | None:
-    """data/scan_state.json → 掃號池摘要（admin 進度分頁用）；缺檔/損壞回 None。"""
+    """data/scan_state.json → 掃號池摘要（admin 進度分頁用）；缺檔/損壞回 None。
+
+    updatedAt：state 最後寫入（掃描最後執行）；lastChanged：池內實質更動
+    （內容變更 contentChangedAt／死亡 dead_since／新入庫 firstSeen）的最晚日期，
+    三者皆無回 None。"""
     from script.lib.state import STATE_PATH, load_state
     state = load_state(STATE_PATH)
     codes = state.get("codes") or {}
     if not codes:
         return None
     by_status: dict[str, int] = {}
+    changed: list[str] = []
     for rec in codes.values():
         s = rec.get("status") or "unknown"
         by_status[s] = by_status.get(s, 0) + 1
+        for d in (rec.get("contentChangedAt"), rec.get("dead_since"), rec.get("firstSeen")):
+            if isinstance(d, str) and len(d) >= 10:
+                changed.append(d[:10])
     return {
         "updatedAt": state.get("updatedAt"),
+        "lastChanged": max(changed) if changed else None,
         "total": len(codes),
         "alive": by_status.get("alive", 0),
         "dead": by_status.get("dead", 0),
