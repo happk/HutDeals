@@ -24,3 +24,8 @@
 ### 02120f6
 
 - **在 `scan_state` 與 `coupons.js` 之間加一層 SQLite 管理主資料**（2026-09-09 使用者提出，未實作）：現況是兩層——[`data/scan_state.json`](../data/scan_state.json)（官網原貌、掃號產出）→ [`public/coupons.js`](../public/coupons.js)（網站輸出、項分類在此套用），主資料由 13MB JSON 承擔，衍生欄位（項分類 `units`、篩選標籤）只能在產出時算，無法查詢、無法增量維護，每次都要全量重寫。構想：中間加一層 SQLite（每日 update 時把 scan_state 匯入、跑 [`script/lib/categories.py`](../script/lib/categories.py) 的分類與標籤、再輸出 coupons.js），好處是查詢／關聯／增量更新、保留歷史快照、避免全量重寫。待評估：Actions 上 SQLite 檔的提交體積與鎖競爭、與現有 scan→update 鏈（[`.github/workflows/scan.yml`](../.github/workflows/scan.yml)、[`.github/workflows/update.yml`](../.github/workflows/update.yml)）的整合成本、以及零維運前提下多一個產物是否值得。
+
+### 636496e
+
+- **資料更新自動生效（前端輪詢版本＋提示／自動重載）**（2026-09-09 使用者提出，未實作）：GitHub Pages 對 [`public/coupons.js`](../public/coupons.js) 固定回 `Cache-Control: max-age=600`（無法自訂），回訪者 10 分鐘內直接吃瀏覽器快取、連重新驗證都不做（實測需 Ctrl+F5 才看到新資料）；分頁長開更是永遠不更新。構想：前端定期（如每 30 分鐘）抓一個約 1KB 的 `version.json`（或比對資料的 `last_update`），版本有變就顯示「有新優惠，點此更新」提示，或在使用者切回前景／分頁隱藏時自動重載。取捨：提示不打斷閱讀但需使用者點一下；自動重載要避免打斷正在瀏覽的人。搭配「頁面載入時以 `fetch(..., {cache:'no-cache'})` 重新驗證」可同時覆蓋快取與長開分頁兩種失效窗口（GitHub Pages 支援 ETag 條件式請求，實測未變更回 304／0 bytes）。
+
