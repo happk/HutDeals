@@ -156,7 +156,8 @@ function groupTitle(group: MealItem["group"], cats: string[], count: number): st
       })
       .join("/");
   } else {
-    label = GROUP_LABEL[group] ?? group;
+    // 舊資料可能有無 group 的固定內容項（如 94555/94666）→ 不可顯示 undefined
+    label = GROUP_LABEL[group] ?? "內容";
   }
   // add(加購) 是「選購」，其餘是「N 選1」
   return group === "add" ? `${label}（${count} 種）` : `${label}（${count} 選1）`;
