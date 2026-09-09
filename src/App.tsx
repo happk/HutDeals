@@ -7,6 +7,7 @@ import { PizzaMark } from "./components/Header";
 import { useFavorites } from "./hooks/useFavorites";
 import { useTheme } from "./hooks/useTheme";
 import { loadData } from "./data";
+import { formatUserTime } from "./lib/format";
 import {
   collectTags,
   filterCoupons,
@@ -351,7 +352,7 @@ export default function App() {
           價格與供應以官網為準；Pizza Hut、必勝客等商標屬各權利人。
         </p>
         <p className="mt-1.5">
-          資料最後更新：{data.last_update.slice(0, 10)}
+          資料最後更新：{formatUserTime(data.last_update)}
           <span aria-hidden="true">　·　</span>
           <a
             href="https://github.com/happk/HutDeals"

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { formatUserTime } from "../lib/format";
 
 /**
  * 圓形披薩 logo（design-samples/sample-a.html hero 同款）:
@@ -143,7 +144,7 @@ export default function Header({
         </button>
         <div className="ml-auto flex items-center gap-2">
           <span className="hidden text-[12px] text-slate-500 dark:text-slate-400 sm:inline">
-            資料最後更新:{lastUpdate}
+            資料最後更新:{formatUserTime(lastUpdate)}
           </span>
           <div className="flex items-center gap-1.5">
             <a

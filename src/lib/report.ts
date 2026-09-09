@@ -1,4 +1,5 @@
 import type { Coupon } from "../types";
+import { formatUserTime } from "./format";
 
 /** GitHub repo(owner/name);github.io 網域自動偵測,否則用 fallback(上線前確認)。 */
 export function detectRepo(): string {
@@ -29,7 +30,7 @@ export function buildIssueUrl(
     `- key: \`${coupon.key}\``,
     `- 代碼: ${coupon.code ?? "無"}`,
     `- 名稱: ${coupon.name}`,
-    `- 資料更新時間: ${lastUpdate}`,
+    `- 資料更新時間: ${formatUserTime(lastUpdate)}（原始 ${lastUpdate}）`,
     "",
     "## 說明",
     "",

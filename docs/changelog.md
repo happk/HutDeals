@@ -17,6 +17,12 @@
   - **資料存放**：`scan_state.json` 回到官網原貌（移除我們的 `cat`）；分類只在產出 `coupons.js` 時套用，券層新增 `units: [{group, groupIdx, cats}]`、候選保留自己的 `cat`。改分類規則只要重跑 build，不必重掃。
   - 篩選標籤由項分類產生（含「飲料」）；`daily.py` 內容變更比對改為「官方組標題＋候選品名」。
   - 一次性遷移 `script/site/migrate_item_units.py`（移除 scan_state 的舊 cat）＋重建 coupons.js。
+- **更新時間改使用者本地時區顯示**：`last_update` 是 runner 寫的 UTC 無時區字串，
+  台灣用戶看到 `2026-09-09T20:33` 會誤判為昨日資料（實為 9/10 04:33 CST 當日凌晨排程）。
+  新增 `src/lib/format.ts` `formatUserTime()`：無時區視為 UTC，按瀏覽器本地時區渲染
+  `YYYY-MM-DD HH:mm`＋動態 UTC 偏移（如 `2026-09-10 04:33（UTC+8）`，半小時時區亦成立）。
+  套用 header／頁尾（原只取 UTC 日期，會差一天）／回報單（附 UTC 原文方便對 CI log）。
+  新增 `format.test.ts` 8 例；寫入端格式不動。
 
 ## v1.0.4（2026-09-09）— 掃號去重、cron-job 備援讓賢、節奏調降
 
