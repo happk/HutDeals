@@ -12,7 +12,11 @@ export interface MealItem {
   group: "main" | "second" | "add";
   /** 該類第幾組(1-based)。26868 有兩個 main 組，前端以 group+groupIdx 區分 */
   groupIdx: number;
-  /** 組分類語意（2026-09-07）：main→大/小/個人比薩(或中性比薩)、second→副食/飲料 */
+  /**
+   * 候選自己的分類（衍生層級，2026-09-09）：
+   * 飲料／副食／義大利麵/飯／大比薩／小比薩／個人比薩／特殊比薩／比薩。
+   * 主分類在券層 units（「項」＝一個選項組），此欄僅為候選細節。
+   */
   cat?: string | null;
   /** 升級/換購加價(0=免加價)。卡片只顯示 +0；詳細頁全部 */
   priceAdd: number;
@@ -20,6 +24,14 @@ export interface MealItem {
   flavorIdx: number | null;
   /** 加購物價差(僅 group=add 有意義) */
   add?: number | null;
+}
+
+/** 項分類（2026-09-09）：「項」＝前端一個選項組；分類掛在項上，與官網組型無關 */
+export interface UnitCat {
+  group: "main" | "second" | "add";
+  groupIdx: number;
+  /** 該項的分類集合（混類項會有多個，如 ["副食","飲料"]） */
+  cats: string[];
 }
 
 export interface Coupon {
@@ -39,6 +51,8 @@ export interface Coupon {
   tags: string[];
   /** 結構化餐點候選（空 = parse 失敗，前端顯示 description 原文） */
   items?: MealItem[];
+  /** 項層分類（「項」＝一個選項組；2026-09-09）。前端組標題以這裡為準 */
+  units?: UnitCat[];
   /** 券級去重後的口味集合（flavorSets[item.flavorIdx] = 該候選可選口味） */
   flavorSets?: Flavor[][];
   /** 活動期間（IG 文案融合後填；目前為 null） */

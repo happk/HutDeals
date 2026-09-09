@@ -78,8 +78,19 @@ stateDiagram-v2
 - `lib/orderflow.py`：4 步 session 流程（配 cookie → 取 llcs → step_1 選門市 → 重抓選單版），
   `BatchFetcher` K 張共用 session。
 - `scan/parse_orderflow.py` + `extract_js.cjs`：選單版內嵌 JS 變數（psidss/pprcss/ctidss）→
-  結構化候選 items（含組分類 cat）。
-- 新 items schema：`{text, group, groupIdx, priceAdd, flavors[], cat}`。
+  結構化候選 items＋官方組標題 `groupTitle`（scan_state 保持官網原貌，不含我們的分類）。
+- items schema（scan_state）：`{text, group, groupIdx, priceAdd, flavors[], add, groupTitle}`。
+
+### 項分類（2026-09-09 使用者拍板）
+
+- **「項」＝前端一個選項組**（`group`+`groupIdx`）；分類掛在項上，與官網組型無關。
+- 飲料／副食／義大利麵飯 ← **看該項每個候選品名**；大／小／個人／特殊比薩 ← **讀該項官方組標題**
+  （候選品名不含尺寸）。官方組標題在品項層不可靠，不可拿來判飲料/副食。
+- 分類只在**產出 coupons.js 時**由 `lib/categories.py` 套用：候選寫回 `cat`、
+  券層寫 `units: [{group, groupIdx, cats}]`（混類項可多類，如 `["副食","飲料"]`），
+  再由項分類產生篩選標籤（含「飲料」）。
+- 改分類規則只要重跑 build，不必重掃 545 碼；`daily.py` 內容變更比對用
+  「官方組標題＋候選品名」。
 
 ## 6. 價格與 desc 原則（2026-09-07）
 

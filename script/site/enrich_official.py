@@ -19,6 +19,7 @@ import datetime as dt
 import sys
 import urllib.error
 
+from script.lib.categories import cat_tags, classify_units
 from script.lib.coupons import load_coupons_js, write_coupons_js
 from script.lib.net import is_rate_limited
 from script.lib.orderflow import fetch_and_parse
@@ -37,7 +38,9 @@ def main() -> int:
     official = [c for c in coupons.values() if not c.get("source")
                 and str(c.get("code", "")).startswith(("91", "92", "93", "94"))]
     targets = [c for c in official
-               if not c.get("orderType") or not (c.get("msrp") or c.get("priceNote"))]
+               if not c.get("orderType") or not (c.get("msrp") or c.get("priceNote"))
+               # 有 items 但還沒有項分類（units）→ 也要重抓一次（2026-09-09 分類上線）
+               or (c.get("items") and not c.get("units"))]
     print(f"官方碼 {len(official)}，待補全 {len(targets)}")
     if not targets:
         return 0
@@ -93,6 +96,10 @@ def main() -> int:
         # items：結構化候選（選單版真值；拆不出不寫 → 前端 fallback description）
         if r.get("items"):
             c["items"] = r["items"]
+            # 項分類（2026-09-09）：與 ingest_external 同一份模組；分類只寫 coupons.js
+            units = classify_units(c["items"])
+            c["units"] = units
+            c["tags"] = sorted(set(c.get("tags") or []) | set(cat_tags(units)))
         c["orderUrl"] = f"https://www.pizzahut.com.tw/order/?mode=step_2&type_id=1025&cno={code}"
         filled += 1
         print(f"  + {code} {c['name']} | 通路:{c.get('orderType')} | {c.get('priceNote')}")

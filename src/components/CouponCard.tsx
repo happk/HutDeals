@@ -111,7 +111,7 @@ export default function CouponCard({
       {/* 內容物:彈性區,裝不下時內部滾動;帶底色便於分辨;與詳情頁同款分組渲染 */}
       <div className="mt-2 min-h-0 flex-1 overflow-y-auto rounded-[10px] bg-red-900/[0.04] p-2 px-2.5 dark:bg-white/5 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-red-900/20 dark:[&::-webkit-scrollbar-thumb]:bg-white/20">
         {coupon.items && coupon.items.length > 0 ? (
-          <MealItems items={coupon.items} flavorSets={coupon.flavorSets} compact />
+          <MealItems items={coupon.items} flavorSets={coupon.flavorSets} units={coupon.units} compact />
         ) : coupon.description ? (
           <p className="m-0 text-[13px] leading-[1.65] text-slate-800 dark:text-slate-200">
             {coupon.description}

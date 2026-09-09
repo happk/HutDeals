@@ -59,7 +59,7 @@ export default function CouponDetail({
         </div>
         {coupon.items && coupon.items.length > 0 ? (
           <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/50">
-            <MealItems items={coupon.items} flavorSets={coupon.flavorSets} />
+            <MealItems items={coupon.items} flavorSets={coupon.flavorSets} units={coupon.units} />
           </div>
         ) : (
           coupon.description && (

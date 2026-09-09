@@ -18,14 +18,16 @@ script/
 │   ├── state.py              # load_state / save_state（data/scan_state.json）
 │   ├── repo.py               # REPO（repo 根 Path；資料檔路徑基準）
 │   ├── coupons.py            # load_coupons_js / write_coupons_js / DATA_MARKER / 排序鍵
+│   ├── categories.py         # 項分類（分類與飲料/麵飯詞彙唯一來源；產出 coupons.js 時套用）
 │   ├── text.py               # clean_text（空白整理；全 repo 唯一一份）
 │   └── chart.py              # setup_cjk_font()（matplotlib 中文字型）
 ├── site/                     # 網站區：官網 → coupons.js 生產線（CI 每日）
 │   ├── __init__.py
 │   ├── fetch_promos.py       # 抓官網 promotions 頁（server-rendered 全列表）
 │   ├── build_coupons.py      # 解析 → Coupon → 合併歷史 → coupons.js
-│   ├── ingest_external.py    # 外部碼（官網驗證）併入 coupons.js
-│   └── enrich_official.py    # 官方碼 step_2 補全（orderflow items；每日 CI）
+│   ├── ingest_external.py    # 外部碼（官網驗證）併入 coupons.js（項分類在此套用）
+│   ├── enrich_official.py    # 官方碼 step_2 補全（orderflow items＋項分類；每日 CI）
+│   └── migrate_item_units.py # 一次性：scan_state 移除舊 cat（回官網原貌，2026-09-09）
 ├── scan/                     # 掃號工作流區：掃號 → 歸檔 → coupons
 │   ├── __init__.py
 │   ├── daily.py              # 每日三工（confirm/explore/sample；scan.yml CI 主排程）

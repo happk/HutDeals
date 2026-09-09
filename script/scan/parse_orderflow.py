@@ -22,61 +22,14 @@ import json
 import re
 from html import unescape
 
-# ============ 組分類（cat）============
+# ============ 官方組標題（溯源用；分類不在這裡做）============
 #
-# 2026-09-07 使用者：組標題(main_food_subject)是官方「組名」第一手來源——
-#   「請選擇1個大比薩」(26880組1 / 94199「13吋大比薩」)= 大比薩(13吋)
-#   「請選擇1個個人比薩」(26868/16010)= 個人比薩(6吋)
-#   副食組：整組候選全飲料（湯也算飲料）→「飲料」；只要任一非飲料 →「副食」（用語副食）
-# 尺寸對照（使用者 2026-09-07 更正）：大=13吋 / 小=9吋 / 個人=6吋
+# 本檔只保留官網原貌：抽組標題（main_food_subject_N）存成 groupTitle。
+# 「項分類」（大/小/個人/特殊比薩、義大利麵飯、副食、飲料）**不在掃號時決定**，
+# 一律在產出 coupons.js 時由 script/lib/categories.py 依「項」判定
+# （2026-09-09 使用者拍板；scan_state 保持官網原貌，改規則只要重跑 build）。
 _FOOD_SUBJECT_RE = re.compile(
     r'id="(main|second)_food_subject_(\d+)" value="([^"]*)"')
-
-# 2026-09-07 使用者審查定稿：湯算飲料；檸檬過寬(恐誤判檸檬雞翅)移除；
-# 茶過寬(恐誤判茶碗蒸)改精準「烏龍茶」；2026-09-08 補「柚茶」(91113 茉香柚茶漏網，
-# 仍不用寬泛「茶」以防茶碗蒸誤判)
-_DRINK_KW = ("可樂", "七喜", "雪碧", "汽水", "紅茶", "綠茶", "烏龍茶", "柚茶",
-             "咖啡", "玉米濃湯", "濃湯", "果汁")
-
-
-def _cat_of_subject(subject: str) -> str | None:
-    """組標題 → cat（2026-09-07 使用者確認完整分類）。
-
-    以官網組標題(main_food_subject value)為準；只影響顯示分類(cat)、不動 group。
-    規則順序(先比尺寸/特殊、後中性)：
-      1. 大比薩/13吋 → 大比薩
-      2. 小比薩/9吋 → 小比薩
-      3. 個人比薩 → 個人比薩
-      4. 義大利麵/飯/筆管麵/千層麵/飯麵 → 義大利麵/飯(新類)
-      5. 副食/煎餅/點心 → 副食
-      6. 含比薩/披薩(無尺寸，如手工義式薄比薩) → 中性 比薩
-      7. 其它 → None(呼叫端 fallback)
-    """
-    if not subject:
-        return None
-    if "大比薩" in subject or "大披薩" in subject or "13吋" in subject:
-        return "大比薩"
-    if "小比薩" in subject or "小披薩" in subject or "9吋" in subject:
-        return "小比薩"
-    if "個人比薩" in subject or "個人披薩" in subject:
-        return "個人比薩"
-    # 特殊比薩：非典型餅體(手工義式薄比薩/Flatzz 等)，獨立類(2026-09-07 使用者)
-    if re.search(r"手工義式|薄比薩|義式薄|Flatzz", subject):
-        return "特殊比薩"
-    if ("義大利麵" in subject or "筆管麵" in subject
-            or "千層麵" in subject or "飯麵" in subject or "飯" in subject):
-        return "義大利麵/飯"
-    if "副食" in subject or "煎餅" in subject or "點心" in subject:
-        return "副食"
-    if "比薩" in subject or "披薩" in subject:
-        return "比薩"
-    return None
-
-
-def _all_drink(names: list[str]) -> bool:
-    """整組候選是否全為飲料/湯品（湯算飲料；2026-09-07 使用者確認）。"""
-    return bool(names) and all(
-        any(kw in (n or "") for kw in _DRINK_KW) for n in names)
 
 
 # ============ DOM 抽取 ============
@@ -267,8 +220,8 @@ def parse_orderflow(html: str, extract: dict | None = None) -> dict:
                     card['flavors'] = [f for f in card['flavors'] if f['name']]
 
 
-    # 組分類註記（組標題原文 groupTitle + cat）寫到每張候選卡（2026-09-07）。
-    # main：cat 依組標題尺寸詞；second：整組全飲料→飲料、否則副食。
+    # 官方組標題原文寫到每張候選卡（groupTitle；溯源／產出 coupons.js 時判尺寸用）。
+    # 不在這裡判分類——scan_state 保持官網原貌。
     subject_by: dict[str, dict[str, str]] = {}
     for m in _FOOD_SUBJECT_RE.finditer(html):
         gtype, g, subj = m.group(1), m.group(2), m.group(3).strip()
@@ -276,14 +229,7 @@ def parse_orderflow(html: str, extract: dict | None = None) -> dict:
     for gtype in ("main", "second"):
         for g, cards in groups.get(gtype, {}).items():
             subject = (subject_by.get(gtype) or {}).get(g, "")
-            if gtype == "main":
-                cat = _cat_of_subject(subject)
-            else:
-                cat = "副食"
-                if _all_drink([c.get("name", "") for c in cards]):
-                    cat = "飲料"
             for c in cards:
-                c["cat"] = cat
                 c["groupTitle"] = subject or None
 
     return {"groups": groups}
@@ -333,8 +279,7 @@ def flatten_items(struct: dict) -> list[dict] | None:
                     'priceAdd': c.get('price_add') or 0,
                     'flavors': [],
                     'add': None,
-                    # 組分類（2026-09-07）：main 依組標題尺寸；second 全飲料→飲料/否則副食
-                    'cat': c.get('cat'),
+                    # 官方組標題原文（溯源；分類在產出 coupons.js 時才算）
                     'groupTitle': c.get('groupTitle'),
                 }
                 if gtype == 'main':
@@ -343,9 +288,6 @@ def flatten_items(struct: dict) -> list[dict] | None:
                         for f in c.get('flavors', []) if f.get('name')]
                 elif gtype == 'add':
                     item['add'] = c.get('price_add') or 0
-                # 兜底：main 無標題→中性比薩；second 無標題→副食
-                if not item['cat']:
-                    item['cat'] = {"main": "比薩", "second": "副食"}.get(gtype)
                 items.append(item)
 
     if not items:

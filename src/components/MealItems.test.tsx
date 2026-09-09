@@ -43,6 +43,30 @@ const items26868: MealItem[] = [
 ];
 
 describe("MealItems 結構化", () => {
+  it("組標題以 units（項分類）為準；混類項顯示聯集，順序固定", () => {
+    const items: MealItem[] = [
+      { text: "百事可樂330ml", group: "second", groupIdx: 1, priceAdd: 0, flavorIdx: null, cat: "飲料" },
+      { text: "薯金幣(小份)", group: "second", groupIdx: 1, priceAdd: 0, flavorIdx: null, cat: "副食" },
+    ];
+    const units = [{ group: "second" as const, groupIdx: 1, cats: ["副食", "飲料"] }];
+    const html = renderToStaticMarkup(<MealItems items={items} units={units} />);
+    expect(html).toContain("副食/飲料");
+    expect(html).toContain("2 選1");
+  });
+
+  it("沒有 units 時退回候選 cat 聯集；無 cat 退回 group 名", () => {
+    const items: MealItem[] = [
+      { text: "茉香柚茶", group: "second", groupIdx: 1, priceAdd: 0, flavorIdx: null, cat: "飲料" },
+    ];
+    const html = renderToStaticMarkup(<MealItems items={items} />);
+    expect(html).toContain("飲料");
+    const plain: MealItem[] = [
+      { text: "薯金幣(大份)", group: "add", groupIdx: 1, priceAdd: 79, flavorIdx: null, add: 79 },
+    ];
+    const html2 = renderToStaticMarkup(<MealItems items={plain} />);
+    expect(html2).toContain("加購");
+  });
+
   it("卡片(compact)：顯示前 4 候選(加價標琥珀價)，超過 4 顯示 …", () => {
     const html = renderToStaticMarkup(
       <MealItems items={items26868} flavorSets={flavorSets} compact />,

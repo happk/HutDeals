@@ -202,14 +202,15 @@ def cmd_confirm(args) -> int:
         rec.pop("step2At", None)
         step2_ok.append(code)
         diff = {}
-        # 組分類（cat/groupTitle）更動 → 也算內容變更（2026-09-07；需先於 items 覆寫比對）
+        # 選項結構（官方組標題＋候選品名）更動 → 也算內容變更
+        # （需先於 items 覆寫比對；2026-09-09 分類移出 scan_state 後改比對組標題+品名）
         old_items = rec.get("items") or []
         new_items = d.get("items") or []
-        cats_old = {(i.get("cat"), i.get("groupTitle")) for i in old_items}
-        cats_new = {(i.get("cat"), i.get("groupTitle")) for i in new_items}
-        if cats_new and cats_new != cats_old:
-            # key=str：item 的 cat/groupTitle 可能為 None(純選項無群組)，None 與 str 不能直接排序
-            diff["cats"] = [sorted(cats_old, key=str), sorted(cats_new, key=str)]
+        sig_old = {(i.get("groupTitle"), i.get("text")) for i in old_items}
+        sig_new = {(i.get("groupTitle"), i.get("text")) for i in new_items}
+        if sig_new and sig_new != sig_old:
+            # key=str：groupTitle 可能為 None(純選項無群組)，None 與 str 不能直接排序
+            diff["items"] = [sorted(sig_old, key=str), sorted(sig_new, key=str)]
         for f in CONTENT_FIELDS:
             old, new = rec.get(f), d.get(f)
             if old != new and new is not None:

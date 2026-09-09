@@ -20,6 +20,7 @@ import re
 import sys
 
 from script.lib import coupons as coupons_lib
+from script.lib.categories import DRINK_KW, SIZE_TAG, cat_tags, classify_units
 from script.lib.coupons import COUPONS_JS, official_keys
 from script.lib.repo import REPO
 from script.lib.state import STATE_PATH
@@ -31,16 +32,12 @@ _CONTENT_TAG_KW = {
     "副食": ["副食", "薯金幣", "QQ球", "雞軟骨"],
     "買一送一": ["買1送1", "買1送4", "買大送大", "送1個", "送2個", "買大送小", "加33元即享"],
     "折扣": ["折", "特價"],
-    "飲料": ["可樂", "飲料"],
+    # 飲料詞彙與項分類共用同一份（script/lib/categories.DRINK_KW），不另立清單
+    "飲料": ["飲料", *DRINK_KW],
 }
 
-# 尺寸語義（2026-09-07 使用者更正：大=13吋 / 小=9吋 / 個人=6吋）
-_SIZE_TAG = {"大比薩": ["13吋", "大比薩"], "小比薩": ["9吋", "小比薩"],
-             "個人比薩": ["6吋", "個人比薩"]}
-# cat 非尺寸類 → 也進券 tags（2026-09-08 篩選對齊）
-_CAT_TO_TAG = {"義大利麵/飯", "副食", "特殊比薩"}
-# 內容 tag 尺寸關鍵字（fallback：僅在無結構化 cat 時用）
-_SIZE_RULES = [(tag, kws) for tag, kws in _SIZE_TAG.items()]
+# 內容 tag 尺寸關鍵字（fallback：僅在無結構化項分類時用）
+_SIZE_RULES = [(tag, kws) for tag, kws in SIZE_TAG.items()]
 
 
 def _size_tags(text: str) -> list[str]:
@@ -84,13 +81,14 @@ def external_to_coupon(rec: dict, today: str) -> dict:
         if m:
             price = int(m.group(1).replace(",", ""))
             price_note = "起"
-    # tags：內容關鍵字 + cat。cat 以結構化為準（2026-09-07）；無 cat 才退回 desc 推論
+    # 項分類（2026-09-09）：以「項」為單位在產出 coupons.js 時算（scan_state 不含 cat）。
+    # classify_units 會就地寫回每筆候選的 cat，並回傳項層分類 [{group,groupIdx,cats}]。
+    units = classify_units(items)
+    # tags：內容關鍵字（標題/描述）+ 項分類（尺寸類與白名單 cat，如飲料/副食）
     tags = _content_tags(title + " " + desc)
-    cats = sorted({i.get("cat") for i in items if i.get("cat")})
-    # 尺寸類(大/小/個人比薩)與非尺寸類(特殊比薩/義大利麵飯/副食)都從 cat 進 tags
-    cat_tags = [c for c in cats if c in _SIZE_TAG or c in _CAT_TO_TAG]
-    if cat_tags:
-        tags = [t for t in tags if t not in _SIZE_TAG] + cat_tags
+    ct = cat_tags(units)
+    if ct:
+        tags = [t for t in tags if t not in SIZE_TAG] + ct
     return {
         "key": code,
         "code": code,
@@ -109,6 +107,7 @@ def external_to_coupon(rec: dict, today: str) -> dict:
         "verifiedAt": today,
         "p_id": rec.get("p_id"),
         "items": items,
+        "units": units,
         # 期限（IG 錄入回填，見 ig_ingest；單碼自動，多碼留 09）
         "startDate": rec.get("startDate"),
         "endDate": rec.get("endDate"),

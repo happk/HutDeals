@@ -10,7 +10,7 @@ import os
 import subprocess
 import unittest
 
-from script.scan.parse_orderflow import _all_drink, flatten_items, parse_orderflow
+from script.scan.parse_orderflow import flatten_items, parse_orderflow
 
 FIXTURES = os.path.join(os.path.dirname(__file__), "fixtures", "orderflow")
 NODE = os.path.join(os.path.dirname(__file__), "..", "..", "..", "script",
@@ -84,92 +84,38 @@ class TestOrderflow(unittest.TestCase):
         self.assertGreaterEqual(top, 200)   # 極炙厚牛干貝 +268
 
 
-class TestCat(unittest.TestCase):
-    """組分類 cat（2026-09-07）：main 依組標題尺寸、second 全飲料→飲料/否則副食。"""
+class TestRawShape(unittest.TestCase):
+    """scan_state 保持官網原貌（2026-09-09）：解析輸出不含我們的分類，只帶官方組標題。
 
-    def _groups(self, code):
-        _, _, _, items = load(code)
-        out = {}
-        for it in items:
-            if it["group"] == "add":
-                continue
-            k = (it["group"], it["groupIdx"])
-            out.setdefault(k, (it["cat"], it["groupTitle"]))
-        return out
+    分類（項分類）改在產出 coupons.js 時由 script/lib/categories.py 判定，
+    見 test_categories.py。
+    """
 
-    def test_26868_personal(self):
-        g = self._groups("26868")
-        # 兩組 main 皆「請選擇1個個人比薩」→ 個人比薩
-        self.assertEqual(g[("main", 1)][0], "個人比薩")
-        self.assertEqual(g[("main", 2)][0], "個人比薩")
-        self.assertEqual(g[("main", 1)][1], "請選擇1個個人比薩")
+    def test_16010_no_cat_has_groupTitle(self):
+        _, _, _, items = load("16010")
+        self.assertTrue(all("cat" not in i for i in items))
+        mains = [i for i in items if i["group"] == "main"]
+        self.assertEqual(mains[0]["groupTitle"], "請選擇1個個人比薩")
+        seconds = [i for i in items if i["group"] == "second"]
+        self.assertEqual(seconds[0]["groupTitle"], "請選擇1份副食")
 
-    def test_16010_drink_group(self):
-        g = self._groups("16010")
-        self.assertEqual(g[("main", 1)][0], "個人比薩")   # 6吋券官方稱個人
-        self.assertEqual(g[("second", 1)][0], "飲料")     # 百事可樂/七喜 全飲料
+    def test_26880_two_main_subjects(self):
+        _, _, _, items = load("26880")
+        subjects = {i["groupIdx"]: i["groupTitle"] for i in items if i["group"] == "main"}
+        self.assertEqual(subjects[1], "請選擇1個大比薩")
+        self.assertEqual(subjects[2], "請選擇1個個人比薩")
 
-    def test_94199_13inch_large(self):
-        g = self._groups("94199")
-        self.assertEqual(g[("main", 1)][0], "大比薩")     # 「13吋大比薩」
+    def test_94199_subject(self):
+        _, _, _, items = load("94199")
+        mains = [i for i in items if i["group"] == "main"]
+        self.assertIn("13吋", mains[0]["groupTitle"])
 
-    def test_26880_mixed_sizes(self):
-        g = self._groups("26880")
-        self.assertEqual(g[("main", 1)][0], "大比薩")
-        self.assertEqual(g[("main", 2)][0], "個人比薩")
-        self.assertEqual(g[("second", 1)][0], "副食")
-
-    def test_91113_fivefold(self):
-        """91113 五享餐：主食個人比薩4選1 + 副食×3(各1) + 飲料3選1。
-
-        守護 2026-09-08：second g4（含茉香柚茶）須為飲料（_DRINK_KW 柚茶），
-        不可因單品漏關鍵字而整組誤判副食。
-        """
-        g = self._groups("91113")
-        self.assertEqual(g[("main", 1)][0], "個人比薩")
-        self.assertEqual(g[("second", 1)][0], "副食")
-        self.assertEqual(g[("second", 2)][0], "副食")
-        self.assertEqual(g[("second", 3)][0], "副食")
-        self.assertEqual(g[("second", 4)][0], "飲料")
-        self.assertEqual(g[("second", 4)][1], "請選擇1份飲料")
-
-    def test_youcha_is_drink_chawanmushi_is_not(self):
-        # 柚茶納入飲料；茶碗蒸仍不可誤判（2026-09-07 精準化紅線）
-        self.assertTrue(_all_drink(["茉香柚茶", "百事可樂330ml", "七喜330ml"]))
-        self.assertFalse(_all_drink(["茶碗蒸"]))
-        self.assertFalse(_all_drink(["檸檬雞翅", "百事可樂330ml"]))
-
-
-class TestCatRules(unittest.TestCase):
-    """組標題 → cat 分類規則（2026-09-07 使用者確認）。"""
-
-    def test_size(self):
-        from script.scan.parse_orderflow import _cat_of_subject
-        self.assertEqual(_cat_of_subject("請選擇1個大比薩"), "大比薩")
-        self.assertEqual(_cat_of_subject("請選擇1個13吋大比薩"), "大比薩")
-        self.assertEqual(_cat_of_subject("請選擇1個小比薩"), "小比薩")
-        self.assertEqual(_cat_of_subject("請選擇1個9吋小比薩"), "小比薩")
-        self.assertEqual(_cat_of_subject("請選擇1個個人比薩"), "個人比薩")
-
-    def test_pasta(self):
-        from script.scan.parse_orderflow import _cat_of_subject
-        self.assertEqual(_cat_of_subject("請選擇1份義大利麵/飯"), "義大利麵/飯")
-        self.assertEqual(_cat_of_subject("請選擇1份筆管麵"), "義大利麵/飯")
-        self.assertEqual(_cat_of_subject("請選擇1份私廚系列飯麵/千層麵"), "義大利麵/飯")
-
-    def test_side(self):
-        from script.scan.parse_orderflow import _cat_of_subject
-        self.assertEqual(_cat_of_subject("請選擇1份副食"), "副食")
-        self.assertEqual(_cat_of_subject("請選擇1個韓式海鮮煎餅"), "副食")
-        self.assertEqual(_cat_of_subject("請選擇第1個點心"), "副食")
-
-    def test_special_pizza(self):
-        from script.scan.parse_orderflow import _cat_of_subject
-        self.assertEqual(_cat_of_subject("請選擇1份手工義式薄比薩"), "特殊比薩")
-
-    def test_neutral_pizza(self):
-        from script.scan.parse_orderflow import _cat_of_subject
-        self.assertIsNone(_cat_of_subject("請選擇1份無關文字"))
+    def test_91113_drink_group_subject(self):
+        _, _, _, items = load("91113")
+        g4 = [i for i in items if i["group"] == "second" and i["groupIdx"] == 4]
+        self.assertTrue(g4)
+        self.assertEqual(g4[0]["groupTitle"], "請選擇1份飲料")
+        self.assertIn("茉香柚茶", {i["text"] for i in g4})
 
 
 if __name__ == "__main__":

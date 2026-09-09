@@ -1,9 +1,12 @@
-"""HutDeals tests — cmd_confirm 組分類(cat/groupTitle)含 None 不崩潰（2026-09-09）。
+"""HutDeals tests — cmd_confirm 選項結構含 None 不崩潰（2026-09-09）。
 
 離線 mock：不打官網、不寫真 data 檔。守護：
-- 官網回傳 items 比舊版多「無群組選項」(cat/groupTitle = None，如 26975 實況)，
-  cats diff 排序不會 TypeError（修復：sorted(key=str)，None 與 str 不能直接比）。
-- diff["cats"] 仍正常寫入 content_changes alerts、state 收新版 items。
+- 官網回傳 items 比舊版多「無群組選項」(groupTitle = None，如 26975 實況)，
+  選項結構 diff 排序不會 TypeError（修復：sorted(key=str)，None 與 str 不能直接比）。
+- diff["items"] 仍正常寫入 content_changes alerts、state 收新版 items。
+
+註：2026-09-09 起 scan_state 不再存我們的分類（cat），內容變更比對改為
+「官方組標題＋候選品名」集合。
 
 執行：python -m unittest script.support.tests.test_confirm_cats_none -v
 """
@@ -23,14 +26,13 @@ def _probe_rec(code):
 
 
 class ConfirmCatsNoneTest(unittest.TestCase):
-    """cmd_confirm：新 items 比舊多出無群組選項 → 組分類含 None 仍不炸。"""
+    """cmd_confirm：新 items 比舊多出無群組選項 → 選項結構含 None 仍不炸。"""
 
     def setUp(self):
         state = {"updatedAt": None, "codes": {
             "16010": {"status": "alive", "title": "標題", "price": 199,
                       "channels": [],
-                      "items": [{"cat": "大比薩", "groupTitle": "group",
-                                 "name": "x"}]},
+                      "items": [{"groupTitle": "請選擇1份副食", "text": "x"}]},
         }}
         self._orig = {k: getattr(daily, k) for k in (
             "load_state", "save_state", "update_alerts", "history_row",
@@ -49,32 +51,31 @@ class ConfirmCatsNoneTest(unittest.TestCase):
         daily.history_row = lambda *a: self.history.append(a)
         daily.update_coverage = lambda recs: None
         daily.probe_batch = lambda codes: ([_probe_rec("16010")], False)
-        # 官網回傳：原本的有群組選項 + 一筆無群組選項（cat/groupTitle = None）
+        # 官網回傳：原本的有群組選項 + 一筆無群組選項（groupTitle = None）
         daily.fetch_and_parse = lambda code, fetcher: {
             "meta": {"title": "標題", "price": 199, "msrp": None,
                      "channels": [], "desc_head": None, "desc": None},
-            "items": [{"cat": "大比薩", "groupTitle": "group", "name": "x"},
-                      {"cat": None, "groupTitle": None, "name": "加點選項"}]}
+            "items": [{"groupTitle": "請選擇1份副食", "text": "x"},
+                      {"groupTitle": None, "text": "加點選項"}]}
 
     def tearDown(self):
         for k, v in self._orig.items():
             setattr(daily, k, v)
 
-    def test_cats_diff_with_none_does_not_crash(self):
+    def test_items_diff_with_none_does_not_crash(self):
         rc = daily.cmd_confirm(SimpleNamespace(limit=0))
         self.assertEqual(rc, 0)  # 不熔斷、不崩潰
-        # cats 更動被記錄（新 items 多一組 None 分類）
-        cats_diffs = [e for sec, e in self.alerts if sec == "content_changes"]
-        self.assertTrue(any("16010" in str(e) and "cats" in str(e)
-                            for e in cats_diffs))
+        # 選項結構更動被記錄（新 items 多一筆無組標題）
+        diffs = [e for sec, e in self.alerts if sec == "content_changes"]
+        self.assertTrue(any("16010" in str(e) and "items" in str(e) for e in diffs))
         # state 已收新版 items（含 None 群組那筆）
         self.assertEqual(len(self.saved["codes"]["16010"]["items"]), 2)
-        # diff 的 cats 值兩側皆已排序（list），不殘留 set
-        for e in cats_diffs:
+        # diff 的 items 值兩側皆已排序（list），不殘留 set
+        for e in diffs:
             for ch in e:
                 if ch.get("code") == "16010":
-                    self.assertIsInstance(ch["diff"]["cats"], list)
-                    self.assertEqual(len(ch["diff"]["cats"]), 2)
+                    self.assertIsInstance(ch["diff"]["items"], list)
+                    self.assertEqual(len(ch["diff"]["items"]), 2)
 
 
 if __name__ == "__main__":

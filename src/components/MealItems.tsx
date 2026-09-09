@@ -1,4 +1,4 @@
-import type { Flavor, MealItem } from "../types";
+import type { Flavor, MealItem, UnitCat } from "../types";
 
 /** 舊三欄格式（parse_meal 產出，遷移前向後相容用） */
 interface LegacyItem {
@@ -127,7 +127,8 @@ function LegacyMealItems({
  * - 詳細頁：每類內 **+0 預設區在上、加價區在下**（中間細分隔線，不拆散）；
  *   候選名一律正常色，+0 標記灰字「+$0」、加價標記琥珀「+$NN」。
  * - 口味(flavorSets[flavorIdx])只在詳細頁顯示。
- * - 組標題顯示 cat（個人比薩/大比薩/副食/飲料…），無 cat 退回 group 名。
+ * - 組標題以券層 `units`（項分類）為準，混類項顯示聯集（如「副食/飲料」）；
+ *   沒有 units 時退回該組候選 cat 的聯集，再退回 group 名。
  */
 const GROUP_LABEL: Record<MealItem["group"], string> = {
   main: "主餐",
@@ -135,16 +136,25 @@ const GROUP_LABEL: Record<MealItem["group"], string> = {
   add: "加購",
 };
 
+/** 混類項標題顯示順序（與 script/lib/categories.py 的 CAT_ORDER 一致） */
+const CAT_ORDER = ["大比薩", "小比薩", "個人比薩", "特殊比薩", "義大利麵/飯", "比薩", "副食", "飲料"];
+
 /** 每組一個類別；同 group 不同 groupIdx 是不同組（26868 有 main×2） */
 function groupKey(it: MealItem): string {
   return `${it.group}-${it.groupIdx}`;
 }
 
-/** 類別標題：依 cat（大/小/個人比薩/副食/飲料）；無 cat 退回 group 名。 */
-function groupTitle(group: MealItem["group"], cat: string | undefined, count: number): string {
+/** 類別標題：項分類聯集（混類→「副食/飲料」）；無分類退回 group 名。 */
+function groupTitle(group: MealItem["group"], cats: string[], count: number): string {
   let label: string;
-  if (cat) {
-    label = cat;
+  if (cats.length > 0) {
+    label = [...cats]
+      .sort((a, b) => {
+        const ia = CAT_ORDER.indexOf(a);
+        const ib = CAT_ORDER.indexOf(b);
+        return (ia < 0 ? CAT_ORDER.length : ia) - (ib < 0 ? CAT_ORDER.length : ib);
+      })
+      .join("/");
   } else {
     label = GROUP_LABEL[group] ?? group;
   }
@@ -161,26 +171,31 @@ function flavorsOf(it: MealItem, flavorSets: Flavor[][] | undefined): Flavor[] |
 export default function MealItems({
   items,
   flavorSets,
+  units,
   compact = false,
 }: {
   items: MealItem[];
   flavorSets?: Flavor[][];
+  /** 項層分類（券層 units；2026-09-09）。無此欄時退回候選 cat 聯集 */
+  units?: UnitCat[];
   compact?: boolean;
 }) {
   // 向後相容：舊三欄格式（{text, choices, add}）無 group 欄位 → 走舊渲染
   if (items.length > 0 && items[0] && !("group" in items[0])) {
     return <LegacyMealItems items={items as unknown as LegacyItem[]} compact={compact} />;
   }
-  return <StructuredMealItems items={items} flavorSets={flavorSets} compact={compact} />;
+  return <StructuredMealItems items={items} flavorSets={flavorSets} units={units} compact={compact} />;
 }
 
 function StructuredMealItems({
   items,
   flavorSets,
+  units,
   compact = false,
 }: {
   items: MealItem[];
   flavorSets?: Flavor[][];
+  units?: UnitCat[];
   compact?: boolean;
 }) {
   // 字體：詳情頁加大（16/14），卡片維持小（14/12）
@@ -201,11 +216,17 @@ function StructuredMealItems({
     g.items.push(it);
   }
 
+  // 項分類查表（units 為準；舊資料沒 units 時退回候選 cat 聯集）
+  const unitCats = new Map<string, string[]>();
+  for (const u of units ?? []) unitCats.set(`${u.group}-${u.groupIdx}`, u.cats);
+
   return (
     <ul className={compact ? "space-y-1" : "space-y-1.5"}>
       {groups.map((g) => {
-        const cat = g.items[0]?.cat ?? undefined;
-        const label = groupTitle(g.group, cat, g.items.length);
+        const cats =
+          unitCats.get(g.key) ??
+          [...new Set(g.items.map((i) => i.cat).filter((x): x is string => !!x))];
+        const label = groupTitle(g.group, cats, g.items.length);
         const freeItems = g.items.filter((i) => i.priceAdd === 0);
         // 加價候選：詳情頁加價區依 priceAdd 由低到高排序(2026-09-07 使用者)；卡片補位亦同
         const paidItems = g.items
