@@ -174,6 +174,14 @@
     </div>
 
     <h2 class="sec">每日入庫趨勢（firstSeen）</h2>
+    <div class="toolbar">
+      <label for="intake-range">區間</label>
+      <select id="intake-range">
+        <option value="14" selected>近14天</option>
+        <option value="30">近30天</option>
+        <option value="all">至今</option>
+      </select>
+    </div>
     <div class="panel chart-panel"><svg id="chart-intake" role="img" aria-label="每日入庫趨勢圖"></svg></div>
 
     <div class="chart-grid">
@@ -199,9 +207,27 @@
   </section>
 </main>
 
-<script src="coupons_full.js"></script>
 <script>
+/* 資料載入：fetch + no-cache（revalidate），避免檔名不變的 coupons_full.js
+   被瀏覽器快取舊檔；解析後再啟動 adminStart（定義於下一個 script）。 */
 (function () {
+  "use strict";
+  function ready() {
+    if (typeof adminStart === "function") adminStart();
+  }
+  fetch("coupons_full.js", { cache: "no-cache" }).then(function (r) {
+    if (!r.ok) throw new Error("http " + r.status);
+    return r.text();
+  }).then(function (text) {
+    var body = text.replace(/^[^\n]*\n/, "").replace(/;\s*$/, "");
+    var marker = "window.HUTDEALS_FULL = ";
+    var idx = body.indexOf(marker);
+    window.HUTDEALS_FULL = idx < 0 ? null : JSON.parse(body.slice(idx + marker.length));
+  }).catch(function () { window.HUTDEALS_FULL = null; }).then(ready);
+})();
+</script>
+<script>
+function adminStart() {
   "use strict";
   var FULL = window.HUTDEALS_FULL || null;
   var app = document.getElementById("app");
@@ -213,13 +239,29 @@
     });
   }
 
+  /* 資料時間 → 使用者本地時區顯示（與前端 src/lib/format.ts 同規則）：
+     無時區後綴視為 UTC；偏移標籤動態算出。解析失敗回原字串。 */
+  function formatUserTime(iso) {
+    var s = /[zZ]|[+-]\d{2}:?\d{2}$/.test(iso) ? iso : iso + "Z";
+    var d = new Date(s);
+    if (isNaN(d.getTime())) return iso;
+    var off = -d.getTimezoneOffset();
+    var t = new Date(d.getTime() + off * 60000);
+    function p(n) { return (n < 10 ? "0" : "") + n; }
+    var sign = off < 0 ? "-" : "+";
+    var abs = Math.abs(off);
+    var label = "UTC" + sign + Math.floor(abs / 60) + (abs % 60 ? ":" + p(abs % 60) : "");
+    return t.getUTCFullYear() + "-" + p(t.getUTCMonth() + 1) + "-" + p(t.getUTCDate()) + " "
+      + p(t.getUTCHours()) + ":" + p(t.getUTCMinutes()) + "（" + label + "）";
+  }
+
   if (!FULL || !Array.isArray(FULL.coupon_list)) {
     noData.hidden = false;
     bindTabs(); // 分頁仍可點,內容區留空
     return;
   }
   app.hidden = false;
-  document.getElementById("last-update").textContent = "資料更新 " + (FULL.last_update || "—");
+  document.getElementById("last-update").textContent = "資料更新 " + formatUserTime(FULL.last_update || "—");
 
   /* ---- 分頁 1：全量券 ---- */
   var rows = FULL.coupon_list;
@@ -385,18 +427,52 @@
     });
   })();
 
-  /* 4) 每日入庫趨勢（面積+折線） */
-  (function () {
+  /* 4) 每日入庫趨勢（面積+折線）：區間下拉（近14天/近30天/至今）切換重繪 */
+  var intake = {};
+  rows.forEach(function (c) {
+    var d = (c.firstSeen || "").slice(0, 10);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) intake[d] = (intake[d] || 0) + 1;
+  });
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+  /* firstSeen 是 runner 的 UTC 日期 → 窗口一律用 UTC 日曆（含 0 入庫的日子補 0，
+     否則 0 的日子會消失、看起來像沒更新）。 */
+  function isoDayUTC(offset) {
+    var t = new Date(Date.now() + offset * 86400000);
+    return t.getUTCFullYear() + "-" + pad2(t.getUTCMonth() + 1) + "-" + pad2(t.getUTCDate());
+  }
+  function intakeDays(mode) {
+    var days = [], i;
+    if (mode === "all") {
+      var keys = Object.keys(intake).sort();
+      if (!keys.length) return days;
+      var t0 = Date.parse(keys[0] + "T00:00:00Z");
+      var t1 = Date.parse(isoDayUTC(0) + "T00:00:00Z");
+      if (t0 > t1) return keys; // 防呆：資料比今天新
+      for (var t = t0; t <= t1; t += 86400000) {
+        var d = new Date(t);
+        days.push(d.getUTCFullYear() + "-" + pad2(d.getUTCMonth() + 1) + "-" + pad2(d.getUTCDate()));
+      }
+    } else {
+      var n = mode === "30" ? 30 : 14;
+      for (i = n - 1; i >= 0; i--) days.push(isoDayUTC(-i));
+    }
+    return days; // 缺值不補進 intake（保持原始），讀取一律用 (intake[d] || 0)
+  }
+  function drawIntake() {
     var W = 880, H = 240, L = 46, R = 14, T = 16, B = 30;
-    var intake = {};
-    rows.forEach(function (c) {
-      var d = (c.firstSeen || "").slice(0, 10);
-      if (/^\d{4}-\d{2}-\d{2}$/.test(d)) intake[d] = (intake[d] || 0) + 1;
-    });
-    var days = Object.keys(intake).sort().slice(-14);
+    var sel = document.getElementById("intake-range");
+    var mode = sel ? sel.value : "14";
+    try { localStorage.setItem("hutdeals:intake-range", mode); } catch (e) {}
+    var days = intakeDays(mode);
+    var vals = {}; // 當檔位的日→張數（缺值=0，不污染原始 intake）
+    days.forEach(function (d) { vals[d] = intake[d] || 0; });
+    var svgEl = document.getElementById("chart-intake");
+    while (svgEl.firstChild) svgEl.removeChild(svgEl.firstChild); // 重繪前清空
+    var showValues = days.length <= 16; // 點太多時只標峰值＋hover，防數字重疊
     drawInto("chart-intake", W, H, function (svg) {
       if (!days.length) return;
-      var max = Math.max.apply(null, days.map(function (d) { return intake[d]; }));
+      var max = Math.max.apply(null, days.map(function (d) { return vals[d]; }));
+      if (!max) max = 1; // 全 0：畫基線不斷圖
       var X = function (i) { return L + i * (W - L - R) / (days.length - 1 || 1); };
       var Y = function (v) { return H - B - (v / max) * (H - T - B); };
       for (var g = 0; g <= 2; g++) {
@@ -404,19 +480,30 @@
         svg.appendChild(el("line", { x1: L, y1: Y(gv), x2: W - R, y2: Y(gv), "class": g ? "ct-grid" : "ct-zero" }));
         svg.appendChild(el("text", { x: L - 6, y: Y(gv) + 3.5, "text-anchor": "end", "class": "ct-axis-txt" }, gv));
       }
-      var pts = days.map(function (d, i) { return [X(i), Y(intake[d])]; });
+      var pts = days.map(function (d, i) { return [X(i), Y(vals[d])]; });
       svg.appendChild(el("polygon", { points: L + "," + (H - B) + " " + pts.map(function (q) { return q.join(","); }).join(" ") + " " + (W - R) + "," + (H - B), "class": "ct-area" }));
       svg.appendChild(el("polyline", { points: pts.map(function (q) { return q.join(","); }).join(" "), "class": "ct-line" }));
       pts.forEach(function (q, i) {
         svg.appendChild(hoverTip(el("circle", { cx: q[0], cy: q[1], r: 3.5, "class": "ct-dot" }),
-          days[i] + "：" + intake[days[i]] + " 張入庫"));
-        // 資料點數值（2026-09-09）：標在點上方，一眼看趨勢不用 hover
-        svg.appendChild(el("text", { x: q[0], y: q[1] - 7, "text-anchor": "middle", "class": "ct-bar-val" },
-          intake[days[i]]));
-        if (i === 0 || i === pts.length - 1 || intake[days[i]] === max)
+          days[i] + "：" + vals[days[i]] + " 張入庫"));
+        // 資料點數值：標在點上方，一眼看趨勢不用 hover（點太多時只標峰值）
+        if (showValues || vals[days[i]] === max)
+          svg.appendChild(el("text", { x: q[0], y: q[1] - 7, "text-anchor": "middle", "class": "ct-bar-val" },
+            vals[days[i]]));
+        if (i === 0 || i === pts.length - 1 || vals[days[i]] === max)
           svg.appendChild(el("text", { x: q[0], y: H - B + 14, "text-anchor": "middle", "class": "ct-axis-txt" }, days[i].slice(5)));
       });
     });
+  }
+  (function initIntakeRange() {
+    var sel = document.getElementById("intake-range");
+    if (!sel) { drawIntake(); return; }
+    try {
+      var saved = localStorage.getItem("hutdeals:intake-range");
+      if (saved === "14" || saved === "30" || saved === "all") sel.value = saved;
+    } catch (e) {}
+    sel.addEventListener("change", drawIntake);
+    drawIntake();
   })();
 
   /* 5) 聯名方/標籤排行（橫條保留——排行型資料的最佳形態） */
@@ -448,19 +535,21 @@
     document.getElementById("scan-cards").innerHTML =
       statCard(scan.total, "掃號池碼數") + statCard(scan.alive, "alive")
       + statCard(scan.dead, "dead") + statCard(scan.unknown, "unknown")
-      + "<div class='stat' style='min-width:200px'><div class='lbl'>state 更新時間</div><div class='num' style='font-size:14px'>"
-      + esc(scan.updatedAt || "—") + "</div></div>";
+      + "<div class='stat' style='min-width:200px'><div class='lbl'>上次更新時間</div><div class='num' style='font-size:14px'>"
+      + esc(formatUserTime(scan.updatedAt || "—")) + "</div>"
+      + "<div class='lbl' style='margin-top:6px'>上次更動時間</div><div class='num' style='font-size:14px'>"
+      + esc(formatUserTime(scan.lastChanged || "—")) + "</div></div>";
   } else {
     document.getElementById("scan-empty").hidden = false;
   }
   document.getElementById("build-info").innerHTML =
-    "<div class='meta-line'>coupons_full.js 寫出時間：" + esc(FULL.last_update || "—") + "</div>"
+    "<div class='meta-line'>coupons_full.js 寫出時間：" + esc(formatUserTime(FULL.last_update || "—")) + "</div>"
     + "<div class='meta-line'>全量筆數：" + rows.length + "（active " + active.length
     + " / offline " + offline.length + "）</div>"
     + "<div class='meta-line'>主站資料檔同源,每日 cron 由 .github/workflows/update.yml 驅動。</div>";
 
   /* ---- 掃號警告（scan_alerts.json；scan.yml sample 工 / update.yml 複製進 public/；缺檔靜默）---- */
-  fetch("scan_alerts.json").then(function (r) { return r.ok ? r.json() : null; }).then(function (a) {
+  fetch("scan_alerts.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (a) {
     if (!a) return;
     function listItems(entries) {
       return "<ul>" + entries.map(function (e) {
@@ -518,7 +607,7 @@
       });
     });
   }
-})();
+}
 </script>
 </body>
 </html>

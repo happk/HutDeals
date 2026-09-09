@@ -17,6 +17,21 @@
   - **資料存放**：`scan_state.json` 回到官網原貌（移除我們的 `cat`）；分類只在產出 `coupons.js` 時套用，券層新增 `units: [{group, groupIdx, cats}]`、候選保留自己的 `cat`。改分類規則只要重跑 build，不必重掃。
   - 篩選標籤由項分類產生（含「飲料」）；`daily.py` 內容變更比對改為「官方組標題＋候選品名」。
   - 一次性遷移 `script/site/migrate_item_units.py`（移除 scan_state 的舊 cat）＋重建 coupons.js。
+- **更新時間改使用者本地時區顯示**：`last_update` 是 runner 寫的 UTC 無時區字串，
+  台灣用戶看到 `2026-09-09T20:33` 會誤判為昨日資料（實為 9/10 04:33 CST 當日凌晨排程）。
+  新增 `src/lib/format.ts` `formatUserTime()`：無時區視為 UTC，按瀏覽器本地時區渲染
+  `YYYY-MM-DD HH:mm`＋動態 UTC 偏移（如 `2026-09-10 04:33（UTC+8）`，半小時時區亦成立）。
+  套用 header／頁尾（原只取 UTC 日期，會差一天）／回報單（附 UTC 原文方便對 CI log）。
+  新增 `format.test.ts` 8 例；寫入端格式不動。
+- **admin 資料改 no-cache 載入**：`coupons_full.js` 檔名永不變，`<script src>` 會命中瀏覽器快取、
+  看起來像沒更新；改 `fetch(..., {cache:"no-cache"})` 解析後啟動（`scan_alerts.json` 同）。
+- **admin 入庫趨勢連續窗口＋區間切換**：舊寫法只取有入庫的日子，0 入庫的日子直接消失
+  （圖上停在舊日期、看起來像沒更新）；改連續日曆窗口、0 補 0 顯示。新增 近14天／近30天／
+  至今 下拉（切換重繪、選擇記 `localStorage`；點多時逐點數值只標峰值）。窗口用 UTC 日曆
+  （`firstSeen` 是 runner 的 UTC 日期）。
+- **admin 爬取進度雙時間**：`state 更新時間` 改名「上次更新時間」（套時區格式）；
+  同框新增「上次更動時間」：`scan_summary()` 新增 `lastChanged`＝全池 `contentChangedAt`／
+  `dead_since`／`firstSeen` 最晚日期，要下次每日更新寫出新 `coupons_full.js` 後才出現。
 
 ## v1.0.4（2026-09-09）— 掃號去重、cron-job 備援讓賢、節奏調降
 
