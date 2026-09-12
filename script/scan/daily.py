@@ -167,6 +167,7 @@ def cmd_confirm(args) -> int:
     today = dt.date.today().isoformat()
     by_code = {r["code"]: r for r in recs}
     changes: list[dict] = []
+    deadened: list[str] = []
     retired: list[str] = []
     revived: list[str] = []
 
@@ -181,6 +182,7 @@ def cmd_confirm(args) -> int:
             continue  # 熔斷沒掃到
         if r.get("m1_success") is False:
             rec.update(status="dead", dead_since=today)
+            deadened.append(code)
             # 死碼不會再自動重試 step2：清掉殘留警告（2026-09-08）
             rec.pop("step2_error", None)
             rec.pop("step2At", None)
@@ -266,6 +268,9 @@ def cmd_confirm(args) -> int:
                 retired.append(code)
 
     state["updatedAt"] = dt.datetime.now().isoformat(timespec="seconds")
+    if changes or deadened or revived:
+        # 池有實質變更（內容/死/復活）→ 上次更動時間＝本次執行時刻，admin 端依瀏覽器時區轉換
+        state["lastChangedAt"] = state["updatedAt"]
     save_state(STATE_PATH, state)
     update_alerts("content_changes", changes)
     update_alerts("pending_empty", retired)

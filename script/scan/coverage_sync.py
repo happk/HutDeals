@@ -56,6 +56,9 @@ def merge_alive_records(recs: list[dict], source: str) -> tuple[int, int]:
         else:
             added += 1
     state["updatedAt"] = dt.datetime.now().isoformat(timespec="seconds")
+    if added:
+        # 新碼入池＝池實質變更 → 與 confirm 同規則記 lastChangedAt（純更新不算）
+        state["lastChangedAt"] = state["updatedAt"]
     save_state(STATE_PATH, state)
     return added, updated
 

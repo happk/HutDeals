@@ -103,6 +103,9 @@ class ConfirmReviveTest(unittest.TestCase):
         self.assertEqual(fails, [])
         self.assertEqual(set(clears), {"16001", "16002", "16003"})
 
+        # 有實質變更（內容+死+復活）→ lastChangedAt 抄本次 updatedAt
+        self.assertEqual(self.saved["lastChangedAt"], self.saved["updatedAt"])
+
     def _failure_entries(self):
         # update_alerts 只收 content_changes/pending_empty；failures 走 merge
         return [f for fails, _ in self.merges for f in fails]
@@ -119,6 +122,16 @@ class ConfirmReviveTest(unittest.TestCase):
         fails = [f for fails, _ in self.merges for f in fails]
         self.assertEqual([f["code"] for f in fails], ["16003"])
         self.assertIn("error", fails[0])
+
+    def test_no_change_keeps_last_changed(self):
+        """無實質變更：lastChangedAt 不新增、既有值不動（admin fallback 依賴此行為）。"""
+        daily.load_state()["lastChangedAt"] = "2026-09-10T09:00:00"
+        # 只探 16001 且內容與 state 相同；16002/16003 沒探到（模擬部分掃集）也不算變更
+        daily.probe_batch = lambda codes: ([_probe_rec("16001", True)], False)
+        daily.fetch_and_parse = lambda code, fetcher: _content("舊標題", 199)
+        daily.cmd_confirm(SimpleNamespace(limit=0))
+        self.assertEqual(self.saved["lastChangedAt"], "2026-09-10T09:00:00")
+        self.assertTrue(self.saved["updatedAt"])
 
 
 if __name__ == "__main__":

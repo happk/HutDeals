@@ -7,6 +7,13 @@
 
 ## 未分配
 
+- **admin「上次更動時間」真時區化**：原 `lastChanged` 是純日期（runner UTC 日），無時刻可轉，
+  瀏覽器把它補成 UTC 午夜換算出假的 `08:00（UTC+8）`。改為每日掃號在池有實質變更時
+  （內容變更／活→死／復活／新碼入池）記 `lastChangedAt`＝該次掃描的 `updatedAt`（完整時刻，
+  無變更不動該欄），admin 卡改顯示 `formatUserTime(lastChangedAt)` 依瀏覽器時區轉換；
+  舊資料在下次有變更的掃號前 fallback 顯示純日期。`formatUserTime` 對純日期改原樣返回
+  （不編造假時刻、跨瀏覽器一致）；admin 掃號警告標題 `updatedAt` 一併補上時區轉換。
+  測試：Python +4 例（`test_last_changed_at` 3、confirm +1）、`format.test` +1。
 - **搜尋加優惠代碼**：搜尋索引納入 `code`，品名不含 5 位碼的券（如 93014「大比薩分享餐$399」）現在可用代碼搜到；搜尋框提示同步改為「搜尋餐點、優惠代碼或關鍵字」。補 `filter.test` 案例。
 - **admin 散點圖修復**：原價已改存結構化 `msrp` 欄位，散點仍讀舊的 `priceNote`「原價$N」→ 點數 0（只剩座標軸）；改讀 `msrp` 後恢復 436 點。
 - **admin 入庫趨勢加數值**：每日入庫趨勢圖在每個資料點上方標出當日入庫張數。

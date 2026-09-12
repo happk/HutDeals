@@ -115,7 +115,9 @@ def scan_summary() -> dict | None:
 
     updatedAt：state 最後寫入（掃描最後執行）；lastChanged：池內實質更動
     （內容變更 contentChangedAt／死亡 dead_since／新入庫 firstSeen）的最晚日期，
-    三者皆無回 None。"""
+    三者皆無回 None。lastChangedAt：最近一次有實質變更的掃描執行時刻
+    （confirm 有內容變更/死/復活、merge_alive_records 有新碼時寫入），
+    舊資料無此欄回 None。"""
     from script.lib.state import STATE_PATH, load_state
     state = load_state(STATE_PATH)
     codes = state.get("codes") or {}
@@ -131,6 +133,7 @@ def scan_summary() -> dict | None:
                 changed.append(d[:10])
     return {
         "updatedAt": state.get("updatedAt"),
+        "lastChangedAt": state.get("lastChangedAt"),
         "lastChanged": max(changed) if changed else None,
         "total": len(codes),
         "alive": by_status.get("alive", 0),

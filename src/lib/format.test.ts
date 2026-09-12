@@ -53,4 +53,9 @@ describe("formatUserTime", () => {
   it("returns the original string when unparsable", () => {
     expect(formatUserTime("not-a-time")).toBe("not-a-time");
   });
+
+  // 純日期無時刻可轉 → 原樣（不補 Z 當午夜，避免編造假時刻）
+  it("passes bare dates through unchanged", () => {
+    expect(formatUserTime("2026-09-11", 480)).toBe("2026-09-11");
+  });
 });

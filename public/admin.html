@@ -240,8 +240,9 @@ function adminStart() {
   }
 
   /* 資料時間 → 使用者本地時區顯示（與前端 src/lib/format.ts 同規則）：
-     無時區後綴視為 UTC；偏移標籤動態算出。解析失敗回原字串。 */
+     無時區後綴視為 UTC；偏移標籤動態算出。純日期無時刻可轉、解析失敗皆回原字串。 */
   function formatUserTime(iso) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso;
     var s = /[zZ]|[+-]\d{2}:?\d{2}$/.test(iso) ? iso : iso + "Z";
     var d = new Date(s);
     if (isNaN(d.getTime())) return iso;
@@ -538,7 +539,7 @@ function adminStart() {
       + "<div class='stat' style='min-width:200px'><div class='lbl'>上次更新時間</div><div class='num' style='font-size:14px'>"
       + esc(formatUserTime(scan.updatedAt || "—")) + "</div>"
       + "<div class='lbl' style='margin-top:6px'>上次更動時間</div><div class='num' style='font-size:14px'>"
-      + esc(formatUserTime(scan.lastChanged || "—")) + "</div></div>";
+      + esc(formatUserTime(scan.lastChangedAt || scan.lastChanged || "—")) + "</div></div>";
   } else {
     document.getElementById("scan-empty").hidden = false;
   }
@@ -588,7 +589,7 @@ function adminStart() {
     });
     if (count) {
       document.getElementById("scan-alerts").innerHTML =
-        "<h2 class='sec'>警告（updatedAt " + esc(a.updatedAt || "—") + "）</h2>" + html;
+        "<h2 class='sec'>警告（updatedAt " + esc(formatUserTime(a.updatedAt || "—")) + "）</h2>" + html;
     }
   }).catch(function () { /* 缺檔/離線預覽:靜默 */ });
 
