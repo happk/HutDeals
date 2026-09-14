@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-13T20:29:38",
+  "updatedAt": "2026-09-14T18:07:23",
   "codes": {
     "26975": {
       "firstSeen": "2026-09-04",
@@ -2037,15 +2037,6 @@
           "groupTitle": null
         },
         {
-          "text": "墨西哥辣椒芝心腸3條(買一送一)",
-          "group": "add",
-          "groupIdx": 3,
-          "priceAdd": 109,
-          "flavors": [],
-          "add": 109,
-          "groupTitle": null
-        },
-        {
           "text": "特選組合-加購",
           "group": "add",
           "groupIdx": 3,
@@ -2097,24 +2088,6 @@
           "priceAdd": 75,
           "flavors": [],
           "add": 75,
-          "groupTitle": null
-        },
-        {
-          "text": "證件套一入(兩款隨機)",
-          "group": "add",
-          "groupIdx": 4,
-          "priceAdd": 259,
-          "flavors": [],
-          "add": 259,
-          "groupTitle": null
-        },
-        {
-          "text": "兩用收納購物袋一入(兩款隨機)",
-          "group": "add",
-          "groupIdx": 4,
-          "priceAdd": 299,
-          "flavors": [],
-          "add": 299,
           "groupTitle": null
         },
         {
@@ -2207,7 +2180,8 @@
           "add": 180,
           "groupTitle": null
         }
-      ]
+      ],
+      "contentChangedAt": "2026-09-14"
     },
     "16054": {
       "firstSeen": "2026-09-04",
@@ -2816,15 +2790,6 @@
           "groupTitle": "請選擇1個13吋大比薩"
         },
         {
-          "text": "墨西哥辣椒芝心腸3條(買一送一)",
-          "group": "add",
-          "groupIdx": 1,
-          "priceAdd": 109,
-          "flavors": [],
-          "add": 109,
-          "groupTitle": null
-        },
-        {
           "text": "特選組合-加購",
           "group": "add",
           "groupIdx": 1,
@@ -2977,7 +2942,8 @@
           "add": 180,
           "groupTitle": null
         }
-      ]
+      ],
+      "contentChangedAt": "2026-09-14"
     },
     "93010": {
       "firstSeen": "2026-09-04",
@@ -3312,15 +3278,6 @@
           "groupTitle": "請選擇1個13吋大比薩"
         },
         {
-          "text": "墨西哥辣椒芝心腸3條(買一送一)",
-          "group": "add",
-          "groupIdx": 1,
-          "priceAdd": 109,
-          "flavors": [],
-          "add": 109,
-          "groupTitle": null
-        },
-        {
           "text": "特選組合-加購",
           "group": "add",
           "groupIdx": 1,
@@ -3473,7 +3430,8 @@
           "add": 180,
           "groupTitle": null
         }
-      ]
+      ],
+      "contentChangedAt": "2026-09-14"
     },
     "93020": {
       "firstSeen": "2026-09-04",
@@ -6101,24 +6059,6 @@
           "groupTitle": null
         },
         {
-          "text": "證件套一入(兩款隨機)",
-          "group": "add",
-          "groupIdx": 2,
-          "priceAdd": 233,
-          "flavors": [],
-          "add": 233,
-          "groupTitle": null
-        },
-        {
-          "text": "兩用收納購物袋一入(兩款隨機)",
-          "group": "add",
-          "groupIdx": 2,
-          "priceAdd": 269,
-          "flavors": [],
-          "add": 269,
-          "groupTitle": null
-        },
-        {
           "text": "HOT燒大拼盤：BBQ烤雞3腿3翅+麻糬QQ球10顆+薯金幣大份+德國芝心腸6條",
           "group": "add",
           "groupIdx": 2,
@@ -6209,7 +6149,7 @@
           "groupTitle": null
         }
       ],
-      "contentChangedAt": "2026-09-10"
+      "contentChangedAt": "2026-09-14"
     },
     "94700": {
       "firstSeen": "2026-09-04",
@@ -6261,7 +6201,7 @@
     "94601": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 18111,
       "title": "94601-開學優惠！超級總匯/炙燒明太子嫩雞/鐵板雙牛$249",
       "partner": null,
@@ -6514,12 +6454,13 @@
           "add": 180,
           "groupTitle": null
         }
-      ]
+      ],
+      "dead_since": "2026-09-14"
     },
     "93023": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 18106,
       "title": "93023-開學優惠！小比薩+烤雞買1送1",
       "partner": null,
@@ -7212,7 +7153,8 @@
           "add": 159,
           "groupTitle": null
         }
-      ]
+      ],
+      "dead_since": "2026-09-14"
     },
     "91114": {
       "firstSeen": "2026-09-04",
@@ -7673,6 +7615,34 @@
       "desc": "主食+-QQ球*5顆+薯金幣(小)+起司豬肉條*4條+飲料",
       "items": [
         {
+          "text": "韓風醬烤雪花牛",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個個人比薩"
+        },
+        {
+          "text": "五重起司蒜香雞",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個個人比薩"
+        },
+        {
           "text": "千島海鮮盛宴",
           "group": "main",
           "groupIdx": 1,
@@ -7911,7 +7881,7 @@
           "groupTitle": null
         }
       ],
-      "contentChangedAt": "2026-09-11"
+      "contentChangedAt": "2026-09-14"
     },
     "91112": {
       "firstSeen": "2026-09-04",
@@ -8513,7 +8483,7 @@
     "92117": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 18874,
       "title": "92117-開學優惠！墨西哥辣椒芝心腸3條 買一送一",
       "partner": null,
@@ -8686,12 +8656,13 @@
           "add": 159,
           "groupTitle": null
         }
-      ]
+      ],
+      "dead_since": "2026-09-14"
     },
     "92114": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 18147,
       "title": "92114-開學優惠！韓式海鮮煎餅 買一送一",
       "partner": null,
@@ -8864,7 +8835,8 @@
           "add": 159,
           "groupTitle": null
         }
-      ]
+      ],
+      "dead_since": "2026-09-14"
     },
     "93014": {
       "firstSeen": "2026-09-04",
@@ -9929,24 +9901,6 @@
           "groupTitle": null
         },
         {
-          "text": "證件套一入(兩款隨機)",
-          "group": "add",
-          "groupIdx": 1,
-          "priceAdd": 233,
-          "flavors": [],
-          "add": 233,
-          "groupTitle": null
-        },
-        {
-          "text": "兩用收納購物袋一入(兩款隨機)",
-          "group": "add",
-          "groupIdx": 1,
-          "priceAdd": 269,
-          "flavors": [],
-          "add": 269,
-          "groupTitle": null
-        },
-        {
           "text": "HOT燒大拼盤：BBQ烤雞3腿3翅+麻糬QQ球10顆+薯金幣大份+德國芝心腸6條",
           "group": "add",
           "groupIdx": 1,
@@ -10037,7 +9991,8 @@
           "groupTitle": null
         }
       ],
-      "lastChecked": "2026-09-05T18:4x"
+      "lastChecked": "2026-09-05T18:4x",
+      "contentChangedAt": "2026-09-14"
     },
     "93015": {
       "firstSeen": "2026-09-04",
@@ -11210,24 +11165,6 @@
           "groupTitle": null
         },
         {
-          "text": "證件套一入(兩款隨機)",
-          "group": "add",
-          "groupIdx": 2,
-          "priceAdd": 233,
-          "flavors": [],
-          "add": 233,
-          "groupTitle": null
-        },
-        {
-          "text": "兩用收納購物袋一入(兩款隨機)",
-          "group": "add",
-          "groupIdx": 2,
-          "priceAdd": 269,
-          "flavors": [],
-          "add": 269,
-          "groupTitle": null
-        },
-        {
           "text": "加購台味三拼：黃金雞軟骨大份+酥炸杏鮑菇+酥炸三味甜不辣",
           "group": "add",
           "groupIdx": 2,
@@ -11326,7 +11263,8 @@
           "add": 159,
           "groupTitle": null
         }
-      ]
+      ],
+      "contentChangedAt": "2026-09-14"
     },
     "92002": {
       "firstSeen": "2026-09-04",
@@ -606710,5 +606648,6 @@
       "lastChecked": "2026-09-08T23:19:55",
       "source": "daily.explore"
     }
-  }
+  },
+  "lastChangedAt": "2026-09-14T18:07:23"
 }
