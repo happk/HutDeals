@@ -64,11 +64,12 @@ jobs:
             git add public/coupons.js public/coupons_full.js public/sitemap.xml data/scan_alerts.json public/scan_alerts.json
             git commit -m "daily update coupon information ($(date -u +%F))"
             # 以最新 remote 為主體重排後再推；真內容衝突則 abort 並留備份分支
+            # --autostash：只 add 部分檔案，workdir 殘留未暫存變更時 rebase 才不會被拒
             BR="bot-conflict/$(date -u +%F)-${JOB_NAME}-${GITHUB_RUN_ID}"
             PUSHED=false
             for i in 1 2 3 4 5; do
               git fetch origin main || { echo "fetch 失敗，重試 $i/5"; sleep 15; continue; }
-              if git rebase origin/main; then
+              if git rebase --autostash origin/main; then
                 if git push; then PUSHED=true; break; fi
                 echo "push 被超前(fetch first)，重試 $i/5"
                 sleep 15
