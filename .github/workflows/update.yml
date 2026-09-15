@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 完整歷史，結尾 fetch+rebase 才不會因 shallow 失敗
 
       - uses: actions/setup-python@v5
         with:
@@ -50,6 +52,8 @@ jobs:
 
       - name: Commit if changed
         id: commit
+        env:
+          JOB_NAME: update
         run: |
           if git diff --quiet -- public/coupons.js public/coupons_full.js public/sitemap.xml data/scan_alerts.json public/scan_alerts.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -59,30 +63,88 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add public/coupons.js public/coupons_full.js public/sitemap.xml data/scan_alerts.json public/scan_alerts.json
             git commit -m "daily update coupon information ($(date -u +%F))"
-            git push
+            # 以最新 remote 為主體重排後再推；真內容衝突則 abort 並留備份分支
+            BR="bot-conflict/$(date -u +%F)-${JOB_NAME}-${GITHUB_RUN_ID}"
+            PUSHED=false
+            for i in 1 2 3 4 5; do
+              git fetch origin main || { echo "fetch 失敗，重試 $i/5"; sleep 15; continue; }
+              if git rebase origin/main; then
+                if git push; then PUSHED=true; break; fi
+                echo "push 被超前(fetch first)，重試 $i/5"
+                sleep 15
+                continue
+              fi
+              if git ls-files --unmerged | grep -q .; then
+                echo "rebase 內容衝突，abort 並推備份分支 $BR"
+                git rebase --abort
+                git push origin HEAD:"$BR"
+                echo "已推備份分支 $BR（更新結果，不含 main 上的新提交）"
+                exit 1
+              fi
+              git rebase --abort 2>/dev/null || true
+              echo "rebase 失敗（非內容衝突），重試 $i/5"
+              sleep 15
+            done
+            if [ "$PUSHED" != "true" ]; then
+              echo "5 次仍推不上去，失敗交給告警步驟"
+              exit 1
+            fi
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      # 爬蟲失敗告警:開 Issue(已有開啟中的告警票則不重複開)
+      # 爬蟲失敗告警:先查本 run 有無備份分支 → 有=推送衝突(黃 sync-conflict，不擋 gate)，無=真失敗(紅 scrape-failed)
       - name: Create failure issue
         if: failure()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          DATE=$(date -u +%F)
+          RUN_URL="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           # gh label create 建不出「不存在」的 label → 不存在(GET 404)才用 REST 建立
           gh api "repos/$GITHUB_REPOSITORY/labels/scrape-failed" >/dev/null 2>&1 \
             || gh api -X POST "repos/$GITHUB_REPOSITORY/labels" \
                  -f name=scrape-failed -f color=ff0000 \
                  -f "description=每日爬蟲失敗(官網改版)" >/dev/null
-          TITLE="每日爬蟲失敗 $(date -u +%F)"
-          COUNT=$(gh issue list --label scrape-failed --state open --json number --jq 'length')
-          if [ "$COUNT" -eq 0 ]; then
-            gh issue create \
-              --title "$TITLE" \
-              --label "scrape-failed" \
-              --body "script.site.build_coupons 執行失敗(可能是官網改版)。舊的 public/coupons.js 未被覆蓋,網站仍顯示前一日資料。請查看 Actions log。"
+          gh api "repos/$GITHUB_REPOSITORY/labels/sync-conflict" >/dev/null 2>&1 \
+            || gh api -X POST "repos/$GITHUB_REPOSITORY/labels" \
+                 -f name=sync-conflict -f color=FBCA04 \
+                 -f "description=每日掃號/更新推送衝突(fetch first)，非熔斷/改版，不擋 gate" >/dev/null
+          BRANCHES=$(git ls-remote --heads origin "bot-conflict/*-${GITHUB_RUN_ID}" \
+            | awk '{print $2}' | sed 's|^refs/heads/||' || true)
+          if [ -n "$BRANCHES" ]; then
+            echo "偵測到本 run 的備份分支，開黃色 sync-conflict（不擋 gate）："
+            echo "$BRANCHES"
+            TITLE="更新衝突待合 $DATE（run ${GITHUB_RUN_ID}）"
+            EXIST=$(gh issue list --label sync-conflict --state open --json title \
+              --jq "[.[] | select(.title | contains(\"${GITHUB_RUN_ID}\"))] | length")
+            if [ "$EXIST" -gt 0 ]; then
+              echo "同 run 的 sync-conflict issue 已存在，跳過"
+              exit 0
+            fi
+            {
+              echo "## 更新推送衝突待合（非官網改版）"
+              echo ""
+              echo "Run: $RUN_URL"
+              echo ""
+              echo "備份分支（更新結果，不含 main 上的新提交）："
+              for BR in $BRANCHES; do echo "- \`$BR\`"; done
+              echo ""
+              echo "## 怎麼合（手動）"
+              echo "本地 \`git fetch origin\` 後，把備份分支 \`cherry-pick\` 或手合回 \`main\` 再推；"
+              echo "合完 \`git push origin --delete <分支>\` 並關本 issue。"
+            } > /tmp/sync-body.md
+            gh issue create --title "$TITLE" --label "sync-conflict" --body-file /tmp/sync-body.md
           else
-            echo "open scrape-failed issue already exists, skip"
+            TITLE="每日爬蟲失敗 $DATE"
+            COUNT=$(gh issue list --label scrape-failed --state open --json number --jq 'length')
+            if [ "$COUNT" -eq 0 ]; then
+              gh issue create \
+                --title "$TITLE" \
+                --label "scrape-failed" \
+                --body "script.site.build_coupons 執行失敗(可能是官網改版)。舊的 public/coupons.js 未被覆蓋,網站仍顯示前一日資料。請查看 Actions log：$RUN_URL"
+            else
+              echo "open scrape-failed issue already exists, skip"
+            fi
           fi
 
       # update 成功 → 觸發 deploy(鏈式)

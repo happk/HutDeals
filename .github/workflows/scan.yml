@@ -59,6 +59,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 完整歷史，結尾 fetch+rebase 才不會因 shallow 失敗
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -71,6 +73,8 @@ jobs:
           LIMIT: ${{ inputs.smoke && inputs.limit || '0' }}
         run: python -m script.scan.daily confirm --limit "$LIMIT"
       - name: Commit if changed
+        env:
+          JOB_NAME: confirm
         run: |
           if git diff --quiet -- data/scan_state.json data/scan_alerts.json \
             data/scan-records/scan-history.md; then
@@ -80,7 +84,33 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/scan_state.json data/scan_alerts.json \
               data/scan-records/scan-history.md
-            git commit -m "daily scan confirm ($(date -u +%F))" && git push
+            git commit -m "daily scan confirm ($(date -u +%F))"
+            # 以最新 remote 為主體重排後再推；真內容衝突則 abort 並留備份分支
+            BR="bot-conflict/$(date -u +%F)-${JOB_NAME}-${GITHUB_RUN_ID}"
+            PUSHED=false
+            for i in 1 2 3 4 5; do
+              git fetch origin main || { echo "fetch 失敗，重試 $i/5"; sleep 15; continue; }
+              if git rebase origin/main; then
+                if git push; then PUSHED=true; break; fi
+                echo "push 被超前(fetch first)，重試 $i/5"
+                sleep 15
+                continue
+              fi
+              if git ls-files --unmerged | grep -q .; then
+                echo "rebase 內容衝突，abort 並推備份分支 $BR"
+                git rebase --abort
+                git push origin HEAD:"$BR"
+                echo "已推備份分支 $BR（掃號結果，不含 main 上的新提交），交給 alert 開 sync-conflict"
+                exit 1
+              fi
+              git rebase --abort 2>/dev/null || true
+              echo "rebase 失敗（非內容衝突），重試 $i/5"
+              sleep 15
+            done
+            if [ "$PUSHED" != "true" ]; then
+              echo "5 次仍推不上去，失敗交給 alert"
+              exit 1
+            fi
           fi
 
   # 軌道②：16/26 潛在碼位 M1 普查（confirm 已確認的 alive/dead 不重探，去重於 cmd_explore；
@@ -92,6 +122,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main  # 取 confirm 推完後的最新狀態（預設會抓觸發時的舊 SHA，push 被拒）
+          fetch-depth: 0  # 完整歷史，結尾 fetch+rebase 才不會因 shallow 失敗
 
       - uses: actions/setup-python@v5
         with:
@@ -104,6 +135,8 @@ jobs:
           LIMIT: ${{ inputs.smoke && inputs.limit || '0' }}
         run: python -m script.scan.daily explore --limit "$LIMIT"
       - name: Commit if changed
+        env:
+          JOB_NAME: explore
         run: |
           if git diff --quiet -- data/scan_state.json data/scan_coverage.json \
             data/scan_alerts.json \
@@ -114,7 +147,33 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/scan_state.json data/scan_coverage.json data/scan_alerts.json \
               data/scan-records/scan-history.md
-            git commit -m "daily scan explore ($(date -u +%F))" && git push
+            git commit -m "daily scan explore ($(date -u +%F))"
+            # 以最新 remote 為主體重排後再推；真內容衝突則 abort 並留備份分支
+            BR="bot-conflict/$(date -u +%F)-${JOB_NAME}-${GITHUB_RUN_ID}"
+            PUSHED=false
+            for i in 1 2 3 4 5; do
+              git fetch origin main || { echo "fetch 失敗，重試 $i/5"; sleep 15; continue; }
+              if git rebase origin/main; then
+                if git push; then PUSHED=true; break; fi
+                echo "push 被超前(fetch first)，重試 $i/5"
+                sleep 15
+                continue
+              fi
+              if git ls-files --unmerged | grep -q .; then
+                echo "rebase 內容衝突，abort 並推備份分支 $BR"
+                git rebase --abort
+                git push origin HEAD:"$BR"
+                echo "已推備份分支 $BR（掃號結果，不含 main 上的新提交），交給 alert 開 sync-conflict"
+                exit 1
+              fi
+              git rebase --abort 2>/dev/null || true
+              echo "rebase 失敗（非內容衝突），重試 $i/5"
+              sleep 15
+            done
+            if [ "$PUSHED" != "true" ]; then
+              echo "5 次仍推不上去，失敗交給 alert"
+              exit 1
+            fi
           fi
 
   # 軌道③：潛在未知號段抽樣（每日隨機重抽，命中→admin 警告）；~1200 發 ≈ 1.9h
@@ -125,6 +184,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main  # 取 explore 推完後的最新狀態
+          fetch-depth: 0  # 完整歷史，結尾 fetch+rebase 才不會因 shallow 失敗
 
       - uses: actions/setup-python@v5
         with:
@@ -142,6 +202,8 @@ jobs:
         run: cp data/scan_alerts.json public/scan_alerts.json
 
       - name: Commit if changed
+        env:
+          JOB_NAME: sample
         run: |
           if git diff --quiet -- data/scan_state.json data/scan_coverage.json \
             data/scan_alerts.json public/scan_alerts.json \
@@ -153,10 +215,36 @@ jobs:
             git add data/scan_state.json data/scan_coverage.json data/scan_alerts.json \
               public/scan_alerts.json \
               data/scan-records/scan-history.md
-            git commit -m "daily scan sample ($(date -u +%F))" && git push
+            git commit -m "daily scan sample ($(date -u +%F))"
+            # 以最新 remote 為主體重排後再推；真內容衝突則 abort 並留備份分支
+            BR="bot-conflict/$(date -u +%F)-${JOB_NAME}-${GITHUB_RUN_ID}"
+            PUSHED=false
+            for i in 1 2 3 4 5; do
+              git fetch origin main || { echo "fetch 失敗，重試 $i/5"; sleep 15; continue; }
+              if git rebase origin/main; then
+                if git push; then PUSHED=true; break; fi
+                echo "push 被超前(fetch first)，重試 $i/5"
+                sleep 15
+                continue
+              fi
+              if git ls-files --unmerged | grep -q .; then
+                echo "rebase 內容衝突，abort 並推備份分支 $BR"
+                git rebase --abort
+                git push origin HEAD:"$BR"
+                echo "已推備份分支 $BR（掃號結果，不含 main 上的新提交），交給 alert 開 sync-conflict"
+                exit 1
+              fi
+              git rebase --abort 2>/dev/null || true
+              echo "rebase 失敗（非內容衝突），重試 $i/5"
+              sleep 15
+            done
+            if [ "$PUSHED" != "true" ]; then
+              echo "5 次仍推不上去，失敗交給 alert"
+              exit 1
+            fi
           fi
 
-  # 掃描失敗告警（熔斷/官網改版）：開 Issue，已有開啟中告警則不重複
+  # 掃描失敗告警：先查本 run 有無備份分支 → 有=推送衝突(黃 sync-conflict，不擋 gate)，無=真失敗(紅 scan-failed)
   alert:
     needs: [confirm, explore, sample]
     if: failure()
@@ -166,20 +254,54 @@ jobs:
       - env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          DATE=$(date -u +%F)
+          RUN_URL="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           # gh label create 建不出「不存在」的 label(只會改已存在者)→ 不存在(GET 404)才用 REST 建立
           gh api "repos/$GITHUB_REPOSITORY/labels/scan-failed" >/dev/null 2>&1 \
             || gh api -X POST "repos/$GITHUB_REPOSITORY/labels" \
                  -f name=scan-failed -f color=ff0000 \
                  -f "description=每日掃號失敗(熔斷/官網改版)" >/dev/null
-          TITLE="每日掃號失敗 $(date -u +%F)"
-          COUNT=$(gh issue list --label scan-failed --state open --json number --jq 'length')
-          if [ "$COUNT" -eq 0 ]; then
-            gh issue create \
-              --title "$TITLE" \
-              --label "scan-failed" \
-              --body "script.scan.daily 某工執行失敗（熔斷或官網改版）。已完成部分已由各 job 自行 commit。請看 Actions log。"
+          gh api "repos/$GITHUB_REPOSITORY/labels/sync-conflict" >/dev/null 2>&1 \
+            || gh api -X POST "repos/$GITHUB_REPOSITORY/labels" \
+                 -f name=sync-conflict -f color=FBCA04 \
+                 -f "description=每日掃號/更新推送衝突(fetch first)，非熔斷/改版，不擋 gate" >/dev/null
+          BRANCHES=$(git ls-remote --heads origin "bot-conflict/*-${GITHUB_RUN_ID}" \
+            | awk '{print $2}' | sed 's|^refs/heads/||' || true)
+          if [ -n "$BRANCHES" ]; then
+            echo "偵測到本 run 的備份分支，開黃色 sync-conflict（不擋 gate）："
+            echo "$BRANCHES"
+            TITLE="掃號衝突待合 $DATE（run ${GITHUB_RUN_ID}）"
+            EXIST=$(gh issue list --label sync-conflict --state open --json title \
+              --jq "[.[] | select(.title | contains(\"${GITHUB_RUN_ID}\"))] | length")
+            if [ "$EXIST" -gt 0 ]; then
+              echo "同 run 的 sync-conflict issue 已存在，補 comment 即可"
+              exit 0
+            fi
+            {
+              echo "## 推送衝突待合（非熔斷 / 非官網改版）"
+              echo ""
+              echo "Run: $RUN_URL"
+              echo ""
+              echo "備份分支（掃號結果，不含 main 上的新提交）："
+              for BR in $BRANCHES; do echo "- \`$BR\`"; done
+              echo ""
+              echo "## 怎麼合（手動）"
+              echo "本地 \`git fetch origin\` 後，把備份分支 \`cherry-pick\` 或手合回 \`main\` 再推；"
+              echo "合完 \`git push origin --delete <分支>\` 並關本 issue。"
+              echo "gate 只擋 \`scan-failed\`/\`scrape-failed\`，本 issue 不影響明日排程。"
+            } > /tmp/sync-body.md
+            gh issue create --title "$TITLE" --label "sync-conflict" --body-file /tmp/sync-body.md
           else
-            echo "open scan-failed issue already exists, skip"
+            TITLE="每日掃號失敗 $DATE"
+            COUNT=$(gh issue list --label scan-failed --state open --json number --jq 'length')
+            if [ "$COUNT" -eq 0 ]; then
+              gh issue create \
+                --title "$TITLE" \
+                --label "scan-failed" \
+                --body "script.scan.daily 某工執行失敗（熔斷或官網改版）。已完成部分已由各 job 自行 commit。請看 Actions log：$RUN_URL"
+            else
+              echo "open scan-failed issue already exists, skip"
+            fi
           fi
 
   # 三工全成功 → 觸發 update(鏈式, 非寫死時間)
