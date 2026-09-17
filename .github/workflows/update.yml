@@ -43,9 +43,12 @@ jobs:
       - name: Generate sitemap
         run: python -m script.site.gen_sitemap
 
-      # SEO 片段：活躍券明文 noscript + JSON-LD（deploy 灌入 dist/index.html 供爬蟲讀）
+      # SEO 片段：活躍券明文 noscript + JSON-LD（deploy 灌入 dist/index.html 供爬蟲讀）。
+      # SEO 失敗不擋 coupons.js 提交（舊片段留用，fail-open）；告警靠 Actions log。
       - name: Generate SEO snippets
+        id: gen-seo
         run: python -m script.site.gen_seo
+        continue-on-error: true
 
       # enrich 的 step2 失敗併入 alerts；同步到 public 供 admin 顯示
       - name: Publish alerts to public

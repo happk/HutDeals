@@ -3,12 +3,19 @@
 在 update.yml 每日 build_coupons 後跑：讀 public/coupons.js 的活躍券，
 產 sitemap.xml（含 `/HutDeals/?code=XXX` 深連結，讓 Google 個別索引每張券）。
 
+注意：全站 canonical 指向主站（index.html），搜尋引擎會把 ?code= 視為
+主站的重複頁——此處深連結僅當「爬蟲發現路徑＋使用者分享 modal 落地」，
+不期待單券獨立排名（SPA 單頁架構的先天限制）。真要單券排名需每券靜態頁，
+超出目前範圍。
+
 用法：python -m script.site.gen_sitemap
 """
 import json
 import re
 import sys
 from pathlib import Path
+from urllib.parse import quote
+from xml.sax.saxutils import escape as xml_escape
 
 REPO = Path(__file__).resolve().parents[2]
 COUPONS_JS = REPO / "public" / "coupons.js"
@@ -39,12 +46,15 @@ def main() -> int:
         "  </url>",
     ]
     for c in active:
-        code = c.get("code")
-        if not code:
+        # 與 gen_seo.coupon_url 同政策：缺 code 回退 key，並做 URL/XML 跳脫。
+        # （今日資料 code==key 全數字，輸出與舊版位元一致；防未來特殊字元。）
+        target = c.get("code") or c.get("key")
+        if not target:
             continue
+        url = f"{BASE}?code={quote(str(target), safe='')}"
         lines += [
             "  <url>",
-            f"    <loc>{BASE}?code={code}</loc>",
+            f"    <loc>{xml_escape(url)}</loc>",
             "    <changefreq>weekly</changefreq>",
             "  </url>",
         ]

@@ -11,9 +11,9 @@
 用法（deploy-pages.yml，npm run build 之後）：
     python -m script.site.inject_seo
 """
+import json
 import re
 import sys
-from pathlib import Path
 
 from script.lib.repo import REPO
 
@@ -22,7 +22,7 @@ DIST_INDEX = REPO / "dist" / "index.html"
 NOSCRIPT_PATH = PUBLIC / "seo-noscript.html"
 LD_PATH = PUBLIC / "seo-ld.json"
 
-ROOT_ANCHOR = '<div id="root"></div>'
+ROOT_RE = re.compile(r'<div\s+id=["\']root["\'][^>]*>\s*</div>')
 NOSCRIPT_RE = re.compile(r'<noscript data-seo="1">.*?</noscript>', re.S)
 LD_RE = re.compile(r'<script type="application/ld\+json" data-seo="1">.*?</script>', re.S)
 
@@ -37,6 +37,11 @@ def main() -> int:
 
     noscript_inner = NOSCRIPT_PATH.read_text(encoding="utf-8")
     ld_json = LD_PATH.read_text(encoding="utf-8").strip()
+    try:
+        json.loads(ld_json)  # 壞檔不上線：fail-closed，直接擋 deploy
+    except json.JSONDecodeError as e:
+        print(f"ERROR: seo-ld.json 非法 JSON（{e}），拒絕注入", file=sys.stderr)
+        return 1
     noscript_tag = f"<noscript data-seo=\"1\">\n{noscript_inner}</noscript>"
     ld_tag = (
         "<script type=\"application/ld+json\" data-seo=\"1\">"
@@ -48,11 +53,12 @@ def main() -> int:
     # noscript：已存在即取代，否則接在 #root 之後
     if NOSCRIPT_RE.search(doc):
         doc = NOSCRIPT_RE.sub(lambda _: noscript_tag, doc, count=1)
-    elif ROOT_ANCHOR in doc:
-        doc = doc.replace(ROOT_ANCHOR, f"{ROOT_ANCHOR}\n    {noscript_tag}", 1)
     else:
-        print("ERROR: dist/index.html 找不到 <div id=\"root\"></div>", file=sys.stderr)
-        return 1
+        m = ROOT_RE.search(doc)
+        if not m:
+            print("ERROR: dist/index.html 找不到 #root 掛載點", file=sys.stderr)
+            return 1
+        doc = doc[: m.end()] + f"\n    {noscript_tag}" + doc[m.end():]
 
     # JSON-LD：已存在即取代，否則插在 </head> 之前
     if LD_RE.search(doc):

@@ -15,7 +15,6 @@
 import html
 import json
 import sys
-from pathlib import Path
 from urllib.parse import quote
 
 from script.lib import coupons as coupons_lib
@@ -32,8 +31,11 @@ BASE = "https://happk.github.io/HutDeals/"
 HEADER = "<!-- 由 script/site/gen_seo.py 每日產生；勿手改 -->\n"
 
 
-def coupon_url(code: str | None, key: str) -> str:
+def coupon_url(code: str | None, key: str | None) -> str:
+    """深連結；code 缺時回退 key（與 sitemap 共用，兩者政策一致）。"""
     target = code or key
+    if not target:
+        return BASE
     return f"{BASE}?code={quote(str(target), safe='')}"
 
 
@@ -55,34 +57,41 @@ def build_noscript(active: list[dict]) -> str:
 def build_ld(active: list[dict], last_update: str) -> str:
     elements: list[dict] = []
     for i, c in enumerate(active, start=1):
-        item: dict = {
-            "@type": "ListItem",
-            "position": i,
-            "url": coupon_url(c.get("code"), c.get("key")),
-            "name": c.get("name") or c.get("key") or "",
-        }
+        name = c.get("name") or c.get("key") or ""
+        url = coupon_url(c.get("code"), c.get("key"))
+        product: dict = {"@type": "Product", "name": name, "url": url}
         if c.get("price") is not None:
-            item["offers"] = {
+            product["offers"] = {
                 "@type": "Offer",
-                "price": str(c["price"]),
+                "price": c["price"],
                 "priceCurrency": "TWD",
                 "availability": "https://schema.org/InStock",
             }
-        elements.append(item)
-    payload = {
+        elements.append(
+            {"@type": "ListItem", "position": i, "url": url, "item": product}
+        )
+    payload: dict = {
         "@context": "https://schema.org",
         "@type": "ItemList",
         "name": "HutDeals — 必勝客優惠整理",
         "description": "台灣必勝客 Pizza Hut 優惠整理：每日自動同步官網優惠與聯名優惠碼。",
         "numberOfItems": len(elements),
-        "dateModified": last_update,
         "itemListElement": elements,
     }
-    return json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n"
+    if last_update:
+        payload["dateModified"] = last_update
+    body = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+    # JSON-LD 將被包進 <script>：把 < 轉為 \u003c（合法 JSON 跳脫，解析還原為 <）。
+    # < 不存在則 </script> 與 <!-- 都無法形成，券名再惡意也閉合不了 script 區塊。
+    body = body.replace("<", "\\u003c")
+    return body + "\n"
 
 
 def load_payload() -> dict:
-    text = COUPONS_JS.read_text(encoding="utf-8")
+    try:
+        text = COUPONS_JS.read_text(encoding="utf-8")
+    except OSError:
+        raise SystemExit("coupons.js 缺檔或不可讀")
     idx = text.find(coupons_lib.DATA_MARKER)
     if idx < 0:
         raise SystemExit("coupons.js 解析失敗：找不到 DATA_MARKER")
