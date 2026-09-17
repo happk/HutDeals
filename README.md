@@ -1,10 +1,27 @@
-# HutDeals — 台灣必勝客優惠整理
+<p align="center">
+  <img src="public/pizza.svg" width="120" alt="HutDeals logo" />
+</p>
 
-網站: https://happk.github.io/HutDeals/
+<h1 align="center">HutDeals — 台灣必勝客優惠整理</h1>
+
+<p align="center">
+  <a href="https://happk.github.io/HutDeals/">網站</a>
+</p>
 
 每天自動蒐集[必勝客官網](https://www.pizzahut.com.tw/promotions/?mode=cpSch&type=plu)優惠與官網驗證的聯名/季節優惠碼，整理成可搜尋、篩選、排序、收藏的靜態網站。
 
 ※ 非官方專案；資料皆經官網頁面或其訂餐驗證端點確認。
+
+<table>
+  <tr>
+    <td><img src="docs/img/sample_dark.jpg" alt="深色模式" width="400" /></td>
+    <td><img src="docs/img/sample_light.jpg" alt="淺色模式" width="400" /></td>
+  </tr>
+  <tr>
+    <td align="center">深色模式</td>
+    <td align="center">淺色模式</td>
+  </tr>
+</table>
 
 ## 架構
 
@@ -41,4 +58,5 @@ npm test         # vitest
 ## 聲明
 
 非必勝客官方網站；資料來源為必勝客官網公開頁面與官網訂餐驗證端點回傳。
+
 價格與供應以官網為準，商標歸屬各權利人。
