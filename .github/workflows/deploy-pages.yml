@@ -28,6 +28,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # SEO 注入：noscript 明文清單 + JSON-LD 灌入 dist/index.html（供不跑 JS 的爬蟲讀）
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m script.site.inject_seo
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

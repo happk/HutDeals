@@ -31,8 +31,10 @@
     <meta name="google-site-verification" content="vPdqM-LuGgjtItS_Ed5DftnCAYSQYQvKPlzD3vJGJ4M" />
     <!-- GoatCounter 流量統計 -->
     <script data-goatcounter="https://hutdeals.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-    <!-- 爬蟲產生的靜態資料檔(Vite public/ 目錄) -->
-    <script src="/coupons.js"></script>
+    <!-- 爬蟲產生的靜態資料檔(Vite public/ 目錄)；defer 避免擋首屏解析。
+         main.tsx 是 module(預設延遲執行)且此標籤在前，故 coupons.js 仍先執行，
+         loadData() 讀到的 window.HUTDEALS_COUPONS 順序不變 -->
+    <script src="/coupons.js" defer></script>
   </head>
   <body>
     <div id="root"></div>
