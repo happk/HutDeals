@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-16T20:33:14",
+  "updatedAt": "2026-09-17T18:05:02",
   "codes": {
     "26975": {
       "firstSeen": "2026-09-04",
@@ -6256,7 +6256,7 @@
     "94601": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "dead",
+      "status": "alive",
       "p_id": 18111,
       "title": "94601-開學優惠！超級總匯/炙燒明太子嫩雞/鐵板雙牛$249",
       "partner": null,
@@ -6402,24 +6402,6 @@
           "groupTitle": null
         },
         {
-          "text": "證件套一入(兩款隨機)",
-          "group": "add",
-          "groupIdx": 1,
-          "priceAdd": 259,
-          "flavors": [],
-          "add": 259,
-          "groupTitle": null
-        },
-        {
-          "text": "兩用收納購物袋一入(兩款隨機)",
-          "group": "add",
-          "groupIdx": 1,
-          "priceAdd": 299,
-          "flavors": [],
-          "add": 299,
-          "groupTitle": null
-        },
-        {
           "text": "起司三重奏豬肉條",
           "group": "add",
           "groupIdx": 1,
@@ -6509,8 +6491,7 @@
           "add": 180,
           "groupTitle": null
         }
-      ],
-      "dead_since": "2026-09-14"
+      ]
     },
     "93023": {
       "firstSeen": "2026-09-04",
@@ -611230,5 +611211,5 @@
       "source": "daily.explore"
     }
   },
-  "lastChangedAt": "2026-09-15T04:27:30"
+  "lastChangedAt": "2026-09-17T18:05:02"
 }
