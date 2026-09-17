@@ -7,6 +7,20 @@
 
 ## 未分配
 
+- **coupons.js 加 defer**：首頁 `<head>` 的 3MB 資料檔不再擋 HTML 解析，首屏先畫。
+  `coupons.js` 標籤在 `main.tsx`（module，預設延遲）之前，defer 腳本按文件順序執行，
+  `loadData()` 讀到的 `window.HUTDEALS_COUPONS` 順序不變；preview 實測無 mock 回退。
+- **SEO 預渲染（爬蟲看得見）**：首頁是 SPA，`<body>` 只有 `<div id="root">`，
+  不跑 JS 的爬蟲（及 Bing 背後的 AI 搜尋）看不到優惠。新增 `script/site/gen_seo.py`
+ （讀 `coupons.js` 活躍券，產 `public/seo-noscript.html` 全量明文清單＋
+  `public/seo-ld.json` ItemList＋Product/Offer JSON-LD），`update.yml` 每日重產併入提交；
+  新增 `script/site/inject_seo.py`，`deploy-pages.yml` 在 build 後把兩片段灌入
+  `dist/index.html`（`<noscript>` 接 `#root` 後、JSON-LD 插 `</head>` 前；冪等、
+  缺檔跳過不擋 deploy、壞 LD 擋 deploy）。另 `gen_sitemap.py` 與 gen 共用深連結政策
+  （缺 code 回退 key＋URL/XML 跳脫；今日資料輸出位元一致）＋ canonical 立場註解。
+  審查修正：`<` 轉 `\u003c` 防券名閉合 script、SEO step `continue-on-error` 不拖累
+  當日資料提交。測試：轉義/XSS 回退案例、壞檔/缺檔/缺 dist 退出碼、冪等重跑、
+  E2E（build→注入→591 筆→JSON 可解析）、`npm test` 36/36。
 - **admin「上次更動時間」真時區化**：原 `lastChanged` 是純日期（runner UTC 日），無時刻可轉，
   瀏覽器把它補成 UTC 午夜換算出假的 `08:00（UTC+8）`。改為每日掃號在池有實質變更時
   （內容變更／活→死／復活／新碼入池）記 `lastChangedAt`＝該次掃描的 `updatedAt`（完整時刻，
