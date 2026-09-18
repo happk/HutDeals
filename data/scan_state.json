@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-17T20:36:23",
+  "updatedAt": "2026-09-18T18:02:11",
   "codes": {
     "26975": {
       "firstSeen": "2026-09-04",
@@ -3472,7 +3472,7 @@
     "93020": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 17906,
       "title": "93020-外帶買一送五",
       "partner": null,
@@ -6203,7 +6203,8 @@
           "groupTitle": null
         }
       ],
-      "contentChangedAt": "2026-09-15"
+      "contentChangedAt": "2026-09-15",
+      "dead_since": "2026-09-18"
     },
     "94700": {
       "firstSeen": "2026-09-04",
@@ -6232,7 +6233,7 @@
     "93021": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 17907,
       "title": "93021-外送買一送二",
       "partner": null,
@@ -6251,7 +6252,8 @@
           "add": null
         }
       ],
-      "contentChangedAt": "2026-09-15"
+      "contentChangedAt": "2026-09-15",
+      "dead_since": "2026-09-18"
     },
     "94601": {
       "firstSeen": "2026-09-04",
@@ -6375,15 +6377,6 @@
           "groupTitle": null
         },
         {
-          "text": "吳寶春聯名 蜜桃冰心起司塔1顆",
-          "group": "add",
-          "groupIdx": 1,
-          "priceAdd": 75,
-          "flavors": [],
-          "add": 75,
-          "groupTitle": null
-        },
-        {
           "text": "榴槤起司冰淇淋",
           "group": "add",
           "groupIdx": 1,
@@ -6491,7 +6484,8 @@
           "add": 180,
           "groupTitle": null
         }
-      ]
+      ],
+      "contentChangedAt": "2026-09-18"
     },
     "93023": {
       "firstSeen": "2026-09-04",
@@ -611211,5 +611205,5 @@
       "source": "daily.explore"
     }
   },
-  "lastChangedAt": "2026-09-17T18:05:02"
+  "lastChangedAt": "2026-09-18T18:02:11"
 }
