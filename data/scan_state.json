@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-20T20:33:45",
+  "updatedAt": "2026-09-21T18:05:12",
   "codes": {
     "26975": {
       "firstSeen": "2026-09-04",
@@ -6490,7 +6490,7 @@
     "93023": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "dead",
+      "status": "empty",
       "p_id": 18106,
       "title": "93023-開學優惠！小比薩+烤雞買1送1",
       "partner": null,
@@ -7633,7 +7633,7 @@
     "91113": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 18882,
       "title": "91113-開學優惠！個人比薩五享餐$199",
       "partner": null,
@@ -7911,7 +7911,8 @@
           "groupTitle": null
         }
       ],
-      "contentChangedAt": "2026-09-15"
+      "contentChangedAt": "2026-09-15",
+      "dead_since": "2026-09-21"
     },
     "91112": {
       "firstSeen": "2026-09-04",
@@ -8140,7 +8141,7 @@
     "91111": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 18876,
       "title": "91111-開學優惠！個人比薩$101餐",
       "partner": null,
@@ -8508,12 +8509,13 @@
       ],
       "ig_shortcode": "DcvQVOgAYIo",
       "ig_author": "khinmap.tw",
-      "contentChangedAt": "2026-09-15"
+      "contentChangedAt": "2026-09-15",
+      "dead_since": "2026-09-21"
     },
     "92117": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "dead",
+      "status": "empty",
       "p_id": 18874,
       "title": "92117-開學優惠！墨西哥辣椒芝心腸3條 買一送一",
       "partner": null,
@@ -8692,7 +8694,7 @@
     "92114": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "dead",
+      "status": "empty",
       "p_id": 18147,
       "title": "92114-開學優惠！韓式海鮮煎餅 買一送一",
       "partner": null,
@@ -615600,5 +615602,5 @@
       "source": "daily.explore"
     }
   },
-  "lastChangedAt": "2026-09-20T18:05:33"
+  "lastChangedAt": "2026-09-21T18:05:12"
 }
