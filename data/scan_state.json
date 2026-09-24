@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T20:25:13",
+  "updatedAt": "2026-09-24T18:09:01",
   "codes": {
     "26975": {
       "firstSeen": "2026-09-04",
@@ -6247,7 +6247,7 @@
     "94601": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 18111,
       "title": "94601-開學優惠！超級總匯/炙燒明太子嫩雞/鐵板雙牛$249",
       "partner": null,
@@ -6474,7 +6474,8 @@
           "groupTitle": null
         }
       ],
-      "contentChangedAt": "2026-09-18"
+      "contentChangedAt": "2026-09-18",
+      "dead_since": "2026-09-24"
     },
     "93023": {
       "firstSeen": "2026-09-04",
@@ -648109,5 +648110,5 @@
       "source": "daily.explore"
     }
   },
-  "lastChangedAt": "2026-09-23T18:04:15"
+  "lastChangedAt": "2026-09-24T18:09:01"
 }
