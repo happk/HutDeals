@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-10T00:53:05",
+  "updatedAt": "2026-10-10T21:28:49",
   "codes": {
     "26975": {
       "firstSeen": "2026-09-04",
@@ -27160,7 +27160,7 @@
     "16146": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-05",
-      "status": "alive",
+      "status": "dead",
       "p_id": 18483,
       "title": "16146兆豐證券寵愛",
       "partner": "兆豐證券",
@@ -28995,7 +28995,8 @@
       ],
       "lastChecked": "2026-09-05T15:17:03",
       "source": "coverage_sync",
-      "contentChangedAt": "2026-09-28"
+      "contentChangedAt": "2026-09-28",
+      "dead_since": "2026-10-10"
     },
     "16147": {
       "firstSeen": "2026-09-04",
@@ -683739,5 +683740,5 @@
       "source": "daily.explore"
     }
   },
-  "lastChangedAt": "2026-10-06T19:57:37"
+  "lastChangedAt": "2026-10-10T21:28:49"
 }
