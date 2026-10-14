@@ -8,3 +8,5 @@ dist/
 # build 產物 / 工具目錄
 *.tsbuildinfo
 .zcode/
+.agents/
+skills-lock.json
