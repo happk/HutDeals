@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-10-21T23:06:24",
+ "updatedAt": "2026-10-21T23:51:45",
  "definition": "alive=M1活; empty=從未觀測到活(空號); dead=原本活+1週觀察期(本圖尚無)",
  "source": "bootstrap 2026-09-05 全段 M1 + step_2",
  "codes": {
@@ -9688,7 +9688,7 @@
   },
   "14115": {
    "status": "empty",
-   "last_checked": "2026-09-15T19:40:42"
+   "last_checked": "2026-10-21T23:07:03"
   },
   "14122": {
    "status": "empty",
@@ -9864,7 +9864,7 @@
   },
   "15032": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:36:41"
+   "last_checked": "2026-10-21T23:11:02"
   },
   "15037": {
    "status": "empty",
@@ -9892,7 +9892,7 @@
   },
   "15089": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:15:59"
+   "last_checked": "2026-10-21T23:11:14"
   },
   "15097": {
    "status": "empty",
@@ -9900,7 +9900,7 @@
   },
   "15100": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:37:22"
+   "last_checked": "2026-10-21T23:11:22"
   },
   "15102": {
    "status": "empty",
@@ -9948,7 +9948,7 @@
   },
   "15272": {
    "status": "empty",
-   "last_checked": "2026-10-17T21:57:40"
+   "last_checked": "2026-10-21T23:12:04"
   },
   "15293": {
    "status": "empty",
@@ -9996,11 +9996,11 @@
   },
   "15382": {
    "status": "empty",
-   "last_checked": "2026-09-28T19:52:28"
+   "last_checked": "2026-10-21T23:12:51"
   },
   "15399": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:08:38"
+   "last_checked": "2026-10-21T23:13:02"
   },
   "15405": {
    "status": "empty",
@@ -10060,15 +10060,15 @@
   },
   "15600": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:35:25"
+   "last_checked": "2026-10-21T23:14:45"
   },
   "15616": {
    "status": "empty",
-   "last_checked": "2026-09-08T23:51:14"
+   "last_checked": "2026-10-21T23:14:49"
   },
   "15620": {
    "status": "empty",
-   "last_checked": "2026-09-23T19:49:33"
+   "last_checked": "2026-10-21T23:14:56"
   },
   "15625": {
    "status": "empty",
@@ -10076,7 +10076,7 @@
   },
   "15641": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:15:39"
+   "last_checked": "2026-10-21T23:15:10"
   },
   "15642": {
    "status": "empty",
@@ -10132,7 +10132,7 @@
   },
   "15765": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:06:19"
+   "last_checked": "2026-10-21T23:16:12"
   },
   "15771": {
    "status": "empty",
@@ -10200,7 +10200,7 @@
   },
   "15886": {
    "status": "empty",
-   "last_checked": "2026-10-04T19:55:56"
+   "last_checked": "2026-10-21T23:16:41"
   },
   "15896": {
    "status": "empty",
@@ -10212,7 +10212,7 @@
   },
   "15922": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:17:33"
+   "last_checked": "2026-10-21T23:16:54"
   },
   "15931": {
    "status": "empty",
@@ -10232,7 +10232,7 @@
   },
   "15967": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:04:40"
+   "last_checked": "2026-10-21T23:17:24"
   },
   "15972": {
    "status": "empty",
@@ -10244,7 +10244,7 @@
   },
   "15982": {
    "status": "empty",
-   "last_checked": "2026-10-08T19:53:51"
+   "last_checked": "2026-10-21T23:17:28"
   },
   "17005": {
    "status": "empty",
@@ -10256,11 +10256,11 @@
   },
   "17008": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:08:27"
+   "last_checked": "2026-10-21T23:18:24"
   },
   "17009": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:17:39"
+   "last_checked": "2026-10-21T23:18:28"
   },
   "17010": {
    "status": "empty",
@@ -10280,7 +10280,7 @@
   },
   "17046": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:17:56"
+   "last_checked": "2026-10-21T23:18:59"
   },
   "17055": {
    "status": "empty",
@@ -10288,7 +10288,7 @@
   },
   "17060": {
    "status": "empty",
-   "last_checked": "2026-10-02T23:58:44"
+   "last_checked": "2026-10-21T23:19:03"
   },
   "17065": {
    "status": "empty",
@@ -10324,7 +10324,7 @@
   },
   "17203": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:04:23"
+   "last_checked": "2026-10-21T23:19:54"
   },
   "17209": {
    "status": "empty",
@@ -10376,7 +10376,7 @@
   },
   "17283": {
    "status": "empty",
-   "last_checked": "2026-10-04T19:59:03"
+   "last_checked": "2026-10-21T23:20:20"
   },
   "17291": {
    "status": "empty",
@@ -10388,7 +10388,7 @@
   },
   "17308": {
    "status": "empty",
-   "last_checked": "2026-09-27T20:00:27"
+   "last_checked": "2026-10-21T23:20:33"
   },
   "17318": {
    "status": "empty",
@@ -10556,11 +10556,11 @@
   },
   "17785": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:23:59"
+   "last_checked": "2026-10-21T23:23:50"
   },
   "17807": {
    "status": "empty",
-   "last_checked": "2026-09-27T20:04:00"
+   "last_checked": "2026-10-21T23:23:54"
   },
   "17811": {
    "status": "empty",
@@ -10644,7 +10644,7 @@
   },
   "17995": {
    "status": "empty",
-   "last_checked": "2026-09-20T20:08:00"
+   "last_checked": "2026-10-21T23:24:49"
   },
   "18013": {
    "status": "empty",
@@ -10856,7 +10856,7 @@
   },
   "24068": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:09:04"
+   "last_checked": "2026-10-21T23:29:39"
   },
   "24095": {
    "status": "empty",
@@ -10896,7 +10896,7 @@
   },
   "24289": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:25:45"
+   "last_checked": "2026-10-21T23:30:19"
   },
   "24290": {
    "status": "empty",
@@ -10904,7 +10904,7 @@
   },
   "24304": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:51:12"
+   "last_checked": "2026-10-21T23:30:23"
   },
   "24307": {
    "status": "empty",
@@ -10972,7 +10972,7 @@
   },
   "24488": {
    "status": "empty",
-   "last_checked": "2026-09-21T23:59:24"
+   "last_checked": "2026-10-21T23:31:10"
   },
   "24503": {
    "status": "empty",
@@ -10984,7 +10984,7 @@
   },
   "24543": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:10:26"
+   "last_checked": "2026-10-21T23:31:24"
   },
   "24562": {
    "status": "empty",
@@ -11028,7 +11028,7 @@
   },
   "24841": {
    "status": "empty",
-   "last_checked": "2026-09-24T20:12:03"
+   "last_checked": "2026-10-21T23:31:59"
   },
   "24847": {
    "status": "empty",
@@ -11052,7 +11052,7 @@
   },
   "25016": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:54:01"
+   "last_checked": "2026-10-21T23:33:26"
   },
   "25026": {
    "status": "empty",
@@ -11068,7 +11068,7 @@
   },
   "25044": {
    "status": "empty",
-   "last_checked": "2026-09-28T20:15:01"
+   "last_checked": "2026-10-21T23:33:37"
   },
   "25047": {
    "status": "empty",
@@ -11104,7 +11104,7 @@
   },
   "25148": {
    "status": "empty",
-   "last_checked": "2026-10-03T00:13:55"
+   "last_checked": "2026-10-21T23:34:39"
   },
   "25149": {
    "status": "empty",
@@ -11144,7 +11144,7 @@
   },
   "25288": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:19:32"
+   "last_checked": "2026-10-21T23:35:08"
   },
   "25316": {
    "status": "empty",
@@ -11200,7 +11200,7 @@
   },
   "25403": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:20:33"
+   "last_checked": "2026-10-21T23:35:52"
   },
   "25413": {
    "status": "empty",
@@ -11256,7 +11256,7 @@
   },
   "25508": {
    "status": "empty",
-   "last_checked": "2026-09-09T00:13:53"
+   "last_checked": "2026-10-21T23:37:13"
   },
   "25520": {
    "status": "empty",
@@ -11348,7 +11348,7 @@
   },
   "25723": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:25:43"
+   "last_checked": "2026-10-21T23:38:24"
   },
   "25726": {
    "status": "empty",
@@ -11472,7 +11472,7 @@
   },
   "27068": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:30:28"
+   "last_checked": "2026-10-21T23:41:28"
   },
   "27071": {
    "status": "empty",
@@ -11532,11 +11532,11 @@
   },
   "27185": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:26:01"
+   "last_checked": "2026-10-21T23:42:29"
   },
   "27189": {
    "status": "empty",
-   "last_checked": "2026-09-09T00:18:58"
+   "last_checked": "2026-10-21T23:42:41"
   },
   "27204": {
    "status": "empty",
@@ -11576,7 +11576,7 @@
   },
   "27344": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:08:58"
+   "last_checked": "2026-10-21T23:43:37"
   },
   "27347": {
    "status": "empty",
@@ -11608,7 +11608,7 @@
   },
   "27413": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:41:46"
+   "last_checked": "2026-10-21T23:43:57"
   },
   "27414": {
    "status": "empty",
@@ -11644,7 +11644,7 @@
   },
   "27471": {
    "status": "empty",
-   "last_checked": "2026-10-16T23:04:16"
+   "last_checked": "2026-10-21T23:45:13"
   },
   "27477": {
    "status": "empty",
@@ -11660,7 +11660,7 @@
   },
   "27514": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:28:52"
+   "last_checked": "2026-10-21T23:45:38"
   },
   "27521": {
    "status": "empty",
@@ -11700,7 +11700,7 @@
   },
   "27619": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:50:32"
+   "last_checked": "2026-10-21T23:46:11"
   },
   "27633": {
    "status": "empty",
@@ -11796,7 +11796,7 @@
   },
   "27859": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:33:25"
+   "last_checked": "2026-10-21T23:47:21"
   },
   "27870": {
    "status": "empty",
@@ -11936,7 +11936,7 @@
   },
   "28456": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:36:11"
+   "last_checked": "2026-10-21T23:50:35"
   },
   "28488": {
    "status": "empty",
@@ -12020,7 +12020,7 @@
   },
   "28852": {
    "status": "empty",
-   "last_checked": "2026-09-09T00:27:18"
+   "last_checked": "2026-10-21T23:51:27"
   },
   "28862": {
    "status": "empty",
@@ -12048,7 +12048,7 @@
   },
   "14021": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:33:06"
+   "last_checked": "2026-10-21T23:06:49"
   },
   "14025": {
    "status": "empty",
@@ -12096,7 +12096,7 @@
   },
   "14283": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:33:42"
+   "last_checked": "2026-10-21T23:07:50"
   },
   "14285": {
    "status": "empty",
@@ -12148,7 +12148,7 @@
   },
   "14536": {
    "status": "empty",
-   "last_checked": "2026-09-09T19:45:11"
+   "last_checked": "2026-10-21T23:08:41"
   },
   "14559": {
    "status": "empty",
@@ -12272,7 +12272,7 @@
   },
   "15078": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:02:09"
+   "last_checked": "2026-10-21T23:11:09"
   },
   "15082": {
    "status": "empty",
@@ -12352,11 +12352,11 @@
   },
   "15294": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:33:00"
+   "last_checked": "2026-10-21T23:12:12"
   },
   "15315": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:02:25"
+   "last_checked": "2026-10-21T23:12:20"
   },
   "15344": {
    "status": "empty",
@@ -12364,7 +12364,7 @@
   },
   "15350": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:12:08"
+   "last_checked": "2026-10-21T23:12:30"
   },
   "15390": {
    "status": "empty",
@@ -12440,11 +12440,11 @@
   },
   "15628": {
    "status": "empty",
-   "last_checked": "2026-09-28T19:54:36"
+   "last_checked": "2026-10-21T23:15:00"
   },
   "15630": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:02:53"
+   "last_checked": "2026-10-21T23:15:05"
   },
   "15651": {
    "status": "empty",
@@ -12500,7 +12500,7 @@
   },
   "15788": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:11:02"
+   "last_checked": "2026-10-21T23:16:15"
   },
   "15804": {
    "status": "empty",
@@ -12520,7 +12520,7 @@
   },
   "15834": {
    "status": "empty",
-   "last_checked": "2026-10-01T19:51:46"
+   "last_checked": "2026-10-21T23:16:31"
   },
   "15840": {
    "status": "empty",
@@ -12544,7 +12544,7 @@
   },
   "15893": {
    "status": "empty",
-   "last_checked": "2026-10-07T19:59:03"
+   "last_checked": "2026-10-21T23:16:48"
   },
   "15904": {
    "status": "empty",
@@ -12560,7 +12560,7 @@
   },
   "15926": {
    "status": "empty",
-   "last_checked": "2026-09-12T20:00:36"
+   "last_checked": "2026-10-21T23:16:59"
   },
   "15930": {
    "status": "empty",
@@ -12576,7 +12576,7 @@
   },
   "15962": {
    "status": "empty",
-   "last_checked": "2026-10-08T19:53:44"
+   "last_checked": "2026-10-21T23:17:18"
   },
   "15964": {
    "status": "empty",
@@ -12604,11 +12604,11 @@
   },
   "17019": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:06:01"
+   "last_checked": "2026-10-21T23:18:35"
   },
   "17031": {
    "status": "empty",
-   "last_checked": "2026-09-30T00:09:38"
+   "last_checked": "2026-10-21T23:18:43"
   },
   "17038": {
    "status": "empty",
@@ -12636,7 +12636,7 @@
   },
   "17132": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:19:32"
+   "last_checked": "2026-10-21T23:19:29"
   },
   "17143": {
    "status": "empty",
@@ -12664,7 +12664,7 @@
   },
   "17186": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:39:17"
+   "last_checked": "2026-10-21T23:19:51"
   },
   "17190": {
    "status": "empty",
@@ -12692,7 +12692,7 @@
   },
   "17268": {
    "status": "empty",
-   "last_checked": "2026-09-30T19:56:30"
+   "last_checked": "2026-10-21T23:20:08"
   },
   "17277": {
    "status": "empty",
@@ -12736,7 +12736,7 @@
   },
   "17404": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:21:28"
+   "last_checked": "2026-10-21T23:21:11"
   },
   "17405": {
    "status": "empty",
@@ -12744,7 +12744,7 @@
   },
   "17408": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:08:22"
+   "last_checked": "2026-10-21T23:21:19"
   },
   "17435": {
    "status": "empty",
@@ -12772,7 +12772,7 @@
   },
   "17498": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:48:29"
+   "last_checked": "2026-10-21T23:22:17"
   },
   "17503": {
    "status": "empty",
@@ -12816,7 +12816,7 @@
   },
   "17600": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:21:47"
+   "last_checked": "2026-10-21T23:22:57"
   },
   "17629": {
    "status": "empty",
@@ -12832,7 +12832,7 @@
   },
   "17753": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:10:59"
+   "last_checked": "2026-10-21T23:23:38"
   },
   "17765": {
    "status": "empty",
@@ -13060,7 +13060,7 @@
   },
   "18674": {
    "status": "empty",
-   "last_checked": "2026-09-26T20:11:51"
+   "last_checked": "2026-10-21T23:27:30"
   },
   "18778": {
    "status": "empty",
@@ -13328,7 +13328,7 @@
   },
   "25040": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:12:46"
+   "last_checked": "2026-10-21T23:33:34"
   },
   "25041": {
    "status": "empty",
@@ -13352,7 +13352,7 @@
   },
   "25089": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:25:00"
+   "last_checked": "2026-10-21T23:34:08"
   },
   "25096": {
    "status": "empty",
@@ -13364,7 +13364,7 @@
   },
   "25103": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:18:32"
+   "last_checked": "2026-10-21T23:34:12"
   },
   "25104": {
    "status": "empty",
@@ -13372,7 +13372,7 @@
   },
   "25108": {
    "status": "empty",
-   "last_checked": "2026-09-23T20:08:08"
+   "last_checked": "2026-10-21T23:34:14"
   },
   "25116": {
    "status": "empty",
@@ -13380,7 +13380,7 @@
   },
   "25134": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:59:23"
+   "last_checked": "2026-10-21T23:34:28"
   },
   "25135": {
    "status": "empty",
@@ -13388,7 +13388,7 @@
   },
   "25144": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:00:42"
+   "last_checked": "2026-10-21T23:34:31"
   },
   "25150": {
    "status": "empty",
@@ -13500,7 +13500,7 @@
   },
   "25467": {
    "status": "empty",
-   "last_checked": "2026-10-01T20:11:19"
+   "last_checked": "2026-10-21T23:36:08"
   },
   "25512": {
    "status": "empty",
@@ -13512,7 +13512,7 @@
   },
   "25531": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:56:53"
+   "last_checked": "2026-10-21T23:37:30"
   },
   "25541": {
    "status": "empty",
@@ -13556,7 +13556,7 @@
   },
   "25654": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:25:14"
+   "last_checked": "2026-10-21T23:38:04"
   },
   "25665": {
    "status": "empty",
@@ -13624,7 +13624,7 @@
   },
   "25769": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:38:40"
+   "last_checked": "2026-10-21T23:38:39"
   },
   "25784": {
    "status": "empty",
@@ -13660,7 +13660,7 @@
   },
   "25892": {
    "status": "empty",
-   "last_checked": "2026-10-08T20:16:59"
+   "last_checked": "2026-10-21T23:39:20"
   },
   "25894": {
    "status": "empty",
@@ -13676,7 +13676,7 @@
   },
   "25973": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:38:24"
+   "last_checked": "2026-10-21T23:39:51"
   },
   "25993": {
    "status": "empty",
@@ -13756,7 +13756,7 @@
   },
   "27109": {
    "status": "empty",
-   "last_checked": "2026-09-11T20:17:52"
+   "last_checked": "2026-10-21T23:41:50"
   },
   "27128": {
    "status": "empty",
@@ -13772,11 +13772,11 @@
   },
   "27182": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:47:11"
+   "last_checked": "2026-10-21T23:42:25"
   },
   "27186": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:26:04"
+   "last_checked": "2026-10-21T23:42:33"
   },
   "27195": {
    "status": "empty",
@@ -13800,7 +13800,7 @@
   },
   "27279": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:27:00"
+   "last_checked": "2026-10-21T23:43:14"
   },
   "27280": {
    "status": "empty",
@@ -13848,7 +13848,7 @@
   },
   "27353": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:38:08"
+   "last_checked": "2026-10-21T23:43:44"
   },
   "27380": {
    "status": "empty",
@@ -13872,11 +13872,11 @@
   },
   "27444": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:38:43"
+   "last_checked": "2026-10-21T23:44:52"
   },
   "27464": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:32:56"
+   "last_checked": "2026-10-21T23:45:05"
   },
   "27496": {
    "status": "empty",
@@ -13888,7 +13888,7 @@
   },
   "27527": {
    "status": "empty",
-   "last_checked": "2026-10-16T23:05:32"
+   "last_checked": "2026-10-21T23:45:50"
   },
   "27532": {
    "status": "empty",
@@ -13916,7 +13916,7 @@
   },
   "27583": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:44:13"
+   "last_checked": "2026-10-21T23:46:00"
   },
   "27626": {
    "status": "empty",
@@ -13992,7 +13992,7 @@
   },
   "27824": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:38:05"
+   "last_checked": "2026-10-21T23:47:13"
   },
   "27838": {
    "status": "empty",
@@ -14060,7 +14060,7 @@
   },
   "28052": {
    "status": "empty",
-   "last_checked": "2026-10-16T23:09:02"
+   "last_checked": "2026-10-21T23:48:57"
   },
   "28126": {
    "status": "empty",
@@ -14088,7 +14088,7 @@
   },
   "28370": {
    "status": "empty",
-   "last_checked": "2026-09-22T00:18:15"
+   "last_checked": "2026-10-21T23:49:59"
   },
   "28421": {
    "status": "empty",
@@ -14200,7 +14200,7 @@
   },
   "28914": {
    "status": "empty",
-   "last_checked": "2026-09-15T20:22:35"
+   "last_checked": "2026-10-21T23:51:35"
   },
   "28917": {
    "status": "empty",
@@ -14228,7 +14228,7 @@
   },
   "28973": {
    "status": "empty",
-   "last_checked": "2026-09-09T20:27:14"
+   "last_checked": "2026-10-21T23:51:38"
   },
   "28998": {
    "status": "empty",
@@ -14236,7 +14236,7 @@
   },
   "14008": {
    "status": "empty",
-   "last_checked": "2026-10-04T19:46:25"
+   "last_checked": "2026-10-21T23:06:45"
   },
   "14042": {
    "status": "empty",
@@ -14264,7 +14264,7 @@
   },
   "14277": {
    "status": "empty",
-   "last_checked": "2026-09-25T19:47:50"
+   "last_checked": "2026-10-21T23:07:47"
   },
   "14282": {
    "status": "empty",
@@ -14344,7 +14344,7 @@
   },
   "14648": {
    "status": "empty",
-   "last_checked": "2026-10-17T21:54:00"
+   "last_checked": "2026-10-21T23:09:00"
   },
   "14651": {
    "status": "empty",
@@ -14352,7 +14352,7 @@
   },
   "14659": {
    "status": "empty",
-   "last_checked": "2026-09-10T19:45:02"
+   "last_checked": "2026-10-21T23:09:03"
   },
   "14684": {
    "status": "empty",
@@ -14540,7 +14540,7 @@
   },
   "15393": {
    "status": "empty",
-   "last_checked": "2026-10-07T19:55:03"
+   "last_checked": "2026-10-21T23:12:58"
   },
   "15394": {
    "status": "empty",
@@ -14580,7 +14580,7 @@
   },
   "15475": {
    "status": "empty",
-   "last_checked": "2026-10-08T19:51:03"
+   "last_checked": "2026-10-21T23:13:29"
   },
   "15510": {
    "status": "empty",
@@ -14600,7 +14600,7 @@
   },
   "15541": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:04:52"
+   "last_checked": "2026-10-21T23:14:29"
   },
   "15547": {
    "status": "empty",
@@ -14660,7 +14660,7 @@
   },
   "15727": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:42:01"
+   "last_checked": "2026-10-21T23:15:43"
   },
   "15734": {
    "status": "empty",
@@ -14740,7 +14740,7 @@
   },
   "17004": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:05:36"
+   "last_checked": "2026-10-21T23:18:07"
   },
   "17021": {
    "status": "empty",
@@ -14768,7 +14768,7 @@
   },
   "17093": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:06:37"
+   "last_checked": "2026-10-21T23:19:14"
   },
   "17097": {
    "status": "empty",
@@ -14868,11 +14868,11 @@
   },
   "17322": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:07:55"
+   "last_checked": "2026-10-21T23:20:41"
   },
   "17327": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:14:56"
+   "last_checked": "2026-10-21T23:20:44"
   },
   "17362": {
    "status": "empty",
@@ -14908,15 +14908,15 @@
   },
   "17507": {
    "status": "empty",
-   "last_checked": "2026-09-30T19:58:11"
+   "last_checked": "2026-10-21T23:22:24"
   },
   "17521": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:15:56"
+   "last_checked": "2026-10-21T23:22:32"
   },
   "17522": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:15:59"
+   "last_checked": "2026-10-21T23:22:36"
   },
   "17529": {
    "status": "empty",
@@ -14944,15 +14944,15 @@
   },
   "17627": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:10:28"
+   "last_checked": "2026-10-21T23:23:04"
   },
   "17632": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:17:26"
+   "last_checked": "2026-10-21T23:23:09"
   },
   "17661": {
    "status": "empty",
-   "last_checked": "2026-10-08T19:59:43"
+   "last_checked": "2026-10-21T23:23:15"
   },
   "17665": {
    "status": "empty",
@@ -14972,7 +14972,7 @@
   },
   "17685": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:07:57"
+   "last_checked": "2026-10-21T23:23:18"
   },
   "17687": {
    "status": "empty",
@@ -14984,7 +14984,7 @@
   },
   "17699": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:22:31"
+   "last_checked": "2026-10-21T23:23:22"
   },
   "17704": {
    "status": "empty",
@@ -15032,7 +15032,7 @@
   },
   "17827": {
    "status": "empty",
-   "last_checked": "2026-10-04T20:02:54"
+   "last_checked": "2026-10-21T23:24:08"
   },
   "17840": {
    "status": "empty",
@@ -15268,7 +15268,7 @@
   },
   "18961": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:23:48"
+   "last_checked": "2026-10-21T23:28:28"
   },
   "18971": {
    "status": "empty",
@@ -15388,7 +15388,7 @@
   },
   "24628": {
    "status": "empty",
-   "last_checked": "2026-10-03T00:10:54"
+   "last_checked": "2026-10-21T23:31:39"
   },
   "24651": {
    "status": "empty",
@@ -15432,7 +15432,7 @@
   },
   "24804": {
    "status": "empty",
-   "last_checked": "2026-09-30T20:07:42"
+   "last_checked": "2026-10-21T23:31:55"
   },
   "24821": {
    "status": "empty",
@@ -15444,7 +15444,7 @@
   },
   "24856": {
    "status": "empty",
-   "last_checked": "2026-09-10T20:09:07"
+   "last_checked": "2026-10-21T23:32:03"
   },
   "24870": {
    "status": "empty",
@@ -15560,7 +15560,7 @@
   },
   "25281": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:55:42"
+   "last_checked": "2026-10-21T23:35:05"
   },
   "25292": {
    "status": "empty",
@@ -15576,7 +15576,7 @@
   },
   "25319": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:40:47"
+   "last_checked": "2026-10-21T23:35:20"
   },
   "25325": {
    "status": "empty",
@@ -15588,7 +15588,7 @@
   },
   "25332": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:26:37"
+   "last_checked": "2026-10-21T23:35:26"
   },
   "25350": {
    "status": "empty",
@@ -15632,11 +15632,11 @@
   },
   "25500": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:24:36"
+   "last_checked": "2026-10-21T23:36:21"
   },
   "25510": {
    "status": "empty",
-   "last_checked": "2026-10-03T00:16:35"
+   "last_checked": "2026-10-21T23:37:16"
   },
   "25515": {
    "status": "empty",
@@ -15676,7 +15676,7 @@
   },
   "25644": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:04:09"
+   "last_checked": "2026-10-21T23:37:58"
   },
   "25661": {
    "status": "empty",
@@ -15684,7 +15684,7 @@
   },
   "25664": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:43:03"
+   "last_checked": "2026-10-21T23:38:11"
   },
   "25668": {
    "status": "empty",
@@ -15704,7 +15704,7 @@
   },
   "25737": {
    "status": "empty",
-   "last_checked": "2026-09-17T20:23:28"
+   "last_checked": "2026-10-21T23:38:28"
   },
   "25742": {
    "status": "empty",
@@ -15720,7 +15720,7 @@
   },
   "25782": {
    "status": "empty",
-   "last_checked": "2026-10-12T00:04:00"
+   "last_checked": "2026-10-21T23:38:46"
   },
   "25827": {
    "status": "empty",
@@ -15744,11 +15744,11 @@
   },
   "25886": {
    "status": "empty",
-   "last_checked": "2026-10-03T00:18:40"
+   "last_checked": "2026-10-21T23:39:10"
   },
   "25887": {
    "status": "empty",
-   "last_checked": "2026-10-12T00:05:00"
+   "last_checked": "2026-10-21T23:39:14"
   },
   "25901": {
    "status": "empty",
@@ -15812,7 +15812,7 @@
   },
   "27156": {
    "status": "empty",
-   "last_checked": "2026-10-07T20:24:31"
+   "last_checked": "2026-10-21T23:42:08"
   },
   "27175": {
    "status": "empty",
@@ -15908,7 +15908,7 @@
   },
   "27466": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:42:13"
+   "last_checked": "2026-10-21T23:45:10"
   },
   "27482": {
    "status": "empty",
@@ -15920,11 +15920,11 @@
   },
   "27504": {
    "status": "empty",
-   "last_checked": "2026-09-28T20:27:17"
+   "last_checked": "2026-10-21T23:45:31"
   },
   "27519": {
    "status": "empty",
-   "last_checked": "2026-10-16T23:04:47"
+   "last_checked": "2026-10-21T23:45:42"
   },
   "27531": {
    "status": "empty",
@@ -15980,7 +15980,7 @@
   },
   "27706": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:32:45"
+   "last_checked": "2026-10-21T23:46:47"
   },
   "27712": {
    "status": "empty",
@@ -15992,7 +15992,7 @@
   },
   "27751": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:12:12"
+   "last_checked": "2026-10-21T23:46:58"
   },
   "27763": {
    "status": "empty",
@@ -16040,7 +16040,7 @@
   },
   "27862": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:33:28"
+   "last_checked": "2026-10-21T23:47:25"
   },
   "27878": {
    "status": "empty",
@@ -16052,7 +16052,7 @@
   },
   "27885": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:51:56"
+   "last_checked": "2026-10-21T23:47:34"
   },
   "27911": {
    "status": "empty",
@@ -16084,7 +16084,7 @@
   },
   "27992": {
    "status": "empty",
-   "last_checked": "2026-09-19T20:28:14"
+   "last_checked": "2026-10-21T23:47:47"
   },
   "27996": {
    "status": "empty",
@@ -16124,7 +16124,7 @@
   },
   "28160": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:47:20"
+   "last_checked": "2026-10-21T23:49:15"
   },
   "28197": {
    "status": "empty",
@@ -16324,7 +16324,7 @@
   },
   "14454": {
    "status": "empty",
-   "last_checked": "2026-10-06T19:59:16"
+   "last_checked": "2026-10-21T23:08:26"
   },
   "14456": {
    "status": "empty",
@@ -16440,7 +16440,7 @@
   },
   "15011": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:30:40"
+   "last_checked": "2026-10-21T23:10:51"
   },
   "15020": {
    "status": "empty",
@@ -16464,7 +16464,7 @@
   },
   "15098": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:31:37"
+   "last_checked": "2026-10-21T23:11:19"
   },
   "15113": {
    "status": "empty",
@@ -16648,7 +16648,7 @@
   },
   "15670": {
    "status": "empty",
-   "last_checked": "2026-10-02T23:55:48"
+   "last_checked": "2026-10-21T23:15:26"
   },
   "15676": {
    "status": "empty",
@@ -16668,7 +16668,7 @@
   },
   "15723": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:01:06"
+   "last_checked": "2026-10-21T23:15:38"
   },
   "15736": {
    "status": "empty",
@@ -16704,7 +16704,7 @@
   },
   "15868": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:21:45"
+   "last_checked": "2026-10-21T23:16:38"
   },
   "15898": {
    "status": "empty",
@@ -16860,11 +16860,11 @@
   },
   "17446": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:15:35"
+   "last_checked": "2026-10-21T23:21:25"
   },
   "17448": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:40:57"
+   "last_checked": "2026-10-21T23:21:59"
   },
   "17469": {
    "status": "empty",
@@ -16896,7 +16896,7 @@
   },
   "17581": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:27:22"
+   "last_checked": "2026-10-21T23:22:53"
   },
   "17586": {
    "status": "empty",
@@ -16996,7 +16996,7 @@
   },
   "17858": {
    "status": "empty",
-   "last_checked": "2026-09-25T20:04:24"
+   "last_checked": "2026-10-21T23:24:18"
   },
   "17864": {
    "status": "empty",
@@ -17028,7 +17028,7 @@
   },
   "17990": {
    "status": "empty",
-   "last_checked": "2026-10-03T00:04:46"
+   "last_checked": "2026-10-21T23:24:46"
   },
   "17998": {
    "status": "empty",
@@ -17068,7 +17068,7 @@
   },
   "18210": {
    "status": "empty",
-   "last_checked": "2026-09-21T23:54:41"
+   "last_checked": "2026-10-21T23:26:17"
   },
   "18238": {
    "status": "empty",
@@ -17152,7 +17152,7 @@
   },
   "18670": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:18:23"
+   "last_checked": "2026-10-21T23:27:28"
   },
   "18671": {
    "status": "empty",
@@ -17164,7 +17164,7 @@
   },
   "18696": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:26:42"
+   "last_checked": "2026-10-21T23:27:38"
   },
   "18705": {
    "status": "empty",
@@ -17300,7 +17300,7 @@
   },
   "24483": {
    "status": "empty",
-   "last_checked": "2026-10-04T20:10:14"
+   "last_checked": "2026-10-21T23:31:03"
   },
   "24486": {
    "status": "empty",
@@ -17572,7 +17572,7 @@
   },
   "25612": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:32:57"
+   "last_checked": "2026-10-21T23:37:47"
   },
   "25662": {
    "status": "empty",
@@ -17656,11 +17656,11 @@
   },
   "25911": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:26:40"
+   "last_checked": "2026-10-21T23:39:26"
   },
   "25912": {
    "status": "empty",
-   "last_checked": "2026-09-24T20:19:27"
+   "last_checked": "2026-10-21T23:39:30"
   },
   "25913": {
    "status": "empty",
@@ -17728,7 +17728,7 @@
   },
   "27202": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:33:35"
+   "last_checked": "2026-10-21T23:42:47"
   },
   "27215": {
    "status": "empty",
@@ -17756,7 +17756,7 @@
   },
   "27313": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:41:13"
+   "last_checked": "2026-10-21T23:43:25"
   },
   "27316": {
    "status": "empty",
@@ -17868,7 +17868,7 @@
   },
   "27689": {
    "status": "empty",
-   "last_checked": "2026-10-03T20:21:41"
+   "last_checked": "2026-10-21T23:46:40"
   },
   "27703": {
    "status": "empty",
@@ -18000,7 +18000,7 @@
   },
   "28383": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:41:03"
+   "last_checked": "2026-10-21T23:50:16"
   },
   "28392": {
    "status": "empty",
@@ -18036,7 +18036,7 @@
   },
   "28524": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:16:03"
+   "last_checked": "2026-10-21T23:50:53"
   },
   "28528": {
    "status": "empty",
@@ -18248,7 +18248,7 @@
   },
   "14589": {
    "status": "empty",
-   "last_checked": "2026-09-12T19:52:16"
+   "last_checked": "2026-10-21T23:08:48"
   },
   "14637": {
    "status": "empty",
@@ -18332,7 +18332,7 @@
   },
   "15164": {
    "status": "empty",
-   "last_checked": "2026-10-07T19:54:01"
+   "last_checked": "2026-10-21T23:11:33"
   },
   "15197": {
    "status": "empty",
@@ -18352,7 +18352,7 @@
   },
   "15265": {
    "status": "empty",
-   "last_checked": "2026-09-30T00:03:35"
+   "last_checked": "2026-10-21T23:12:00"
   },
   "15278": {
    "status": "empty",
@@ -18408,7 +18408,7 @@
   },
   "15471": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:03:24"
+   "last_checked": "2026-10-21T23:13:26"
   },
   "15479": {
    "status": "empty",
@@ -18416,7 +18416,7 @@
   },
   "15482": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:18:28"
+   "last_checked": "2026-10-21T23:13:37"
   },
   "15499": {
    "status": "empty",
@@ -18484,7 +18484,7 @@
   },
   "15761": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:42:10"
+   "last_checked": "2026-10-21T23:16:07"
   },
   "15784": {
    "status": "empty",
@@ -18516,7 +18516,7 @@
   },
   "15929": {
    "status": "empty",
-   "last_checked": "2026-09-18T19:55:43"
+   "last_checked": "2026-10-21T23:17:02"
   },
   "15946": {
    "status": "empty",
@@ -18524,7 +18524,7 @@
   },
   "15947": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:04:26"
+   "last_checked": "2026-10-21T23:17:13"
   },
   "15948": {
    "status": "empty",
@@ -18572,7 +18572,7 @@
   },
   "17175": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:18:35"
+   "last_checked": "2026-10-21T23:19:47"
   },
   "17184": {
    "status": "empty",
@@ -18580,7 +18580,7 @@
   },
   "17215": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:14:17"
+   "last_checked": "2026-10-21T23:19:57"
   },
   "17219": {
    "status": "empty",
@@ -18596,7 +18596,7 @@
   },
   "17234": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:07:30"
+   "last_checked": "2026-10-21T23:20:00"
   },
   "17267": {
    "status": "empty",
@@ -18624,7 +18624,7 @@
   },
   "17418": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:25:37"
+   "last_checked": "2026-10-21T23:21:21"
   },
   "17425": {
    "status": "empty",
@@ -18716,7 +18716,7 @@
   },
   "17740": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:43:19"
+   "last_checked": "2026-10-21T23:23:35"
   },
   "17752": {
    "status": "empty",
@@ -18748,7 +18748,7 @@
   },
   "17900": {
    "status": "empty",
-   "last_checked": "2026-10-03T20:00:22"
+   "last_checked": "2026-10-21T23:24:31"
   },
   "17906": {
    "status": "empty",
@@ -18796,11 +18796,11 @@
   },
   "18201": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:11:00"
+   "last_checked": "2026-10-21T23:26:07"
   },
   "18242": {
    "status": "empty",
-   "last_checked": "2026-09-28T20:07:33"
+   "last_checked": "2026-10-21T23:26:29"
   },
   "18253": {
    "status": "empty",
@@ -18972,7 +18972,7 @@
   },
   "24333": {
    "status": "empty",
-   "last_checked": "2026-09-12T20:14:26"
+   "last_checked": "2026-10-21T23:30:33"
   },
   "24348": {
    "status": "empty",
@@ -18988,7 +18988,7 @@
   },
   "24402": {
    "status": "empty",
-   "last_checked": "2026-10-07T20:13:56"
+   "last_checked": "2026-10-21T23:30:41"
   },
   "24455": {
    "status": "empty",
@@ -19000,7 +19000,7 @@
   },
   "24460": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:30:56"
+   "last_checked": "2026-10-21T23:30:51"
   },
   "24506": {
    "status": "empty",
@@ -19092,7 +19092,7 @@
   },
   "25069": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:24:43"
+   "last_checked": "2026-10-21T23:33:57"
   },
   "25076": {
    "status": "empty",
@@ -19116,11 +19116,11 @@
   },
   "25175": {
    "status": "empty",
-   "last_checked": "2026-09-24T20:14:38"
+   "last_checked": "2026-10-21T23:34:46"
   },
   "25193": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:29:33"
+   "last_checked": "2026-10-21T23:34:48"
   },
   "25256": {
    "status": "empty",
@@ -19168,7 +19168,7 @@
   },
   "25436": {
    "status": "empty",
-   "last_checked": "2026-09-22T00:04:13"
+   "last_checked": "2026-10-21T23:36:00"
   },
   "25441": {
    "status": "empty",
@@ -19208,7 +19208,7 @@
   },
   "25606": {
    "status": "empty",
-   "last_checked": "2026-09-23T20:11:53"
+   "last_checked": "2026-10-21T23:37:42"
   },
   "25657": {
    "status": "empty",
@@ -19216,7 +19216,7 @@
   },
   "25659": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:25:20"
+   "last_checked": "2026-10-21T23:38:07"
   },
   "25683": {
    "status": "empty",
@@ -19260,7 +19260,7 @@
   },
   "25831": {
    "status": "empty",
-   "last_checked": "2026-10-08T20:16:46"
+   "last_checked": "2026-10-21T23:38:53"
   },
   "25839": {
    "status": "empty",
@@ -19272,7 +19272,7 @@
   },
   "25862": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:23:09"
+   "last_checked": "2026-10-21T23:39:03"
   },
   "25863": {
    "status": "empty",
@@ -19300,7 +19300,7 @@
   },
   "25947": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:26:52"
+   "last_checked": "2026-10-21T23:39:37"
   },
   "25960": {
    "status": "empty",
@@ -19316,7 +19316,7 @@
   },
   "25991": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:38:30"
+   "last_checked": "2026-10-21T23:39:57"
   },
   "27005": {
    "status": "empty",
@@ -19324,7 +19324,7 @@
   },
   "27010": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:28:03"
+   "last_checked": "2026-10-21T23:41:08"
   },
   "27017": {
    "status": "empty",
@@ -19364,11 +19364,11 @@
   },
   "27111": {
    "status": "empty",
-   "last_checked": "2026-10-03T00:20:20"
+   "last_checked": "2026-10-21T23:41:54"
   },
   "27131": {
    "status": "empty",
-   "last_checked": "2026-10-16T23:02:19"
+   "last_checked": "2026-10-21T23:41:58"
   },
   "27139": {
    "status": "empty",
@@ -19396,7 +19396,7 @@
   },
   "27226": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:47:38"
+   "last_checked": "2026-10-21T23:42:50"
   },
   "27238": {
    "status": "empty",
@@ -19404,7 +19404,7 @@
   },
   "27250": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:08:16"
+   "last_checked": "2026-10-21T23:43:02"
   },
   "27261": {
    "status": "empty",
@@ -19420,7 +19420,7 @@
   },
   "27308": {
    "status": "empty",
-   "last_checked": "2026-10-04T20:22:43"
+   "last_checked": "2026-10-21T23:43:21"
   },
   "27312": {
    "status": "empty",
@@ -19440,7 +19440,7 @@
   },
   "27332": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:41:24"
+   "last_checked": "2026-10-21T23:43:29"
   },
   "27337": {
    "status": "empty",
@@ -19452,7 +19452,7 @@
   },
   "27415": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:48:29"
+   "last_checked": "2026-10-21T23:44:01"
   },
   "27431": {
    "status": "empty",
@@ -19464,7 +19464,7 @@
   },
   "27452": {
    "status": "empty",
-   "last_checked": "2026-09-22T00:13:04"
+   "last_checked": "2026-10-21T23:44:57"
   },
   "27492": {
    "status": "empty",
@@ -19532,7 +19532,7 @@
   },
   "27672": {
    "status": "empty",
-   "last_checked": "2026-10-04T20:25:46"
+   "last_checked": "2026-10-21T23:46:29"
   },
   "27695": {
    "status": "empty",
@@ -19592,7 +19592,7 @@
   },
   "28019": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:32:11"
+   "last_checked": "2026-10-21T23:48:32"
   },
   "28024": {
    "status": "empty",
@@ -19612,7 +19612,7 @@
   },
   "28169": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:40:18"
+   "last_checked": "2026-10-21T23:49:19"
   },
   "28175": {
    "status": "empty",
@@ -19624,7 +19624,7 @@
   },
   "28210": {
    "status": "empty",
-   "last_checked": "2026-09-22T00:17:51"
+   "last_checked": "2026-10-21T23:49:28"
   },
   "28266": {
    "status": "empty",
@@ -19644,7 +19644,7 @@
   },
   "28316": {
    "status": "empty",
-   "last_checked": "2026-09-24T20:29:28"
+   "last_checked": "2026-10-21T23:49:49"
   },
   "28325": {
    "status": "empty",
@@ -19652,7 +19652,7 @@
   },
   "28377": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:45:06"
+   "last_checked": "2026-10-21T23:50:06"
   },
   "28378": {
    "status": "empty",
@@ -19684,7 +19684,7 @@
   },
   "28564": {
    "status": "empty",
-   "last_checked": "2026-10-12T00:15:18"
+   "last_checked": "2026-10-21T23:51:00"
   },
   "28579": {
    "status": "empty",
@@ -19708,7 +19708,7 @@
   },
   "28691": {
    "status": "empty",
-   "last_checked": "2026-10-07T20:32:47"
+   "last_checked": "2026-10-21T23:51:13"
   },
   "28694": {
    "status": "empty",
@@ -20016,7 +20016,7 @@
   },
   "15428": {
    "status": "empty",
-   "last_checked": "2026-09-27T19:53:07"
+   "last_checked": "2026-10-21T23:13:10"
   },
   "15442": {
    "status": "empty",
@@ -20032,7 +20032,7 @@
   },
   "15481": {
    "status": "empty",
-   "last_checked": "2026-09-13T19:54:11"
+   "last_checked": "2026-10-21T23:13:33"
   },
   "15528": {
    "status": "empty",
@@ -20052,7 +20052,7 @@
   },
   "15645": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:02:59"
+   "last_checked": "2026-10-21T23:15:14"
   },
   "15663": {
    "status": "empty",
@@ -20064,7 +20064,7 @@
   },
   "15683": {
    "status": "empty",
-   "last_checked": "2026-10-03T19:51:16"
+   "last_checked": "2026-10-21T23:15:31"
   },
   "15691": {
    "status": "empty",
@@ -20088,7 +20088,7 @@
   },
   "15812": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:42:28"
+   "last_checked": "2026-10-21T23:16:21"
   },
   "15871": {
    "status": "empty",
@@ -20100,7 +20100,7 @@
   },
   "15888": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:07:16"
+   "last_checked": "2026-10-21T23:16:44"
   },
   "15934": {
    "status": "empty",
@@ -20116,7 +20116,7 @@
   },
   "17011": {
    "status": "empty",
-   "last_checked": "2026-09-26T20:02:23"
+   "last_checked": "2026-10-21T23:18:32"
   },
   "17037": {
    "status": "empty",
@@ -20124,7 +20124,7 @@
   },
   "17084": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:23:40"
+   "last_checked": "2026-10-21T23:19:11"
   },
   "17085": {
    "status": "empty",
@@ -20140,7 +20140,7 @@
   },
   "17119": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:38:58"
+   "last_checked": "2026-10-21T23:19:22"
   },
   "17148": {
    "status": "empty",
@@ -20148,7 +20148,7 @@
   },
   "17159": {
    "status": "empty",
-   "last_checked": "2026-10-05T19:58:34"
+   "last_checked": "2026-10-21T23:19:36"
   },
   "17174": {
    "status": "empty",
@@ -20240,7 +20240,7 @@
   },
   "17451": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:41:04"
+   "last_checked": "2026-10-21T23:22:03"
   },
   "17452": {
    "status": "empty",
@@ -20296,7 +20296,7 @@
   },
   "17705": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:02:39"
+   "last_checked": "2026-10-21T23:23:25"
   },
   "17708": {
    "status": "empty",
@@ -20388,7 +20388,7 @@
   },
   "18115": {
    "status": "empty",
-   "last_checked": "2026-10-08T20:03:14"
+   "last_checked": "2026-10-21T23:25:53"
   },
   "18145": {
    "status": "empty",
@@ -20480,7 +20480,7 @@
   },
   "18766": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:54:13"
+   "last_checked": "2026-10-21T23:28:00"
   },
   "18850": {
    "status": "empty",
@@ -20496,7 +20496,7 @@
   },
   "18945": {
    "status": "empty",
-   "last_checked": "2026-09-27T20:08:49"
+   "last_checked": "2026-10-21T23:28:26"
   },
   "18949": {
    "status": "empty",
@@ -20512,7 +20512,7 @@
   },
   "24032": {
    "status": "empty",
-   "last_checked": "2026-10-08T20:07:05"
+   "last_checked": "2026-10-21T23:29:34"
   },
   "24047": {
    "status": "empty",
@@ -20536,7 +20536,7 @@
   },
   "24074": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:28:30"
+   "last_checked": "2026-10-21T23:29:43"
   },
   "24082": {
    "status": "empty",
@@ -20600,7 +20600,7 @@
   },
   "24545": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:56:31"
+   "last_checked": "2026-10-21T23:31:28"
   },
   "24551": {
    "status": "empty",
@@ -20648,7 +20648,7 @@
   },
   "24889": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:57:33"
+   "last_checked": "2026-10-21T23:32:10"
   },
   "24896": {
    "status": "empty",
@@ -20684,7 +20684,7 @@
   },
   "25072": {
    "status": "empty",
-   "last_checked": "2026-09-27T20:14:02"
+   "last_checked": "2026-10-21T23:34:01"
   },
   "25077": {
    "status": "empty",
@@ -20704,7 +20704,7 @@
   },
   "25133": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:25:19"
+   "last_checked": "2026-10-21T23:34:25"
   },
   "25174": {
    "status": "empty",
@@ -20720,7 +20720,7 @@
   },
   "25197": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:18:52"
+   "last_checked": "2026-10-21T23:34:51"
   },
   "25198": {
    "status": "empty",
@@ -20740,7 +20740,7 @@
   },
   "25257": {
    "status": "empty",
-   "last_checked": "2026-10-01T20:10:01"
+   "last_checked": "2026-10-21T23:34:58"
   },
   "25263": {
    "status": "empty",
@@ -20760,7 +20760,7 @@
   },
   "25388": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:30:39"
+   "last_checked": "2026-10-21T23:35:36"
   },
   "25392": {
    "status": "empty",
@@ -20800,7 +20800,7 @@
   },
   "25526": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:26:30"
+   "last_checked": "2026-10-21T23:37:27"
   },
   "25527": {
    "status": "empty",
@@ -20908,11 +20908,11 @@
   },
   "25998": {
    "status": "empty",
-   "last_checked": "2026-10-04T20:19:38"
+   "last_checked": "2026-10-21T23:40:00"
   },
   "27018": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:39:30"
+   "last_checked": "2026-10-21T23:41:11"
   },
   "27040": {
    "status": "empty",
@@ -20980,7 +20980,7 @@
   },
   "27421": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:32:37"
+   "last_checked": "2026-10-21T23:44:05"
   },
   "27439": {
    "status": "empty",
@@ -20988,7 +20988,7 @@
   },
   "27506": {
    "status": "empty",
-   "last_checked": "2026-09-30T00:33:09"
+   "last_checked": "2026-10-21T23:45:35"
   },
   "27511": {
    "status": "empty",
@@ -21120,7 +21120,7 @@
   },
   "28156": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:44:39"
+   "last_checked": "2026-10-21T23:49:12"
   },
   "28213": {
    "status": "empty",
@@ -21136,7 +21136,7 @@
   },
   "28281": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:33:14"
+   "last_checked": "2026-10-21T23:49:41"
   },
   "28309": {
    "status": "empty",
@@ -21236,7 +21236,7 @@
   },
   "28840": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:50:00"
+   "last_checked": "2026-10-21T23:51:24"
   },
   "28842": {
    "status": "empty",
@@ -21260,7 +21260,7 @@
   },
   "14096": {
    "status": "empty",
-   "last_checked": "2026-09-30T19:44:15"
+   "last_checked": "2026-10-21T23:06:59"
   },
   "14097": {
    "status": "empty",
@@ -21296,7 +21296,7 @@
   },
   "14260": {
    "status": "empty",
-   "last_checked": "2026-09-15T19:41:14"
+   "last_checked": "2026-10-21T23:07:40"
   },
   "14305": {
    "status": "empty",
@@ -21400,7 +21400,7 @@
   },
   "15068": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:01:03"
+   "last_checked": "2026-10-21T23:11:06"
   },
   "15124": {
    "status": "empty",
@@ -21416,7 +21416,7 @@
   },
   "15174": {
    "status": "empty",
-   "last_checked": "2026-10-08T19:48:21"
+   "last_checked": "2026-10-21T23:11:40"
   },
   "15186": {
    "status": "empty",
@@ -21460,7 +21460,7 @@
   },
   "15430": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:12:34"
+   "last_checked": "2026-10-21T23:13:14"
   },
   "15472": {
    "status": "empty",
@@ -21508,7 +21508,7 @@
   },
   "15729": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:03:24"
+   "last_checked": "2026-10-21T23:15:47"
   },
   "15731": {
    "status": "empty",
@@ -21540,11 +21540,11 @@
   },
   "15833": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:11:23"
+   "last_checked": "2026-10-21T23:16:27"
   },
   "15835": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:42:31"
+   "last_checked": "2026-10-21T23:16:34"
   },
   "15845": {
    "status": "empty",
@@ -21620,11 +21620,11 @@
   },
   "17265": {
    "status": "empty",
-   "last_checked": "2026-10-03T19:56:00"
+   "last_checked": "2026-10-21T23:20:04"
   },
   "17273": {
    "status": "empty",
-   "last_checked": "2026-10-07T20:02:13"
+   "last_checked": "2026-10-21T23:20:12"
   },
   "17286": {
    "status": "empty",
@@ -21672,7 +21672,7 @@
   },
   "17505": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:48:33"
+   "last_checked": "2026-10-21T23:22:21"
   },
   "17547": {
    "status": "empty",
@@ -21740,7 +21740,7 @@
   },
   "17819": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:28:29"
+   "last_checked": "2026-10-21T23:24:05"
   },
   "17837": {
    "status": "empty",
@@ -21784,7 +21784,7 @@
   },
   "17996": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:19:48"
+   "last_checked": "2026-10-21T23:24:53"
   },
   "18007": {
    "status": "empty",
@@ -21844,7 +21844,7 @@
   },
   "18380": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:27:26"
+   "last_checked": "2026-10-21T23:26:45"
   },
   "18386": {
    "status": "empty",
@@ -21988,7 +21988,7 @@
   },
   "24230": {
    "status": "empty",
-   "last_checked": "2026-09-15T20:03:00"
+   "last_checked": "2026-10-21T23:30:12"
   },
   "24275": {
    "status": "empty",
@@ -22044,7 +22044,7 @@
   },
   "24630": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:11:00"
+   "last_checked": "2026-10-21T23:31:42"
   },
   "24632": {
    "status": "empty",
@@ -22136,7 +22136,7 @@
   },
   "25127": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:29:18"
+   "last_checked": "2026-10-21T23:34:22"
   },
   "25137": {
    "status": "empty",
@@ -22184,7 +22184,7 @@
   },
   "25406": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:02:04"
+   "last_checked": "2026-10-21T23:35:56"
   },
   "25410": {
    "status": "empty",
@@ -22220,11 +22220,11 @@
   },
   "25514": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:24:39"
+   "last_checked": "2026-10-21T23:37:20"
   },
   "25516": {
    "status": "empty",
-   "last_checked": "2026-09-15T20:09:45"
+   "last_checked": "2026-10-21T23:37:24"
   },
   "25565": {
    "status": "empty",
@@ -22260,7 +22260,7 @@
   },
   "25700": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:22:32"
+   "last_checked": "2026-10-21T23:38:20"
   },
   "25795": {
    "status": "empty",
@@ -22304,7 +22304,7 @@
   },
   "25959": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:34:59"
+   "last_checked": "2026-10-21T23:39:41"
   },
   "25983": {
    "status": "empty",
@@ -22324,7 +22324,7 @@
   },
   "27009": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:24:49"
+   "last_checked": "2026-10-21T23:40:46"
   },
   "27019": {
    "status": "empty",
@@ -22364,7 +22364,7 @@
   },
   "27187": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:29:05"
+   "last_checked": "2026-10-21T23:42:38"
   },
   "27219": {
    "status": "empty",
@@ -22388,7 +22388,7 @@
   },
   "27351": {
    "status": "empty",
-   "last_checked": "2026-09-24T20:23:24"
+   "last_checked": "2026-10-21T23:43:42"
   },
   "27356": {
    "status": "empty",
@@ -22432,7 +22432,7 @@
   },
   "27520": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:35:59"
+   "last_checked": "2026-10-21T23:45:47"
   },
   "27524": {
    "status": "empty",
@@ -22480,7 +22480,7 @@
   },
   "27686": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:32:35"
+   "last_checked": "2026-10-21T23:46:36"
   },
   "27725": {
    "status": "empty",
@@ -22504,7 +22504,7 @@
   },
   "27823": {
    "status": "empty",
-   "last_checked": "2026-10-04T20:26:36"
+   "last_checked": "2026-10-21T23:47:10"
   },
   "27835": {
    "status": "empty",
@@ -22544,7 +22544,7 @@
   },
   "27999": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:13:35"
+   "last_checked": "2026-10-21T23:47:51"
   },
   "28025": {
    "status": "empty",
@@ -22596,7 +22596,7 @@
   },
   "28230": {
    "status": "empty",
-   "last_checked": "2026-09-15T20:20:47"
+   "last_checked": "2026-10-21T23:49:31"
   },
   "28232": {
    "status": "empty",
@@ -22636,7 +22636,7 @@
   },
   "28464": {
    "status": "empty",
-   "last_checked": "2026-09-30T20:24:38"
+   "last_checked": "2026-10-21T23:50:42"
   },
   "28510": {
    "status": "empty",
@@ -22692,7 +22692,7 @@
   },
   "14005": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:32:59"
+   "last_checked": "2026-10-21T23:06:41"
   },
   "14016": {
    "status": "empty",
@@ -22720,7 +22720,7 @@
   },
   "14169": {
    "status": "empty",
-   "last_checked": "2026-09-30T19:44:31"
+   "last_checked": "2026-10-21T23:07:18"
   },
   "14175": {
    "status": "empty",
@@ -22752,7 +22752,7 @@
   },
   "14323": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:34:45"
+   "last_checked": "2026-10-21T23:08:00"
   },
   "14329": {
    "status": "empty",
@@ -22768,7 +22768,7 @@
   },
   "14388": {
    "status": "empty",
-   "last_checked": "2026-09-16T19:50:23"
+   "last_checked": "2026-10-21T23:08:15"
   },
   "14486": {
    "status": "empty",
@@ -22888,7 +22888,7 @@
   },
   "15352": {
    "status": "empty",
-   "last_checked": "2026-10-08T19:49:18"
+   "last_checked": "2026-10-21T23:12:33"
   },
   "15392": {
    "status": "empty",
@@ -22904,7 +22904,7 @@
   },
   "15431": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:12:38"
+   "last_checked": "2026-10-21T23:13:18"
   },
   "15508": {
    "status": "empty",
@@ -22912,7 +22912,7 @@
   },
   "15521": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:03:57"
+   "last_checked": "2026-10-21T23:14:23"
   },
   "15522": {
    "status": "empty",
@@ -22972,11 +22972,11 @@
   },
   "15733": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:15:30"
+   "last_checked": "2026-10-21T23:15:50"
   },
   "15741": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:16:21"
+   "last_checked": "2026-10-21T23:15:54"
   },
   "15750": {
    "status": "empty",
@@ -23036,7 +23036,7 @@
   },
   "15965": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:43:16"
+   "last_checked": "2026-10-21T23:17:20"
   },
   "15985": {
    "status": "empty",
@@ -23068,7 +23068,7 @@
   },
   "17067": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:09:15"
+   "last_checked": "2026-10-21T23:19:06"
   },
   "17113": {
    "status": "empty",
@@ -23104,7 +23104,7 @@
   },
   "17365": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:08:12"
+   "last_checked": "2026-10-21T23:20:53"
   },
   "17369": {
    "status": "empty",
@@ -23196,7 +23196,7 @@
   },
   "17809": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:44:04"
+   "last_checked": "2026-10-21T23:23:58"
   },
   "17818": {
    "status": "empty",
@@ -23212,11 +23212,11 @@
   },
   "17836": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:18:42"
+   "last_checked": "2026-10-21T23:24:11"
   },
   "17843": {
    "status": "empty",
-   "last_checked": "2026-09-30T19:59:49"
+   "last_checked": "2026-10-21T23:24:14"
   },
   "17938": {
    "status": "empty",
@@ -23232,7 +23232,7 @@
   },
   "18133": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:13:38"
+   "last_checked": "2026-10-21T23:25:56"
   },
   "18141": {
    "status": "empty",
@@ -23252,7 +23252,7 @@
   },
   "18285": {
    "status": "empty",
-   "last_checked": "2026-09-16T20:08:19"
+   "last_checked": "2026-10-21T23:26:34"
   },
   "18291": {
    "status": "empty",
@@ -23412,7 +23412,7 @@
   },
   "24519": {
    "status": "empty",
-   "last_checked": "2026-09-16T20:12:56"
+   "last_checked": "2026-10-21T23:31:18"
   },
   "24612": {
    "status": "empty",
@@ -23520,7 +23520,7 @@
   },
   "25154": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:21:47"
+   "last_checked": "2026-10-21T23:34:42"
   },
   "25160": {
    "status": "empty",
@@ -23556,7 +23556,7 @@
   },
   "25390": {
    "status": "empty",
-   "last_checked": "2026-10-07T20:19:03"
+   "last_checked": "2026-10-21T23:35:41"
   },
   "25399": {
    "status": "empty",
@@ -23576,7 +23576,7 @@
   },
   "25537": {
    "status": "empty",
-   "last_checked": "2026-10-12T00:02:24"
+   "last_checked": "2026-10-21T23:37:34"
   },
   "25542": {
    "status": "empty",
@@ -23608,7 +23608,7 @@
   },
   "25691": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:43:26"
+   "last_checked": "2026-10-21T23:38:17"
   },
   "25709": {
    "status": "empty",
@@ -23620,11 +23620,11 @@
   },
   "25767": {
    "status": "empty",
-   "last_checked": "2026-09-26T20:23:19"
+   "last_checked": "2026-10-21T23:38:36"
   },
   "25797": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:05:04"
+   "last_checked": "2026-10-21T23:38:50"
   },
   "25804": {
    "status": "empty",
@@ -23660,7 +23660,7 @@
   },
   "25906": {
    "status": "empty",
-   "last_checked": "2026-10-03T20:15:04"
+   "last_checked": "2026-10-21T23:39:23"
   },
   "25942": {
    "status": "empty",
@@ -23696,7 +23696,7 @@
   },
   "27167": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:41:28"
+   "last_checked": "2026-10-21T23:42:15"
   },
   "27169": {
    "status": "empty",
@@ -23760,7 +23760,7 @@
   },
   "27429": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:43:06"
+   "last_checked": "2026-10-21T23:44:48"
   },
   "27433": {
    "status": "empty",
@@ -23856,7 +23856,7 @@
   },
   "27713": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:41:25"
+   "last_checked": "2026-10-21T23:46:51"
   },
   "27715": {
    "status": "empty",
@@ -23920,7 +23920,7 @@
   },
   "28026": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:53:29"
+   "last_checked": "2026-10-21T23:48:53"
   },
   "28029": {
    "status": "empty",
@@ -24036,7 +24036,7 @@
   },
   "28861": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:49:08"
+   "last_checked": "2026-10-21T23:51:31"
   },
   "28871": {
    "status": "empty",
@@ -24120,7 +24120,7 @@
   },
   "14627": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:09:57"
+   "last_checked": "2026-10-21T23:08:56"
   },
   "14643": {
    "status": "empty",
@@ -24164,7 +24164,7 @@
   },
   "15004": {
    "status": "empty",
-   "last_checked": "2026-09-30T19:47:13"
+   "last_checked": "2026-10-21T23:10:38"
   },
   "15005": {
    "status": "empty",
@@ -24248,7 +24248,7 @@
   },
   "15497": {
    "status": "empty",
-   "last_checked": "2026-10-05T19:53:21"
+   "last_checked": "2026-10-21T23:13:42"
   },
   "15509": {
    "status": "empty",
@@ -24256,7 +24256,7 @@
   },
   "15515": {
    "status": "empty",
-   "last_checked": "2026-10-04T19:52:51"
+   "last_checked": "2026-10-21T23:13:45"
   },
   "15539": {
    "status": "empty",
@@ -24264,7 +24264,7 @@
   },
   "15555": {
    "status": "empty",
-   "last_checked": "2026-09-28T19:54:17"
+   "last_checked": "2026-10-21T23:14:41"
   },
   "15556": {
    "status": "empty",
@@ -24340,7 +24340,7 @@
   },
   "15916": {
    "status": "empty",
-   "last_checked": "2026-09-17T20:00:46"
+   "last_checked": "2026-10-21T23:16:51"
   },
   "15928": {
    "status": "empty",
@@ -24424,7 +24424,7 @@
   },
   "17406": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:40:43"
+   "last_checked": "2026-10-21T23:21:15"
   },
   "17453": {
    "status": "empty",
@@ -24452,7 +24452,7 @@
   },
   "17519": {
    "status": "empty",
-   "last_checked": "2026-09-23T19:56:45"
+   "last_checked": "2026-10-21T23:22:28"
   },
   "17539": {
    "status": "empty",
@@ -24492,7 +24492,7 @@
   },
   "17659": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:17:35"
+   "last_checked": "2026-10-21T23:23:12"
   },
   "17690": {
    "status": "empty",
@@ -24584,7 +24584,7 @@
   },
   "18412": {
    "status": "empty",
-   "last_checked": "2026-09-17T20:10:48"
+   "last_checked": "2026-10-21T23:26:53"
   },
   "18449": {
    "status": "empty",
@@ -24636,7 +24636,7 @@
   },
   "18748": {
    "status": "empty",
-   "last_checked": "2026-09-17T20:12:06"
+   "last_checked": "2026-10-21T23:27:50"
   },
   "18858": {
    "status": "empty",
@@ -24668,7 +24668,7 @@
   },
   "24023": {
    "status": "empty",
-   "last_checked": "2026-09-18T20:08:33"
+   "last_checked": "2026-10-21T23:29:19"
   },
   "24052": {
    "status": "empty",
@@ -24680,7 +24680,7 @@
   },
   "24105": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:14:39"
+   "last_checked": "2026-10-21T23:29:47"
   },
   "24119": {
    "status": "empty",
@@ -24748,7 +24748,7 @@
   },
   "24619": {
    "status": "empty",
-   "last_checked": "2026-09-17T20:15:45"
+   "last_checked": "2026-10-21T23:31:35"
   },
   "24679": {
    "status": "empty",
@@ -24828,7 +24828,7 @@
   },
   "25046": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:54:20"
+   "last_checked": "2026-10-21T23:33:40"
   },
   "25065": {
    "status": "empty",
@@ -24900,7 +24900,7 @@
   },
   "25311": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:40:39"
+   "last_checked": "2026-10-21T23:35:13"
   },
   "25337": {
    "status": "empty",
@@ -24960,11 +24960,11 @@
   },
   "25690": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:22:21"
+   "last_checked": "2026-10-21T23:38:14"
   },
   "25772": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:25:52"
+   "last_checked": "2026-10-21T23:38:42"
   },
   "25776": {
    "status": "empty",
@@ -25020,7 +25020,7 @@
   },
   "27230": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:47:40"
+   "last_checked": "2026-10-21T23:42:55"
   },
   "27246": {
    "status": "empty",
@@ -25076,7 +25076,7 @@
   },
   "27656": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:11:34"
+   "last_checked": "2026-10-21T23:46:21"
   },
   "27674": {
    "status": "empty",
@@ -25156,7 +25156,7 @@
   },
   "28133": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:35:27"
+   "last_checked": "2026-10-21T23:49:08"
   },
   "28137": {
    "status": "empty",
@@ -25188,7 +25188,7 @@
   },
   "28353": {
    "status": "empty",
-   "last_checked": "2026-10-16T23:10:31"
+   "last_checked": "2026-10-21T23:49:53"
   },
   "28366": {
    "status": "empty",
@@ -25196,7 +25196,7 @@
   },
   "28371": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:15:38"
+   "last_checked": "2026-10-21T23:50:03"
   },
   "28498": {
    "status": "empty",
@@ -25284,7 +25284,7 @@
   },
   "14237": {
    "status": "empty",
-   "last_checked": "2026-10-06T19:58:47"
+   "last_checked": "2026-10-21T23:07:36"
   },
   "14296": {
    "status": "empty",
@@ -25360,7 +25360,7 @@
   },
   "14866": {
    "status": "empty",
-   "last_checked": "2026-09-27T19:48:48"
+   "last_checked": "2026-10-21T23:09:41"
   },
   "14892": {
    "status": "empty",
@@ -25428,7 +25428,7 @@
   },
   "15516": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:13:49"
+   "last_checked": "2026-10-21T23:13:49"
   },
   "15558": {
    "status": "empty",
@@ -25520,7 +25520,7 @@
   },
   "17139": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:07:10"
+   "last_checked": "2026-10-21T23:19:32"
   },
   "17177": {
    "status": "empty",
@@ -25548,7 +25548,7 @@
   },
   "17356": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:40:22"
+   "last_checked": "2026-10-21T23:20:49"
   },
   "17376": {
    "status": "empty",
@@ -25608,7 +25608,7 @@
   },
   "17756": {
    "status": "empty",
-   "last_checked": "2026-09-18T20:02:17"
+   "last_checked": "2026-10-21T23:23:42"
   },
   "17792": {
    "status": "empty",
@@ -25632,7 +25632,7 @@
   },
   "17943": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:50:42"
+   "last_checked": "2026-10-21T23:24:35"
   },
   "17946": {
    "status": "empty",
@@ -25640,7 +25640,7 @@
   },
   "17951": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:23:53"
+   "last_checked": "2026-10-21T23:24:39"
   },
   "17963": {
    "status": "empty",
@@ -25760,7 +25760,7 @@
   },
   "24157": {
    "status": "empty",
-   "last_checked": "2026-09-18T20:09:02"
+   "last_checked": "2026-10-21T23:29:55"
   },
   "24197": {
    "status": "empty",
@@ -25768,7 +25768,7 @@
   },
   "24218": {
    "status": "empty",
-   "last_checked": "2026-09-18T20:09:15"
+   "last_checked": "2026-10-21T23:30:07"
   },
   "24225": {
    "status": "empty",
@@ -25820,7 +25820,7 @@
   },
   "24733": {
    "status": "empty",
-   "last_checked": "2026-09-18T20:10:49"
+   "last_checked": "2026-10-21T23:31:52"
   },
   "24751": {
    "status": "empty",
@@ -25900,7 +25900,7 @@
   },
   "25397": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:23:27"
+   "last_checked": "2026-10-21T23:35:45"
   },
   "25464": {
    "status": "empty",
@@ -25940,7 +25940,7 @@
   },
   "25861": {
    "status": "empty",
-   "last_checked": "2026-09-27T20:20:03"
+   "last_checked": "2026-10-21T23:39:00"
   },
   "25877": {
    "status": "empty",
@@ -25980,7 +25980,7 @@
   },
   "27103": {
    "status": "empty",
-   "last_checked": "2026-10-03T20:17:36"
+   "last_checked": "2026-10-21T23:41:47"
   },
   "27110": {
    "status": "empty",
@@ -26040,7 +26040,7 @@
   },
   "27367": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:27:12"
+   "last_checked": "2026-10-21T23:43:47"
   },
   "27397": {
    "status": "empty",
@@ -26056,7 +26056,7 @@
   },
   "27454": {
    "status": "empty",
-   "last_checked": "2026-10-08T20:21:13"
+   "last_checked": "2026-10-21T23:45:01"
   },
   "27462": {
    "status": "empty",
@@ -26080,7 +26080,7 @@
   },
   "27564": {
    "status": "empty",
-   "last_checked": "2026-09-30T20:19:40"
+   "last_checked": "2026-10-21T23:45:57"
   },
   "27577": {
    "status": "empty",
@@ -26188,7 +26188,7 @@
   },
   "28291": {
    "status": "empty",
-   "last_checked": "2026-10-12T00:14:34"
+   "last_checked": "2026-10-21T23:49:46"
   },
   "28326": {
    "status": "empty",
@@ -26196,7 +26196,7 @@
   },
   "28359": {
    "status": "empty",
-   "last_checked": "2026-09-18T20:29:28"
+   "last_checked": "2026-10-21T23:49:56"
   },
   "28485": {
    "status": "empty",
@@ -26312,7 +26312,7 @@
   },
   "14666": {
    "status": "empty",
-   "last_checked": "2026-10-08T19:45:40"
+   "last_checked": "2026-10-21T23:09:11"
   },
   "14688": {
    "status": "empty",
@@ -26400,11 +26400,11 @@
   },
   "15169": {
    "status": "empty",
-   "last_checked": "2026-10-08T19:48:12"
+   "last_checked": "2026-10-21T23:11:36"
   },
   "15177": {
    "status": "empty",
-   "last_checked": "2026-10-04T19:50:56"
+   "last_checked": "2026-10-21T23:11:43"
   },
   "15185": {
    "status": "empty",
@@ -26476,7 +26476,7 @@
   },
   "15554": {
    "status": "empty",
-   "last_checked": "2026-10-03T19:49:47"
+   "last_checked": "2026-10-21T23:14:38"
   },
   "15595": {
    "status": "empty",
@@ -26508,7 +26508,7 @@
   },
   "15829": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:01:25"
+   "last_checked": "2026-10-21T23:16:24"
   },
   "15887": {
    "status": "empty",
@@ -26552,7 +26552,7 @@
   },
   "17167": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:10:07"
+   "last_checked": "2026-10-21T23:19:43"
   },
   "17196": {
    "status": "empty",
@@ -26584,7 +26584,7 @@
   },
   "17399": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:08:19"
+   "last_checked": "2026-10-21T23:21:03"
   },
   "17415": {
    "status": "empty",
@@ -26612,7 +26612,7 @@
   },
   "17606": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:48:33"
+   "last_checked": "2026-10-21T23:22:59"
   },
   "17614": {
    "status": "empty",
@@ -26768,7 +26768,7 @@
   },
   "18860": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:28:29"
+   "last_checked": "2026-10-21T23:28:16"
   },
   "18914": {
    "status": "empty",
@@ -26920,7 +26920,7 @@
   },
   "24987": {
    "status": "empty",
-   "last_checked": "2026-09-24T20:12:39"
+   "last_checked": "2026-10-21T23:32:31"
   },
   "25000": {
    "status": "empty",
@@ -26944,7 +26944,7 @@
   },
   "25146": {
    "status": "empty",
-   "last_checked": "2026-09-19T20:15:02"
+   "last_checked": "2026-10-21T23:34:34"
   },
   "25163": {
    "status": "empty",
@@ -26964,7 +26964,7 @@
   },
   "25314": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:19:54"
+   "last_checked": "2026-10-21T23:35:16"
   },
   "25315": {
    "status": "empty",
@@ -26992,7 +26992,7 @@
   },
   "25459": {
    "status": "empty",
-   "last_checked": "2026-10-12T00:01:17"
+   "last_checked": "2026-10-21T23:36:04"
   },
   "25503": {
    "status": "empty",
@@ -27072,7 +27072,7 @@
   },
   "25966": {
    "status": "empty",
-   "last_checked": "2026-09-19T20:20:50"
+   "last_checked": "2026-10-21T23:39:44"
   },
   "25969": {
    "status": "empty",
@@ -27088,7 +27088,7 @@
   },
   "27084": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:40:08"
+   "last_checked": "2026-10-21T23:41:34"
   },
   "27086": {
    "status": "empty",
@@ -27136,7 +27136,7 @@
   },
   "27479": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:39:02"
+   "last_checked": "2026-10-21T23:45:20"
   },
   "27494": {
    "status": "empty",
@@ -27152,7 +27152,7 @@
   },
   "27541": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:40:11"
+   "last_checked": "2026-10-21T23:45:53"
   },
   "27558": {
    "status": "empty",
@@ -27392,7 +27392,7 @@
   },
   "14365": {
    "status": "empty",
-   "last_checked": "2026-09-20T19:51:28"
+   "last_checked": "2026-10-21T23:08:07"
   },
   "14419": {
    "status": "empty",
@@ -27400,7 +27400,7 @@
   },
   "14455": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:28:18"
+   "last_checked": "2026-10-21T23:08:29"
   },
   "14474": {
    "status": "empty",
@@ -27428,7 +27428,7 @@
   },
   "14691": {
    "status": "empty",
-   "last_checked": "2026-09-20T19:52:25"
+   "last_checked": "2026-10-21T23:09:14"
   },
   "14717": {
    "status": "empty",
@@ -27492,7 +27492,7 @@
   },
   "15375": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:08:33"
+   "last_checked": "2026-10-21T23:12:44"
   },
   "15379": {
    "status": "empty",
@@ -27500,7 +27500,7 @@
   },
   "15380": {
    "status": "empty",
-   "last_checked": "2026-10-17T21:58:26"
+   "last_checked": "2026-10-21T23:12:47"
   },
   "15523": {
    "status": "empty",
@@ -27580,7 +27580,7 @@
   },
   "17295": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:07:40"
+   "last_checked": "2026-10-21T23:20:29"
   },
   "17338": {
    "status": "empty",
@@ -27588,7 +27588,7 @@
   },
   "17367": {
    "status": "empty",
-   "last_checked": "2026-10-03T19:56:50"
+   "last_checked": "2026-10-21T23:20:58"
   },
   "17371": {
    "status": "empty",
@@ -27640,7 +27640,7 @@
   },
   "17774": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:08:30"
+   "last_checked": "2026-10-21T23:23:47"
   },
   "17800": {
    "status": "empty",
@@ -27648,7 +27648,7 @@
   },
   "17817": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:18:38"
+   "last_checked": "2026-10-21T23:24:02"
   },
   "17867": {
    "status": "empty",
@@ -27820,7 +27820,7 @@
   },
   "24332": {
    "status": "empty",
-   "last_checked": "2026-10-08T20:07:57"
+   "last_checked": "2026-10-21T23:30:29"
   },
   "24355": {
    "status": "empty",
@@ -27844,7 +27844,7 @@
   },
   "24507": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:57:05"
+   "last_checked": "2026-10-21T23:31:14"
   },
   "24636": {
    "status": "empty",
@@ -27888,7 +27888,7 @@
   },
   "25008": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:17:40"
+   "last_checked": "2026-10-21T23:33:01"
   },
   "25136": {
    "status": "empty",
@@ -27936,7 +27936,7 @@
   },
   "25493": {
    "status": "empty",
-   "last_checked": "2026-09-25T20:17:32"
+   "last_checked": "2026-10-21T23:36:16"
   },
   "25549": {
    "status": "empty",
@@ -27980,7 +27980,7 @@
   },
   "25871": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:23:15"
+   "last_checked": "2026-10-21T23:39:07"
   },
   "25880": {
    "status": "empty",
@@ -28028,7 +28028,7 @@
   },
   "27090": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:28:40"
+   "last_checked": "2026-10-21T23:41:39"
   },
   "27116": {
    "status": "empty",
@@ -28140,7 +28140,7 @@
   },
   "27856": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:44:58"
+   "last_checked": "2026-10-21T23:47:17"
   },
   "27882": {
    "status": "empty",
@@ -28148,7 +28148,7 @@
   },
   "27892": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:46:25"
+   "last_checked": "2026-10-21T23:47:37"
   },
   "27927": {
    "status": "empty",
@@ -28192,7 +28192,7 @@
   },
   "28418": {
    "status": "empty",
-   "last_checked": "2026-09-20T20:31:47"
+   "last_checked": "2026-10-21T23:50:29"
   },
   "28427": {
    "status": "empty",
@@ -28288,7 +28288,7 @@
   },
   "14178": {
    "status": "empty",
-   "last_checked": "2026-10-17T21:52:38"
+   "last_checked": "2026-10-21T23:07:26"
   },
   "14253": {
    "status": "empty",
@@ -28304,7 +28304,7 @@
   },
   "14387": {
    "status": "empty",
-   "last_checked": "2026-10-18T21:55:45"
+   "last_checked": "2026-10-21T23:08:10"
   },
   "14434": {
    "status": "empty",
@@ -28396,7 +28396,7 @@
   },
   "15218": {
    "status": "empty",
-   "last_checked": "2026-10-03T19:48:19"
+   "last_checked": "2026-10-21T23:11:50"
   },
   "15227": {
    "status": "empty",
@@ -28468,7 +28468,7 @@
   },
   "15744": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:15:37"
+   "last_checked": "2026-10-21T23:15:59"
   },
   "15763": {
    "status": "empty",
@@ -28632,7 +28632,7 @@
   },
   "17897": {
    "status": "empty",
-   "last_checked": "2026-10-08T20:00:46"
+   "last_checked": "2026-10-21T23:24:29"
   },
   "17970": {
    "status": "empty",
@@ -28764,7 +28764,7 @@
   },
   "18781": {
    "status": "empty",
-   "last_checked": "2026-10-08T20:05:09"
+   "last_checked": "2026-10-21T23:28:03"
   },
   "18789": {
    "status": "empty",
@@ -28844,7 +28844,7 @@
   },
   "24597": {
    "status": "empty",
-   "last_checked": "2026-09-26T20:15:57"
+   "last_checked": "2026-10-21T23:31:31"
   },
   "24600": {
    "status": "empty",
@@ -28924,7 +28924,7 @@
   },
   "25117": {
    "status": "empty",
-   "last_checked": "2026-09-30T00:24:09"
+   "last_checked": "2026-10-21T23:34:17"
   },
   "25121": {
    "status": "empty",
@@ -29020,7 +29020,7 @@
   },
   "25860": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:18:17"
+   "last_checked": "2026-10-21T23:38:56"
   },
   "25953": {
    "status": "empty",
@@ -29032,7 +29032,7 @@
   },
   "27058": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:36:25"
+   "last_checked": "2026-10-21T23:41:23"
   },
   "27066": {
    "status": "empty",
@@ -29068,11 +29068,11 @@
   },
   "27179": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:28:58"
+   "last_checked": "2026-10-21T23:42:22"
   },
   "27245": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:08:12"
+   "last_checked": "2026-10-21T23:42:58"
   },
   "27267": {
    "status": "empty",
@@ -29116,7 +29116,7 @@
   },
   "27618": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:40:52"
+   "last_checked": "2026-10-21T23:46:08"
   },
   "27711": {
    "status": "empty",
@@ -29228,7 +29228,7 @@
   },
   "28624": {
    "status": "empty",
-   "last_checked": "2026-10-12T00:15:29"
+   "last_checked": "2026-10-21T23:51:07"
   },
   "28626": {
    "status": "empty",
@@ -29280,7 +29280,7 @@
   },
   "14062": {
    "status": "empty",
-   "last_checked": "2026-09-22T19:46:04"
+   "last_checked": "2026-10-21T23:06:54"
   },
   "14114": {
    "status": "empty",
@@ -29288,7 +29288,7 @@
   },
   "14291": {
    "status": "empty",
-   "last_checked": "2026-09-22T19:46:36"
+   "last_checked": "2026-10-21T23:07:53"
   },
   "14298": {
    "status": "empty",
@@ -29300,7 +29300,7 @@
   },
   "14401": {
    "status": "empty",
-   "last_checked": "2026-10-03T19:44:19"
+   "last_checked": "2026-10-21T23:08:18"
   },
   "14407": {
    "status": "empty",
@@ -29316,7 +29316,7 @@
   },
   "14545": {
    "status": "empty",
-   "last_checked": "2026-09-22T19:47:20"
+   "last_checked": "2026-10-21T23:08:44"
   },
   "14548": {
    "status": "empty",
@@ -29332,7 +29332,7 @@
   },
   "14602": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:28:51"
+   "last_checked": "2026-10-21T23:08:52"
   },
   "14603": {
    "status": "empty",
@@ -29380,7 +29380,7 @@
   },
   "14882": {
    "status": "empty",
-   "last_checked": "2026-10-07T19:52:11"
+   "last_checked": "2026-10-21T23:09:46"
   },
   "14903": {
    "status": "empty",
@@ -29392,7 +29392,7 @@
   },
   "15017": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:37:24"
+   "last_checked": "2026-10-21T23:10:54"
   },
   "15025": {
    "status": "empty",
@@ -29436,7 +29436,7 @@
   },
   "15288": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:02:12"
+   "last_checked": "2026-10-21T23:12:08"
   },
   "15345": {
    "status": "empty",
@@ -29500,7 +29500,7 @@
   },
   "17125": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:39:02"
+   "last_checked": "2026-10-21T23:19:25"
   },
   "17136": {
    "status": "empty",
@@ -29528,7 +29528,7 @@
   },
   "17397": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:40:40"
+   "last_checked": "2026-10-21T23:21:00"
   },
   "17402": {
    "status": "empty",
@@ -29564,7 +29564,7 @@
   },
   "17734": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:18:02"
+   "last_checked": "2026-10-21T23:23:32"
   },
   "17776": {
    "status": "empty",
@@ -29764,7 +29764,7 @@
   },
   "24479": {
    "status": "empty",
-   "last_checked": "2026-09-22T20:09:44"
+   "last_checked": "2026-10-21T23:30:59"
   },
   "24508": {
    "status": "empty",
@@ -29848,7 +29848,7 @@
   },
   "25328": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:01:27"
+   "last_checked": "2026-10-21T23:35:22"
   },
   "25369": {
    "status": "empty",
@@ -29884,7 +29884,7 @@
   },
   "25577": {
    "status": "empty",
-   "last_checked": "2026-10-07T20:20:52"
+   "last_checked": "2026-10-21T23:37:38"
   },
   "25608": {
    "status": "empty",
@@ -29936,7 +29936,7 @@
   },
   "25977": {
    "status": "empty",
-   "last_checked": "2026-10-12T00:05:13"
+   "last_checked": "2026-10-21T23:39:54"
   },
   "25979": {
    "status": "empty",
@@ -29944,7 +29944,7 @@
   },
   "27043": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:36:15"
+   "last_checked": "2026-10-21T23:41:20"
   },
   "27044": {
    "status": "empty",
@@ -29956,7 +29956,7 @@
   },
   "27197": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:29:14"
+   "last_checked": "2026-10-21T23:42:43"
   },
   "27223": {
    "status": "empty",
@@ -30028,7 +30028,7 @@
   },
   "27877": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:35:36"
+   "last_checked": "2026-10-21T23:47:29"
   },
   "27879": {
    "status": "empty",
@@ -30228,7 +30228,7 @@
   },
   "14731": {
    "status": "empty",
-   "last_checked": "2026-10-18T21:56:58"
+   "last_checked": "2026-10-21T23:09:22"
   },
   "14732": {
    "status": "empty",
@@ -30324,7 +30324,7 @@
   },
   "15693": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:15:17"
+   "last_checked": "2026-10-21T23:15:35"
   },
   "15743": {
    "status": "empty",
@@ -30372,7 +30372,7 @@
   },
   "17043": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:44:43"
+   "last_checked": "2026-10-21T23:18:51"
   },
   "17103": {
    "status": "empty",
@@ -30452,7 +30452,7 @@
   },
   "17879": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:19:04"
+   "last_checked": "2026-10-21T23:24:21"
   },
   "17885": {
    "status": "empty",
@@ -30508,7 +30508,7 @@
   },
   "18403": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:11:36"
+   "last_checked": "2026-10-21T23:26:49"
   },
   "18405": {
    "status": "empty",
@@ -30524,7 +30524,7 @@
   },
   "18466": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:22:02"
+   "last_checked": "2026-10-21T23:26:57"
   },
   "18483": {
    "status": "empty",
@@ -30576,7 +30576,7 @@
   },
   "18962": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:54:16"
+   "last_checked": "2026-10-21T23:28:32"
   },
   "18991": {
    "status": "empty",
@@ -30628,7 +30628,7 @@
   },
   "24537": {
    "status": "empty",
-   "last_checked": "2026-09-23T20:05:25"
+   "last_checked": "2026-10-21T23:31:21"
   },
   "24541": {
    "status": "empty",
@@ -30648,7 +30648,7 @@
   },
   "24720": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:26:54"
+   "last_checked": "2026-10-21T23:31:49"
   },
   "24769": {
    "status": "empty",
@@ -30740,7 +30740,7 @@
   },
   "25648": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:29:07"
+   "last_checked": "2026-10-21T23:38:01"
   },
   "25810": {
    "status": "empty",
@@ -30784,7 +30784,7 @@
   },
   "25968": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:35:05"
+   "last_checked": "2026-10-21T23:39:47"
   },
   "27047": {
    "status": "empty",
@@ -30848,7 +30848,7 @@
   },
   "27735": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:32:53"
+   "last_checked": "2026-10-21T23:46:55"
   },
   "27758": {
    "status": "empty",
@@ -31072,7 +31072,7 @@
   },
   "15028": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:30:58"
+   "last_checked": "2026-10-21T23:10:59"
   },
   "15079": {
    "status": "empty",
@@ -31096,7 +31096,7 @@
   },
   "15346": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:13:22"
+   "last_checked": "2026-10-21T23:12:27"
   },
   "15439": {
    "status": "empty",
@@ -31160,7 +31160,7 @@
   },
   "17275": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:45:57"
+   "last_checked": "2026-10-21T23:20:17"
   },
   "17280": {
    "status": "empty",
@@ -31168,7 +31168,7 @@
   },
   "17486": {
    "status": "empty",
-   "last_checked": "2026-10-07T20:04:18"
+   "last_checked": "2026-10-21T23:22:14"
   },
   "17537": {
    "status": "empty",
@@ -31352,7 +31352,7 @@
   },
   "24471": {
    "status": "empty",
-   "last_checked": "2026-09-28T20:12:42"
+   "last_checked": "2026-10-21T23:30:56"
   },
   "24487": {
    "status": "empty",
@@ -31400,7 +31400,7 @@
   },
   "25073": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:33:55"
+   "last_checked": "2026-10-21T23:34:04"
   },
   "25086": {
    "status": "empty",
@@ -31420,11 +31420,11 @@
   },
   "25345": {
    "status": "empty",
-   "last_checked": "2026-09-24T20:15:21"
+   "last_checked": "2026-10-21T23:35:29"
   },
   "25398": {
    "status": "empty",
-   "last_checked": "2026-09-30T20:11:07"
+   "last_checked": "2026-10-21T23:35:48"
   },
   "25400": {
    "status": "empty",
@@ -31436,7 +31436,7 @@
   },
   "25504": {
    "status": "empty",
-   "last_checked": "2026-09-24T20:17:05"
+   "last_checked": "2026-10-21T23:37:08"
   },
   "25707": {
    "status": "empty",
@@ -31452,7 +31452,7 @@
   },
   "27039": {
    "status": "empty",
-   "last_checked": "2026-09-30T20:16:07"
+   "last_checked": "2026-10-21T23:41:16"
   },
   "27113": {
    "status": "empty",
@@ -31512,7 +31512,7 @@
   },
   "27662": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:24:22"
+   "last_checked": "2026-10-21T23:46:25"
   },
   "27731": {
    "status": "empty",
@@ -31664,7 +31664,7 @@
   },
   "14416": {
    "status": "empty",
-   "last_checked": "2026-09-25T19:48:27"
+   "last_checked": "2026-10-21T23:08:22"
   },
   "14475": {
    "status": "empty",
@@ -31716,7 +31716,7 @@
   },
   "14928": {
    "status": "empty",
-   "last_checked": "2026-10-17T21:55:01"
+   "last_checked": "2026-10-21T23:09:50"
   },
   "14949": {
    "status": "empty",
@@ -31784,7 +31784,7 @@
   },
   "15617": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:20:05"
+   "last_checked": "2026-10-21T23:14:53"
   },
   "15646": {
    "status": "empty",
@@ -31792,7 +31792,7 @@
   },
   "15667": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:15:02"
+   "last_checked": "2026-10-21T23:15:22"
   },
   "15686": {
    "status": "empty",
@@ -31828,7 +31828,7 @@
   },
   "17111": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:06:47"
+   "last_checked": "2026-10-21T23:19:18"
   },
   "17279": {
    "status": "empty",
@@ -31856,11 +31856,11 @@
   },
   "17454": {
    "status": "empty",
-   "last_checked": "2026-09-28T20:01:24"
+   "last_checked": "2026-10-21T23:22:06"
   },
   "17470": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:47:10"
+   "last_checked": "2026-10-21T23:22:10"
   },
   "17472": {
    "status": "empty",
@@ -31896,7 +31896,7 @@
   },
   "17889": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:11:50"
+   "last_checked": "2026-10-21T23:24:25"
   },
   "17986": {
    "status": "empty",
@@ -31916,7 +31916,7 @@
   },
   "18212": {
    "status": "empty",
-   "last_checked": "2026-09-25T20:07:15"
+   "last_checked": "2026-10-21T23:26:22"
   },
   "18217": {
    "status": "empty",
@@ -31976,7 +31976,7 @@
   },
   "18853": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:13:03"
+   "last_checked": "2026-10-21T23:28:09"
   },
   "18862": {
    "status": "empty",
@@ -32068,7 +32068,7 @@
   },
   "24983": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:32:33"
+   "last_checked": "2026-10-21T23:32:27"
   },
   "25039": {
    "status": "empty",
@@ -32192,7 +32192,7 @@
   },
   "27899": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:38:40"
+   "last_checked": "2026-10-21T23:47:40"
   },
   "27913": {
    "status": "empty",
@@ -32244,7 +32244,7 @@
   },
   "28252": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:27:56"
+   "last_checked": "2026-10-21T23:49:35"
   },
   "28260": {
    "status": "empty",
@@ -32424,7 +32424,7 @@
   },
   "15250": {
    "status": "empty",
-   "last_checked": "2026-09-28T19:51:41"
+   "last_checked": "2026-10-21T23:11:55"
   },
   "15267": {
    "status": "empty",
@@ -32468,7 +32468,7 @@
   },
   "15932": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:36:57"
+   "last_checked": "2026-10-21T23:17:06"
   },
   "17032": {
    "status": "empty",
@@ -32480,7 +32480,7 @@
   },
   "17165": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:39:05"
+   "last_checked": "2026-10-21T23:19:39"
   },
   "17207": {
    "status": "empty",
@@ -32660,7 +32660,7 @@
   },
   "24371": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:30:03"
+   "last_checked": "2026-10-21T23:30:37"
   },
   "24384": {
    "status": "empty",
@@ -32744,7 +32744,7 @@
   },
   "25473": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:37:15"
+   "last_checked": "2026-10-21T23:36:12"
   },
   "25487": {
    "status": "empty",
@@ -32792,7 +32792,7 @@
   },
   "27092": {
    "status": "empty",
-   "last_checked": "2026-09-26T20:25:52"
+   "last_checked": "2026-10-21T23:41:43"
   },
   "27101": {
    "status": "empty",
@@ -32816,11 +32816,11 @@
   },
   "27281": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:37:37"
+   "last_checked": "2026-10-21T23:43:18"
   },
   "27333": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:42:47"
+   "last_checked": "2026-10-21T23:43:33"
   },
   "27340": {
    "status": "empty",
@@ -32904,7 +32904,7 @@
   },
   "28459": {
    "status": "empty",
-   "last_checked": "2026-09-27T20:30:39"
+   "last_checked": "2026-10-21T23:50:39"
   },
   "28651": {
    "status": "empty",
@@ -33056,11 +33056,11 @@
   },
   "15110": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:02:28"
+   "last_checked": "2026-10-21T23:11:26"
   },
   "15198": {
    "status": "empty",
-   "last_checked": "2026-09-27T19:51:43"
+   "last_checked": "2026-10-21T23:11:46"
   },
   "15307": {
    "status": "empty",
@@ -33256,7 +33256,7 @@
   },
   "18692": {
    "status": "empty",
-   "last_checked": "2026-09-27T20:08:14"
+   "last_checked": "2026-10-21T23:27:35"
   },
   "18757": {
    "status": "empty",
@@ -33268,7 +33268,7 @@
   },
   "18795": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:54:16"
+   "last_checked": "2026-10-21T23:28:06"
   },
   "18872": {
    "status": "empty",
@@ -33300,7 +33300,7 @@
   },
   "24485": {
    "status": "empty",
-   "last_checked": "2026-10-03T20:06:49"
+   "last_checked": "2026-10-21T23:31:07"
   },
   "24501": {
    "status": "empty",
@@ -33340,7 +33340,7 @@
   },
   "25031": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:28:41"
+   "last_checked": "2026-10-21T23:33:29"
   },
   "25156": {
    "status": "empty",
@@ -33376,7 +33376,7 @@
   },
   "25625": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:27:17"
+   "last_checked": "2026-10-21T23:37:51"
   },
   "25666": {
    "status": "empty",
@@ -33412,11 +33412,11 @@
   },
   "27406": {
    "status": "empty",
-   "last_checked": "2026-09-27T20:23:59"
+   "last_checked": "2026-10-21T23:43:53"
   },
   "27497": {
    "status": "empty",
-   "last_checked": "2026-10-16T23:04:39"
+   "last_checked": "2026-10-21T23:45:28"
   },
   "27681": {
    "status": "empty",
@@ -33424,7 +33424,7 @@
   },
   "27685": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:41:12"
+   "last_checked": "2026-10-21T23:46:33"
   },
   "27708": {
    "status": "empty",
@@ -33432,7 +33432,7 @@
   },
   "27753": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:45:29"
+   "last_checked": "2026-10-21T23:47:02"
   },
   "28106": {
    "status": "empty",
@@ -33564,7 +33564,7 @@
   },
   "14804": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:36:07"
+   "last_checked": "2026-10-21T23:09:27"
   },
   "14902": {
    "status": "empty",
@@ -33588,7 +33588,7 @@
   },
   "15387": {
    "status": "empty",
-   "last_checked": "2026-10-02T23:53:38"
+   "last_checked": "2026-10-21T23:12:54"
   },
   "15400": {
    "status": "empty",
@@ -33624,7 +33624,7 @@
   },
   "15941": {
    "status": "empty",
-   "last_checked": "2026-09-28T19:56:41"
+   "last_checked": "2026-10-21T23:17:10"
   },
   "17050": {
    "status": "empty",
@@ -33644,7 +33644,7 @@
   },
   "17287": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:46:04"
+   "last_checked": "2026-10-21T23:20:25"
   },
   "17332": {
    "status": "empty",
@@ -33656,7 +33656,7 @@
   },
   "17538": {
    "status": "empty",
-   "last_checked": "2026-10-07T20:04:29"
+   "last_checked": "2026-10-21T23:22:39"
   },
   "17598": {
    "status": "empty",
@@ -33920,7 +33920,7 @@
   },
   "27263": {
    "status": "empty",
-   "last_checked": "2026-09-28T20:25:22"
+   "last_checked": "2026-10-21T23:43:10"
   },
   "27445": {
    "status": "empty",
@@ -33980,7 +33980,7 @@
   },
   "28379": {
    "status": "empty",
-   "last_checked": "2026-09-28T20:31:44"
+   "last_checked": "2026-10-21T23:50:09"
   },
   "28457": {
    "status": "empty",
@@ -34244,7 +34244,7 @@
   },
   "18555": {
    "status": "empty",
-   "last_checked": "2026-10-01T20:02:28"
+   "last_checked": "2026-10-21T23:26:59"
   },
   "18716": {
    "status": "empty",
@@ -34368,7 +34368,7 @@
   },
   "25351": {
    "status": "empty",
-   "last_checked": "2026-10-12T00:00:23"
+   "last_checked": "2026-10-21T23:35:33"
   },
   "25414": {
    "status": "empty",
@@ -34380,7 +34380,7 @@
   },
   "25762": {
    "status": "empty",
-   "last_checked": "2026-10-12T00:03:48"
+   "last_checked": "2026-10-21T23:38:32"
   },
   "25816": {
    "status": "empty",
@@ -34428,7 +34428,7 @@
   },
   "27646": {
    "status": "empty",
-   "last_checked": "2026-09-30T00:34:32"
+   "last_checked": "2026-10-21T23:46:18"
   },
   "27696": {
    "status": "empty",
@@ -34436,7 +34436,7 @@
   },
   "27774": {
    "status": "empty",
-   "last_checked": "2026-10-16T23:07:08"
+   "last_checked": "2026-10-21T23:47:06"
   },
   "27830": {
    "status": "empty",
@@ -34460,7 +34460,7 @@
   },
   "28254": {
    "status": "empty",
-   "last_checked": "2026-10-09T01:15:14"
+   "last_checked": "2026-10-21T23:49:39"
   },
   "28347": {
    "status": "empty",
@@ -34592,7 +34592,7 @@
   },
   "15261": {
    "status": "empty",
-   "last_checked": "2026-10-07T19:54:26"
+   "last_checked": "2026-10-21T23:11:57"
   },
   "15348": {
    "status": "empty",
@@ -34600,7 +34600,7 @@
   },
   "15358": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:12:11"
+   "last_checked": "2026-10-21T23:12:37"
   },
   "15488": {
    "status": "empty",
@@ -34652,7 +34652,7 @@
   },
   "17544": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:27:04"
+   "last_checked": "2026-10-21T23:22:44"
   },
   "17790": {
    "status": "empty",
@@ -34768,7 +34768,7 @@
   },
   "24451": {
    "status": "empty",
-   "last_checked": "2026-09-30T20:06:39"
+   "last_checked": "2026-10-21T23:30:47"
   },
   "24463": {
    "status": "empty",
@@ -34812,7 +34812,7 @@
   },
   "25054": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:58:50"
+   "last_checked": "2026-10-21T23:33:52"
   },
   "25259": {
    "status": "empty",
@@ -34820,7 +34820,7 @@
   },
   "25266": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:30:10"
+   "last_checked": "2026-10-21T23:35:02"
   },
   "25287": {
    "status": "empty",
@@ -34928,7 +34928,7 @@
   },
   "28059": {
    "status": "empty",
-   "last_checked": "2026-10-07T20:31:02"
+   "last_checked": "2026-10-21T23:49:01"
   },
   "28093": {
    "status": "empty",
@@ -34944,7 +34944,7 @@
   },
   "28189": {
    "status": "empty",
-   "last_checked": "2026-09-30T20:23:48"
+   "last_checked": "2026-10-21T23:49:23"
   },
   "28198": {
    "status": "empty",
@@ -35148,7 +35148,7 @@
   },
   "17028": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:08:58"
+   "last_checked": "2026-10-21T23:18:40"
   },
   "17217": {
    "status": "empty",
@@ -35188,7 +35188,7 @@
   },
   "17732": {
    "status": "empty",
-   "last_checked": "2026-10-01T19:58:13"
+   "last_checked": "2026-10-21T23:23:29"
   },
   "18031": {
    "status": "empty",
@@ -35236,7 +35236,7 @@
   },
   "18623": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:12:16"
+   "last_checked": "2026-10-21T23:27:18"
   },
   "18685": {
    "status": "empty",
@@ -35380,7 +35380,7 @@
   },
   "27257": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:29:35"
+   "last_checked": "2026-10-21T23:43:06"
   },
   "27500": {
    "status": "empty",
@@ -35404,7 +35404,7 @@
   },
   "27932": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:31:03"
+   "last_checked": "2026-10-21T23:47:43"
   },
   "27934": {
    "status": "empty",
@@ -35560,7 +35560,7 @@
   },
   "15310": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:08:06"
+   "last_checked": "2026-10-21T23:12:16"
   },
   "15319": {
    "status": "empty",
@@ -35772,7 +35772,7 @@
   },
   "27379": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:32:18"
+   "last_checked": "2026-10-21T23:43:50"
   },
   "27489": {
    "status": "empty",
@@ -35780,7 +35780,7 @@
   },
   "27701": {
    "status": "empty",
-   "last_checked": "2026-10-03T00:25:01"
+   "last_checked": "2026-10-21T23:46:44"
   },
   "27732": {
    "status": "empty",
@@ -35816,7 +35816,7 @@
   },
   "28573": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:34:33"
+   "last_checked": "2026-10-21T23:51:04"
   },
   "28646": {
    "status": "empty",
@@ -35844,11 +35844,11 @@
   },
   "28980": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:50:29"
+   "last_checked": "2026-10-21T23:51:41"
   },
   "14125": {
    "status": "empty",
-   "last_checked": "2026-10-03T19:43:32"
+   "last_checked": "2026-10-21T23:07:09"
   },
   "14340": {
    "status": "empty",
@@ -35952,7 +35952,7 @@
   },
   "17401": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:10:51"
+   "last_checked": "2026-10-21T23:21:06"
   },
   "17625": {
    "status": "empty",
@@ -36004,7 +36004,7 @@
   },
   "18599": {
    "status": "empty",
-   "last_checked": "2026-10-03T20:03:15"
+   "last_checked": "2026-10-21T23:27:12"
   },
   "18635": {
    "status": "empty",
@@ -36116,11 +36116,11 @@
   },
   "27081": {
    "status": "empty",
-   "last_checked": "2026-10-03T20:17:10"
+   "last_checked": "2026-10-21T23:41:31"
   },
   "27172": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:28:54"
+   "last_checked": "2026-10-21T23:42:20"
   },
   "27291": {
    "status": "empty",
@@ -36164,7 +36164,7 @@
   },
   "28431": {
    "status": "empty",
-   "last_checked": "2026-10-03T20:24:56"
+   "last_checked": "2026-10-21T23:50:32"
   },
   "28552": {
    "status": "empty",
@@ -36200,7 +36200,7 @@
   },
   "14171": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:33:34"
+   "last_checked": "2026-10-21T23:07:22"
   },
   "14217": {
    "status": "empty",
@@ -36212,7 +36212,7 @@
   },
   "14266": {
    "status": "empty",
-   "last_checked": "2026-10-04T19:46:54"
+   "last_checked": "2026-10-21T23:07:43"
   },
   "14366": {
    "status": "empty",
@@ -36284,7 +36284,7 @@
   },
   "15454": {
    "status": "empty",
-   "last_checked": "2026-10-04T19:52:41"
+   "last_checked": "2026-10-21T23:13:23"
   },
   "15527": {
    "status": "empty",
@@ -36308,7 +36308,7 @@
   },
   "17551": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:42:25"
+   "last_checked": "2026-10-21T23:22:47"
   },
   "17913": {
    "status": "empty",
@@ -36340,7 +36340,7 @@
   },
   "18697": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:07:14"
+   "last_checked": "2026-10-21T23:27:42"
   },
   "18792": {
    "status": "empty",
@@ -36380,15 +36380,15 @@
   },
   "24953": {
    "status": "empty",
-   "last_checked": "2026-10-04T20:12:06"
+   "last_checked": "2026-10-21T23:32:20"
   },
   "24964": {
    "status": "empty",
-   "last_checked": "2026-10-04T20:12:10"
+   "last_checked": "2026-10-21T23:32:25"
   },
   "25053": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:58:47"
+   "last_checked": "2026-10-21T23:33:48"
   },
   "25080": {
    "status": "empty",
@@ -36432,7 +36432,7 @@
   },
   "27134": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:36:57"
+   "last_checked": "2026-10-21T23:42:02"
   },
   "27162": {
    "status": "empty",
@@ -36444,7 +36444,7 @@
   },
   "27605": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:24:04"
+   "last_checked": "2026-10-21T23:46:04"
   },
   "27616": {
    "status": "empty",
@@ -36536,7 +36536,7 @@
   },
   "15545": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:02:17"
+   "last_checked": "2026-10-21T23:14:34"
   },
   "15611": {
    "status": "empty",
@@ -36552,7 +36552,7 @@
   },
   "17040": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:38:34"
+   "last_checked": "2026-10-21T23:18:47"
   },
   "17427": {
    "status": "empty",
@@ -36576,7 +36576,7 @@
   },
   "18049": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:20:52"
+   "last_checked": "2026-10-21T23:25:24"
   },
   "18056": {
    "status": "empty",
@@ -36596,7 +36596,7 @@
   },
   "18309": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:06:10"
+   "last_checked": "2026-10-21T23:26:41"
   },
   "18398": {
    "status": "empty",
@@ -36700,7 +36700,7 @@
   },
   "28060": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:43:54"
+   "last_checked": "2026-10-21T23:49:05"
   },
   "28087": {
    "status": "empty",
@@ -36724,7 +36724,7 @@
   },
   "28512": {
    "status": "empty",
-   "last_checked": "2026-10-05T20:28:50"
+   "last_checked": "2026-10-21T23:50:49"
   },
   "28529": {
    "status": "empty",
@@ -36776,7 +36776,7 @@
   },
   "14297": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:34:34"
+   "last_checked": "2026-10-21T23:07:57"
   },
   "14400": {
    "status": "empty",
@@ -36796,7 +36796,7 @@
   },
   "15333": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:03:24"
+   "last_checked": "2026-10-21T23:12:24"
   },
   "15397": {
    "status": "empty",
@@ -36816,7 +36816,7 @@
   },
   "17315": {
    "status": "empty",
-   "last_checked": "2026-10-06T20:10:25"
+   "last_checked": "2026-10-21T23:20:37"
   },
   "17966": {
    "status": "empty",
@@ -36824,7 +36824,7 @@
   },
   "17985": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:29:42"
+   "last_checked": "2026-10-21T23:24:42"
   },
   "18069": {
    "status": "empty",
@@ -36880,7 +36880,7 @@
   },
   "18963": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:16:11"
+   "last_checked": "2026-10-21T23:28:36"
   },
   "18988": {
    "status": "empty",
@@ -36904,7 +36904,7 @@
   },
   "24430": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:36:19"
+   "last_checked": "2026-10-21T23:30:45"
   },
   "24473": {
    "status": "empty",
@@ -36940,7 +36940,7 @@
   },
   "25891": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:26:34"
+   "last_checked": "2026-10-21T23:39:17"
   },
   "25995": {
    "status": "empty",
@@ -36952,7 +36952,7 @@
   },
   "27621": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:32:15"
+   "last_checked": "2026-10-21T23:46:14"
   },
   "27707": {
    "status": "empty",
@@ -37044,7 +37044,7 @@
   },
   "14806": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:10:14"
+   "last_checked": "2026-10-21T23:09:30"
   },
   "14828": {
    "status": "empty",
@@ -37068,7 +37068,7 @@
   },
   "15647": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:10:23"
+   "last_checked": "2026-10-21T23:15:18"
   },
   "15983": {
    "status": "empty",
@@ -37080,7 +37080,7 @@
   },
   "17553": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:27:11"
+   "last_checked": "2026-10-21T23:22:50"
   },
   "17670": {
    "status": "empty",
@@ -37148,7 +37148,7 @@
   },
   "24245": {
    "status": "empty",
-   "last_checked": "2026-10-07T20:13:18"
+   "last_checked": "2026-10-21T23:30:15"
   },
   "24288": {
    "status": "empty",
@@ -37200,7 +37200,7 @@
   },
   "25049": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:54:26"
+   "last_checked": "2026-10-21T23:33:44"
   },
   "25070": {
    "status": "empty",
@@ -37312,7 +37312,7 @@
   },
   "14523": {
    "status": "empty",
-   "last_checked": "2026-10-17T21:53:33"
+   "last_checked": "2026-10-21T23:08:38"
   },
   "14796": {
    "status": "empty",
@@ -37328,7 +37328,7 @@
   },
   "15810": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:15:50"
+   "last_checked": "2026-10-21T23:16:18"
   },
   "15975": {
    "status": "empty",
@@ -37344,11 +37344,11 @@
   },
   "18157": {
    "status": "empty",
-   "last_checked": "2026-10-08T20:03:25"
+   "last_checked": "2026-10-21T23:26:01"
   },
   "18193": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:25:16"
+   "last_checked": "2026-10-21T23:26:05"
   },
   "18260": {
    "status": "empty",
@@ -37368,7 +37368,7 @@
   },
   "18899": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:49:01"
+   "last_checked": "2026-10-21T23:28:19"
   },
   "18968": {
    "status": "empty",
@@ -37440,7 +37440,7 @@
   },
   "25632": {
    "status": "empty",
-   "last_checked": "2026-10-08T20:15:21"
+   "last_checked": "2026-10-21T23:37:55"
   },
   "25634": {
    "status": "empty",
@@ -37456,7 +37456,7 @@
   },
   "25944": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:30:49"
+   "last_checked": "2026-10-21T23:39:33"
   },
   "25957": {
    "status": "empty",
@@ -37476,7 +37476,7 @@
   },
   "27473": {
    "status": "empty",
-   "last_checked": "2026-10-16T23:04:21"
+   "last_checked": "2026-10-21T23:45:16"
   },
   "27518": {
    "status": "empty",
@@ -37600,7 +37600,7 @@
   },
   "15373": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:33:38"
+   "last_checked": "2026-10-21T23:12:41"
   },
   "15383": {
    "status": "empty",
@@ -37608,7 +37608,7 @@
   },
   "15423": {
    "status": "empty",
-   "last_checked": "2026-10-09T00:39:24"
+   "last_checked": "2026-10-21T23:13:06"
   },
   "15443": {
    "status": "empty",
@@ -37692,7 +37692,7 @@
   },
   "24212": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:20:39"
+   "last_checked": "2026-10-21T23:30:03"
   },
   "24730": {
    "status": "empty",
@@ -37852,7 +37852,7 @@
   },
   "18113": {
    "status": "empty",
-   "last_checked": "2026-10-13T02:25:06"
+   "last_checked": "2026-10-21T23:25:47"
   },
   "18130": {
    "status": "empty",
@@ -37860,7 +37860,7 @@
   },
   "18205": {
    "status": "empty",
-   "last_checked": "2026-10-10T23:26:57"
+   "last_checked": "2026-10-21T23:26:12"
   },
   "18408": {
    "status": "empty",
@@ -37936,7 +37936,7 @@
   },
   "27147": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:28:48"
+   "last_checked": "2026-10-21T23:42:04"
   },
   "28079": {
    "status": "empty",
@@ -38072,7 +38072,7 @@
   },
   "18634": {
    "status": "empty",
-   "last_checked": "2026-10-11T23:53:15"
+   "last_checked": "2026-10-21T23:27:21"
   },
   "18658": {
    "status": "empty",
@@ -38124,7 +38124,7 @@
   },
   "24646": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:19:11"
+   "last_checked": "2026-10-21T23:31:46"
   },
   "24696": {
    "status": "empty",
@@ -38388,7 +38388,7 @@
   },
   "28807": {
    "status": "empty",
-   "last_checked": "2026-10-16T23:11:48"
+   "last_checked": "2026-10-21T23:51:20"
   },
   "28991": {
    "status": "empty",
@@ -38452,7 +38452,7 @@
   },
   "17045": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:13:20"
+   "last_checked": "2026-10-21T23:18:55"
   },
   "17214": {
    "status": "empty",
@@ -38520,7 +38520,7 @@
   },
   "27157": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:46:54"
+   "last_checked": "2026-10-21T23:42:11"
   },
   "27335": {
    "status": "empty",
@@ -38544,7 +38544,7 @@
   },
   "28407": {
    "status": "empty",
-   "last_checked": "2026-10-14T23:54:31"
+   "last_checked": "2026-10-21T23:50:25"
   },
   "28499": {
    "status": "empty",
@@ -38600,7 +38600,7 @@
   },
   "15748": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:05:57"
+   "last_checked": "2026-10-21T23:16:03"
   },
   "17264": {
    "status": "empty",
@@ -38660,7 +38660,7 @@
   },
   "24317": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:21:25"
+   "last_checked": "2026-10-21T23:30:26"
   },
   "24366": {
    "status": "empty",
@@ -38684,7 +38684,7 @@
   },
   "24906": {
    "status": "empty",
-   "last_checked": "2026-10-15T23:23:12"
+   "last_checked": "2026-10-21T23:32:12"
   },
   "24914": {
    "status": "empty",
@@ -38748,7 +38748,7 @@
   },
   "14333": {
    "status": "empty",
-   "last_checked": "2026-10-16T22:27:58"
+   "last_checked": "2026-10-21T23:08:03"
   },
   "14424": {
    "status": "empty",
@@ -38988,7 +38988,7 @@
   },
   "24169": {
    "status": "empty",
-   "last_checked": "2026-10-17T22:14:44"
+   "last_checked": "2026-10-21T23:29:59"
   },
   "24181": {
    "status": "empty",
@@ -39100,15 +39100,15 @@
   },
   "18057": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:13:32"
+   "last_checked": "2026-10-21T23:25:40"
   },
   "18622": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:15:04"
+   "last_checked": "2026-10-21T23:27:15"
   },
   "18752": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:15:24"
+   "last_checked": "2026-10-21T23:27:53"
   },
   "18913": {
    "status": "empty",
@@ -39132,7 +39132,7 @@
   },
   "24910": {
    "status": "empty",
-   "last_checked": "2026-10-18T22:19:54"
+   "last_checked": "2026-10-21T23:32:16"
   },
   "25102": {
    "status": "empty",
@@ -39280,7 +39280,7 @@
   },
   "25222": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:29:44"
+   "last_checked": "2026-10-21T23:34:54"
   },
   "25637": {
    "status": "empty",
@@ -39304,7 +39304,7 @@
   },
   "28530": {
    "status": "empty",
-   "last_checked": "2026-10-20T23:45:41"
+   "last_checked": "2026-10-21T23:50:56"
   },
   "28531": {
    "status": "empty",
@@ -39321,6 +39321,122 @@
   "28968": {
    "status": "empty",
    "last_checked": "2026-10-20T23:46:45"
+  },
+  "14119": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:07:06"
+  },
+  "14134": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:07:13"
+  },
+  "14234": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:07:31"
+  },
+  "14478": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:08:34"
+  },
+  "14663": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:09:08"
+  },
+  "14713": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:09:18"
+  },
+  "14811": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:09:33"
+  },
+  "14841": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:09:38"
+  },
+  "15114": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:11:30"
+  },
+  "15519": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:14:19"
+  },
+  "18062": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:25:43"
+  },
+  "18235": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:26:25"
+  },
+  "18295": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:26:38"
+  },
+  "18565": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:27:04"
+  },
+  "18592": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:27:08"
+  },
+  "18637": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:27:25"
+  },
+  "18729": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:27:46"
+  },
+  "18764": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:27:56"
+  },
+  "18856": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:28:12"
+  },
+  "18925": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:28:22"
+  },
+  "24108": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:29:51"
+  },
+  "24857": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:32:07"
+  },
+  "27484": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:45:24"
+  },
+  "28381": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:50:12"
+  },
+  "28389": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:50:20"
+  },
+  "28483": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:50:46"
+  },
+  "28641": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:51:10"
+  },
+  "28734": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:51:17"
+  },
+  "28994": {
+   "status": "empty",
+   "last_checked": "2026-10-21T23:51:45"
   }
  }
 }
