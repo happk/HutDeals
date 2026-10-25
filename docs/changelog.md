@@ -7,6 +7,15 @@
 
 ## 未分配
 
+- **搜尋納入餐點內容物**：搜尋索引加入 items 候選品名（前端 WeakMap 懶快取，每券只組一次、
+  之後每鍵零重建）。修復外部碼（description=None、內容只在 items 的 682 券）內容物對搜尋
+  隱形——搜「雞軟骨」由 2 筆增至 363 筆，offline 殘影卡同受惠；每鍵成本反降
+  （0.198→0.067 ms/鍵，723 券實測）。測試：`filter.test` +5（26821 型／跨欄位 AND／
+  offline items／快取冪等／空 items）；新增資料集驗收 `exp_prob` 的
+  `search_cases.test.ts`——11 案例（搜索字→應命中鍵）對真實 coupons.js 跑 filterCoupons，
+  「至少命中」語意不隨每日資料更新破壞。分析、效能基準與計畫：
+  `exp_prob/2026-10-26_search-items-index/`。
+
 ## v1.1.0（2026-10-26）
 
 - **UI 打磨批次**：組標題「N 選1」改「N 選 1」；收藏鈕放大到與「查看完整資訊」同級、
