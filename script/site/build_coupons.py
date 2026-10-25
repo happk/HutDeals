@@ -117,6 +117,17 @@ def merge(
             stats["new"] += 1
         else:
             coupon["firstSeen"] = old.get("firstSeen", today)
+            # 補全欄位繼承（c5d1634-1，2026-10-26）：官網列表產的新殼缺、舊有 → 抄舊，
+            # 補全結果不再被每日 merge 清零（enrich 失敗日不掉殼）。
+            # items/flavorSets 同進同出——items 的 flavorIdx 指向 flavorSets，落單會懸空
+            # （欄位集合經 exp_prob/2026-10-26_merge-inherit-fix/probe_fields.py 實測校正）。
+            # enrich 成功時覆寫 items/orderUrl、只補缺 orderType/msrp → 繼承值至多落後一個週期。
+            for f in ("items", "flavorSets", "units", "msrp", "orderType"):
+                if old.get(f) and not coupon.get(f):
+                    coupon[f] = old[f]
+            if old.get("orderUrl"):
+                # cno 直連（code 可推導、無過期問題）優於通用訂餐頁——舊者勝出
+                coupon["orderUrl"] = old["orderUrl"]
             if old.get("status") == "offline":
                 coupon["status"] = "active"
                 coupon.pop("offlineSince", None)

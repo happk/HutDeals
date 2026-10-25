@@ -50,17 +50,7 @@
 
 ### c5d1634 (2026-09-08)
 
-1. **`merge()` 不保留前日的 `items`／`orderType`／`msrp`**
-
-   問題：[`script/site/build_coupons.py:merge()`](../script/site/build_coupons.py#L87-L145) 只保留 `firstSeen`／`lastSeen`／`status`／`offlineSince`。
-
-   影響：[`script/site/enrich_official.py`](../script/site/enrich_official.py#L31-L70) 需每日全量重補（例：`91113`）。
-   `enrich` 失敗一天，那張券就掉殼一天。
-
-   修法方向：`merge()` 繼承舊的 `items`／`orderType`／`msrp`，`enrich` 仍只補缺不覆蓋。
-   或 `enrich` 失敗時保留前日補全的結果。
-
-2. **官券沒有通路字樣時，`orderType` 永遠補不出來**
+1. **官券沒有通路字樣時，`orderType` 永遠補不出來**
 
    問題：[`script/scan/parse_step2.py:extract_channels()`](../script/scan/parse_step2.py#L87-L111) 對 `title`／`desc` 全無通路字樣的官券回 `[]`（例：`91113`、`91112`）。
 
@@ -68,7 +58,7 @@
 
    修法方向：留空，或給預設值。待使用者定。
 
-3. **官網「套餐價格：199起」抓不到價格**
+2. **官網「套餐價格：199起」抓不到價格**
 
    問題：[`script/site/fetch_promos.py:parse_pdpop_html()`](../script/site/fetch_promos.py) 的價格字串沒有 `$` 號形。
    [`script/scan/parse_step2.py:_HTML_PRICE_PATTERNS`](../script/scan/parse_step2.py) 要求 `$`，命中不了。

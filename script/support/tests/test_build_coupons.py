@@ -160,6 +160,109 @@ class TestMerge(unittest.TestCase):
         self.assertEqual([c["key"] for c in merged], ["93034", "93020"])
 
 
+class TestMergeInherit(unittest.TestCase):
+    """c5d1634-1（2026-10-26）：merge 繼承 enrich 補全欄位。
+
+    欄位集合經 exp_prob/2026-10-26_merge-inherit-fix/probe_fields.py 對當前資料實測：
+    items＋flavorSets（同進同出，flavorIdx 指向 flavorSets）、units、msrp、
+    orderType（防禦名稱改版邊角）＋orderUrl（cno 直連，舊者勝出）。
+    """
+
+    def setUp(self):
+        self.shell = enrich({"source": "pdpop", "code": "93034",
+                             "name": "93034大比薩送副食/飲料$198"}, TAGS)
+        self.items = [
+            {"text": "四小福", "group": "main", "groupIdx": 1, "priceAdd": 0, "flavorIdx": 0},
+            {"text": "可樂", "group": "second", "groupIdx": 1, "priceAdd": 0, "flavorIdx": None},
+        ]
+
+    def _old(self, **extra):
+        base = dict(self.shell, firstSeen="2026-09-01", lastSeen="2026-09-02", status="active")
+        base.update(extra)
+        return base
+
+    def test_inherits_all_fill_fields(self):
+        old = self._old(items=list(self.items),
+                        flavorSets=[[{"name": "鬆厚", "priceAdd": 0}]],
+                        units=[{"group": "main", "groupIdx": 1, "cats": ["小比薩"]}],
+                        msrp=456, orderType="外帶/外送",
+                        orderUrl="https://www.pizzahut.com.tw/order/?mode=step_2&type_id=1025&cno=93034")
+        merged, _ = merge({"93034": old}, [dict(self.shell)], "2026-10-26")
+        c = merged[0]
+        self.assertEqual(c["items"], self.items)
+        self.assertEqual(c["flavorSets"], [[{"name": "鬆厚", "priceAdd": 0}]])
+        self.assertEqual(c["units"], [{"group": "main", "groupIdx": 1, "cats": ["小比薩"]}])
+        self.assertEqual(c["msrp"], 456)
+        self.assertEqual(c["orderType"], "外帶/外送")
+        self.assertIn("cno=93034", c["orderUrl"])
+
+    def test_items_without_flavor_sets_is_legal(self):
+        # 實況形狀（probe_fields：5 張）：items 候選全無口味 → 無 flavorSets。
+        # 繼承 items 不得無中生有 flavorSets、也不得因此丟 items。
+        items = [{"text": "夏威夷比薩", "group": "main", "groupIdx": 1,
+                  "priceAdd": 0, "flavorIdx": None}]
+        merged, _ = merge({"93034": self._old(items=items)}, [dict(self.shell)], "2026-10-26")
+        self.assertEqual(merged[0]["items"], items)
+        self.assertNotIn("flavorSets", merged[0])
+
+    def test_new_value_wins(self):
+        # 防禦：未來列表若開始供應欄位，新值不被舊值覆蓋（繼承只在殼缺時墊底）
+        shell = dict(self.shell, orderType="外送")
+        merged, _ = merge({"93034": self._old(orderType="外帶")}, [shell], "2026-10-26")
+        self.assertEqual(merged[0]["orderType"], "外送")
+
+    def test_name_change_drops_parsed_type_inherits_old(self):
+        # 名稱改版拿掉通路字樣 → 殼不自帶 orderType → 繼承舊值（實測 0 張觸發的防禦邊角）
+        shell = enrich({"source": "pdpop", "code": "93034", "name": "93034 歡樂分享餐"}, TAGS)
+        self.assertIsNone(shell.get("orderType"))
+        merged, _ = merge({"93034": self._old(orderType="外帶")}, [dict(shell)], "2026-10-26")
+        self.assertEqual(merged[0]["orderType"], "外帶")
+
+    def test_new_coupon_no_inherit(self):
+        merged, stats = merge({}, [dict(self.shell)], "2026-10-26")
+        self.assertNotIn("items", merged[0])
+        self.assertNotIn("flavorSets", merged[0])
+        self.assertEqual(stats["new"], 1)
+
+    def test_revived_keeps_fill(self):
+        old = self._old(status="offline", offlineSince="2026-10-01",
+                        items=list(self.items), msrp=500)
+        merged, stats = merge({"93034": old}, [dict(self.shell)], "2026-10-26")
+        self.assertEqual(merged[0]["status"], "active")
+        self.assertEqual(merged[0]["items"], self.items)
+        self.assertEqual(merged[0]["msrp"], 500)
+        self.assertEqual(stats["revived"], 1)
+
+    def test_external_branch_untouched(self):
+        # 外部碼不在官網 new_coupons → 走 kept-not-seen 原樣保留分支，不進繼承邏輯
+        ext = {"key": "26868", "code": "26868", "name": "x", "source": "verified-external",
+               "items": list(self.items), "status": "active",
+               "firstSeen": "2026-09-01", "lastSeen": "2026-09-02"}
+        merged, _ = merge({"26868": ext}, [dict(self.shell)], "2026-10-26")
+        e = next(c for c in merged if c["key"] == "26868")
+        self.assertEqual(e["items"], self.items)
+        self.assertEqual(e["source"], "verified-external")
+
+    def test_order_url_old_wins_over_generic(self):
+        old = self._old(orderUrl="https://www.pizzahut.com.tw/order/?mode=step_2&type_id=1025&cno=93034")
+        merged, _ = merge({"93034": old}, [dict(self.shell)], "2026-10-26")
+        self.assertIn("cno=93034", merged[0]["orderUrl"])
+
+    def test_inherit_roundtrip_preserves_flavor_sets(self):
+        # 繼承(compact 格式) → write_coupons_js → load：flavorIdx 仍指向有效 flavorSets
+        old = self._old(items=list(self.items),
+                        flavorSets=[[{"name": "鬆厚", "priceAdd": 0}]])
+        merged, _ = merge({"93034": old}, [dict(self.shell)], "2026-10-26")
+        tmp = REPO / "public" / "coupons.inherit-test.js"
+        write_coupons_js(merged, "2026-10-26T00:00:00", path=tmp)
+        loaded = load_coupons_js(tmp)
+        it = loaded["93034"]["items"][0]
+        fs = loaded["93034"]["flavorSets"]
+        self.assertEqual(it["flavorIdx"], 0)
+        self.assertLess(it["flavorIdx"], len(fs))
+        tmp.unlink()
+
+
 class TestCouponsJsRoundtrip(unittest.TestCase):
     def test_write_and_load(self):
         tmp = REPO / "public" / "coupons.test.js"

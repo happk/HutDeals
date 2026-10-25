@@ -7,6 +7,14 @@
 
 ## 未分配
 
+- **官券補全欄位每日保留**：`build_coupons.merge()` 對官網列表產的新殼繼承舊券的 enrich
+  補全欄位——items＋flavorSets（同進同出，防 flavorIdx 懸空）、units、msrp、orderType、
+  orderUrl（cno 直連舊者勝出）。結束「enrich 失敗一天、掉殼一天」——補全結果不再被每日
+  merge 清零；enrich 成功時仍覆寫/補缺，繼承值至多落後一個週期（修 todo c5d1634-1；
+  欄位集合經 exp_prob 實測由 todo 記錄的三欄校正為六欄）。測試：`test_build_coupons`
+  TestMergeInherit +9（含繼承→write→load roundtrip）；快照模擬 `sim_merge_snapshot.py`
+  對真實 coupons.js 驗證補全券 100% 保留、外部券 682 張零變動。分析與計畫：
+  `exp_prob/2026-10-26_merge-inherit-fix/`。
 - **公告面板輕量語法渲染**：notices.md 內容從純文字升級為輕量語法——`### 小節標題`
   渲染為粗體、字大一級；`- `／`* ` 連續行渲染為無序圓點列表（紅色 marker）；
   其餘為段落（換行保留）。解析改為區塊化（`parseNotices`：p／h3／ul，`-` 與 `*`
