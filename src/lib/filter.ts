@@ -50,6 +50,28 @@ export function supportsOrderType(
   return couponType.includes(wanted);
 }
 
+// 搜尋索引：name＋description＋code＋items 候選品名（2026-10-26）。外部碼多為
+// description=null、內容只在 items（26821 型）；code 進索引是因部分券 name 不含
+// 5 位碼（如 93014）。WeakMap 懶快取：每券物件只組一次，之後每鍵零重建
+// （效能量測 exp_prob/2026-10-26_search-items-index/bench_search.mjs）。
+const haystackCache = new WeakMap<Coupon, string>();
+
+function haystackOf(c: Coupon): string {
+  let h = haystackCache.get(c);
+  if (h !== undefined) return h;
+  const parts = [c.name, c.description ?? "", c.code ?? ""];
+  if (c.items) {
+    const seen = new Set<string>();
+    for (const it of c.items) {
+      if (it.text && !seen.has(it.text)) seen.add(it.text);
+    }
+    for (const t of seen) parts.push(t);
+  }
+  h = parts.join(" ").toLowerCase();
+  haystackCache.set(c, h);
+  return h;
+}
+
 export function filterCoupons(
   coupons: Coupon[],
   state: FilterState,
@@ -60,9 +82,7 @@ export function filterCoupons(
   return coupons.filter((c) => {
     if (state.favOnly && !favorites.has(c.key)) return false;
     if (terms.length > 0) {
-      // 代碼也進搜尋索引：部分券的 name 不含 5 位碼（如 93014「大比薩分享餐$399」）
-      const haystack = `${c.name} ${c.description ?? ""} ${c.code ?? ""}`.toLowerCase();
-      if (!terms.every((t) => haystack.includes(t))) return false;
+      if (!terms.every((t) => haystackOf(c).includes(t))) return false;
     }
     if (state.orderType && !supportsOrderType(c.orderType, state.orderType)) return false;
     if (!inPriceRange(c.price, state.priceMin, state.priceMax)) return false;

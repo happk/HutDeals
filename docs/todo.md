@@ -48,27 +48,6 @@
 
    修法方向：補失敗告警（開 issue）。歸屬錯誤分級藍圖（2026-10-25 拍板擱置）一起做。
 
-### 6a7ec13 (2026-10-14)
-
-1. **搜尋查不到卡片上的餐點內容物**
-
-   問題：[`src/lib/filter.ts:filterCoupons()`](../src/lib/filter.ts#L53-L77) 的搜尋字串只組 `name`、`description`、`code`。
-   卡片上實際顯示的餐點候選沒有進去（[`src/types.ts:MealItem`](../src/types.ts#L8-L27) 的 `items[].text`）。
-
-   放大問題的是 [`script/site/ingest_external.py:external_to_coupon()`](../script/site/ingest_external.py#L59-L119)。
-   它在能拆出結構化餐點時，把 `description` 設為 `None`（L70-L74）。
-   兩個行為疊在一起，內容物就對搜尋完全隱形。
-
-   影響：`26821` 的 `description` 是空的，內容物「黃金雞軟骨(小份)」寫在 `items`。
-   搜「黃金雞軟骨」查不到它。
-   全站有 356 筆券的內容物含這個品名。
-   能被搜到的只有 1 筆，因為那一筆的 `description` 剛好也含該詞。
-
-   修法方向：產出端加一個 `searchText` 欄位。餐點品名只有 106 個不重複值，去重後很小。
-   或讓前端把 `items` 併入搜尋字串。這個做法每次輸入要掃 13 萬字元，宜先去重。
-
-   驗證：`exp_prob/2026-10-14_search-offline-archive/probe.py`
-
 ### c5d1634 (2026-09-08)
 
 1. **`merge()` 不保留前日的 `items`／`orderType`／`msrp`**

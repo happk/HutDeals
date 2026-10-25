@@ -7,7 +7,7 @@ import {
   toSearchParams,
   DEFAULT_STATE,
 } from "./filter";
-import type { Coupon } from "../types";
+import type { Coupon, MealItem } from "../types";
 
 function mk(partial: Partial<Coupon>): Coupon {
   return {
@@ -66,6 +66,56 @@ describe("filterCoupons", () => {
     // 代碼可與其他關鍵字並用（空格分隔全部命中）
     const both = { ...DEFAULT_STATE, q: "93014 分享" };
     expect(filterCoupons(list, both, new Set()).map((c) => c.key)).toEqual(["93014"]);
+  });
+
+  // items[].text 進搜尋索引（2026-10-26）：外部碼 description=null、內容只在 items
+  const mi = (text: string): MealItem => ({
+    text, group: "second", groupIdx: 1, priceAdd: 0, flavorIdx: null,
+  });
+
+  it("search: items 命中——26821 型（無 description、內容只在 items）", () => {
+    const list = [
+      ...coupons, // 既有 fixture 無 items，同詞不中＝對照組
+      mk({ key: "x1", name: "外帶買大送小", description: null, items: [mi("黃金雞軟骨(小份)")] }),
+    ];
+    const s = { ...DEFAULT_STATE, q: "雞軟骨" };
+    expect(filterCoupons(list, s, new Set()).map((c) => c.key)).toEqual(["x1"]);
+  });
+
+  it("search: 跨欄位 AND——一詞在 name、一詞只在 items", () => {
+    const list = [
+      mk({ key: "y1", name: "大比薩$198", items: [mi("薯金幣(小份)")] }),
+      mk({ key: "y2", name: "小比薩$99", items: [mi("薯金幣(小份)")] }),
+    ];
+    const both = { ...DEFAULT_STATE, q: "大比薩 薯金幣" };
+    expect(filterCoupons(list, both, new Set()).map((c) => c.key)).toEqual(["y1"]);
+    const one = { ...DEFAULT_STATE, q: "大比薩" };
+    expect(filterCoupons(list, one, new Set()).map((c) => c.key)).toEqual(["y1"]);
+  });
+
+  it("search: offline 殘影的 items 也搜得到", () => {
+    const list = [
+      mk({ key: "g1", name: "過期券", status: "offline", items: [mi("黃金雞軟骨(小份)")] }),
+    ];
+    const s = { ...DEFAULT_STATE, q: "雞軟骨" };
+    expect(filterCoupons(list, s, new Set()).map((c) => c.key)).toEqual(["g1"]);
+  });
+
+  it("search: 同一 list 連續兩次過濾結果一致（WeakMap 快取冪等）", () => {
+    const list = [mk({ key: "c1", name: "套餐", items: [mi("可樂")] })];
+    const s = { ...DEFAULT_STATE, q: "可樂" };
+    const first = filterCoupons(list, s, new Set()).map((c) => c.key);
+    const second = filterCoupons(list, s, new Set()).map((c) => c.key);
+    expect(second).toEqual(["c1"]);
+    expect(second).toEqual(first);
+  });
+
+  it("search: 空 items 視同無 items，仍可搜 name/description/code", () => {
+    const list = [
+      mk({ key: "e1", name: "個人比薩$101", description: null, items: [] }),
+    ];
+    expect(filterCoupons(list, { ...DEFAULT_STATE, q: "個人比薩" }, new Set()).map((c) => c.key)).toEqual(["e1"]);
+    expect(filterCoupons(list, { ...DEFAULT_STATE, q: "雞軟骨" }, new Set())).toEqual([]);
   });
 
   it("include tags are OR, exclude tags remove", () => {
