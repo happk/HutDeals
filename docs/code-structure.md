@@ -49,6 +49,7 @@ script/
         ├── test_confirm_cats_none.py  # cmd_confirm 組分類含 None 不崩潰
         ├── test_explore_dedup.py      # cmd_explore 對 confirm 去重
         ├── test_fetch_retry.py        # orderflow 抓取重試退避
+        ├── test_ingest_offline.py     # ingest_external 判死歸檔（dead/empty 標 offline）
         ├── test_step2_visibility.py   # step2 失敗寫 alerts/顯示於 admin
         └── fixtures/         # plu_pdpop.html + step2/*.html + orderflow/*.html（官網真實抓取）
 ```

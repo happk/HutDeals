@@ -12,6 +12,33 @@
 
 ## 潛在漏洞
 
+### cb13be8 (2026-10-25)
+
+1. **`confirm` 退役判斷卡死：dead 缺 `dead_since` 永不轉 empty**
+
+   問題：[`script/scan/daily.py:cmd_confirm()`](../script/scan/daily.py#L258-L268) 的
+   `codes[code].get("dead_since", today)` fallback，遇到缺 `dead_since` 的 dead 紀錄時 days 恆為 0。
+   15 筆 2026-09-04 遺留紀錄全為此形狀（皆不在 coupons.js）。
+
+   影響：這些碼永不退役、每日被 confirm 白白探測一次，也不會被 explore 盯復活。
+
+   修法方向：缺 `dead_since` 的 dead 直接轉 empty（一次性遷移，或改 fallback 判斷）。
+
+   驗證：`exp_prob/2026-10-25_search-offline-archive/probe_fix_sim.py`（§2）
+
+2. **`merge_alive_records` 復活不清殘留 `dead_since`**
+
+   問題：[`script/scan/coverage_sync.py:merge_alive_records()`](../script/scan/coverage_sync.py#L47-L52)
+   以 `dict(old)` 起底、只覆寫 `status="alive"`，舊 `dead_since` 殘留。
+
+   影響：活碼帶死亡日欄位。
+   消費端若以 `dead_since` 存在與否判斷就會誤判
+   （[`script/site/ingest_external.py:_mark_offline_by_state()`](../script/site/ingest_external.py) 已明確以 `status` 為準避開）。
+
+   修法方向：翻活時 `rec.pop("dead_since", None)`，與 confirm 復活路徑（daily.py L236）一致。
+
+   驗證：`exp_prob/2026-10-25_search-offline-archive/probe_fix_sim.py`（§3）
+
 ### 6a7ec13 (2026-10-14)
 
 1. **搜尋查不到卡片上的餐點內容物**
@@ -32,44 +59,6 @@
    或讓前端把 `items` 併入搜尋字串。這個做法每次輸入要掃 13 萬字元，宜先去重。
 
    驗證：`exp_prob/2026-10-14_search-offline-archive/probe.py`
-
-2. **外部碼沒有離線歸檔機制**
-
-   問題：掃號已判死的外部碼，仍以 `active` 留在 [`public/coupons.js`](../public/coupons.js)。
-   三段機制一起作用才會漏。
-
-   - [`script/site/ingest_external.py:main()`](../script/site/ingest_external.py#L122-L170)
-     只入庫 `status=="alive"` 的 [`data/scan_state.json`](../data/scan_state.json) 紀錄（L132-L135）。
-     `dead` 與 `empty` 連迴圈都進不去。
-     coupons.js 的舊條目就原封不動。
-     `status` 留 `active`，`lastSeen` 與 `verifiedAt` 凍結在最後一次存活的日子。
-
-   - [`script/site/build_coupons.py:merge()`](../script/site/build_coupons.py#L87-L145)
-     刻意保留 `source=="verified-external"` 的條目，不標 offline（L132-L136）。
-     它信任 ingest 的結果。ingest 不處理離線，這個缺口就沒有人補。
-
-   - [`src/lib/filter.ts:filterCoupons()`](../src/lib/filter.ts#L53-L77) 一律排除非 active 的規則（L60）
-     對外部碼形同無效。它們永遠是 `active`。
-
-   影響：`26821` 在 scan_state 是 `empty`，`dead_since=2026-09-30`。
-   coupons.js 裡仍是 `active`。
-   全站 35 筆這樣。31 筆 `empty` 已死 14 天，4 筆 `dead` 死 3 到 4 天。
-   coupons.js 現有 20 筆 offline 全是官網下架，外部碼 0 筆。
-
-   前端沒有失效標示。列表排除 offline，使用者看不到。
-   [`src/components/CouponDetail.tsx`](../src/components/CouponDetail.tsx#L131-L138) 有橫幅，但只在深連結看得到。
-   深連結走 [`src/App.tsx`](../src/App.tsx#L120-L121) 的 `?code=`，那一行不過濾 status。
-   橫幅文案寫死「已從官網下架」，對外部碼的語意不符。
-   [`script/site/gen_sitemap.py`](../script/site/gen_sitemap.py#L32) 也把死碼收進 sitemap。
-
-   修法方向：讓 ingest 依 scan_state 標 offline。
-   `empty` 立即離線，`dead` 走 7 天寬限期。
-   `offlineSince` 取 `dead_since`，保留真實死亡日，每日重跑也無 diff。
-   復活路徑已有（[`ingest_external.py:L154-L158`](../script/site/ingest_external.py#L154-L158)）。
-   滿 60 天由 `merge()` 自然清除。
-   另有兩個決定要一起做：離線後是否仍顯示。橫幅文案怎麼按來源分支。
-
-   驗證：`exp_prob/2026-10-14_search-offline-archive/probe_archive.py`（`probe.py` 為現象快照）
 
 ### c5d1634 (2026-09-08)
 

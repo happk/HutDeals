@@ -70,6 +70,9 @@ export default function CouponCard({
 }) {
   const [copied, setCopied] = useState(false);
   const name = displayName(coupon.name);
+  const dead = coupon.status !== "active";
+  // 殘影卡（2026-10-25）：離線券不提供訂購連結；代碼複製保留
+  const orderUrl = dead ? undefined : coupon.orderUrl;
 
   const copyCode = async () => {
     if (!coupon.code) return;
@@ -82,7 +85,7 @@ export default function CouponCard({
     }
   };
 
-  return (
+  const card = (
     <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-red-900/10 bg-white/95 p-4 shadow-[0_6px_18px_rgba(240,169,46,0.16)] backdrop-blur-md transition-[transform,border-color,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(240,169,46,0.3)] focus-within:border-red-400 dark:border-white/10 dark:bg-white/[0.07] dark:shadow-[0_4px_16px_rgba(0,0,0,0.35)] dark:hover:border-red-500/40">
       {/* 標題列:通路(badge) + 品名 + 收藏星 */}
       <div className="flex min-h-6 items-center gap-1.5">
@@ -150,9 +153,9 @@ export default function CouponCard({
 
       {/* 底列:前往訂購 + 代碼膠囊(代碼+複製) */}
       <div className="mt-2 flex shrink-0 gap-2">
-        {coupon.orderUrl && (
+        {orderUrl && (
           <a
-            href={coupon.orderUrl}
+            href={orderUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 rounded-[9px] bg-gradient-to-r from-red-700 to-red-600 px-3 py-2 text-center text-[14px] font-bold text-white hover:from-red-800 hover:to-red-700 dark:from-red-700 dark:to-red-500"
@@ -180,6 +183,18 @@ export default function CouponCard({
           </span>
         )}
       </div>
+    </div>
+  );
+
+  if (!dead) return card;
+  // 殘影卡：灰化降透明＋失效角標（樣式同 2026-10-25 原型方案 C）
+  return (
+    <div className="relative h-full">
+      <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl border border-amber-600/30 bg-amber-100/10" />
+      <div className="h-full opacity-55 grayscale">{card}</div>
+      <span className="absolute right-3 top-3 z-20 rounded-full border border-amber-600/50 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:border-amber-400/40 dark:bg-amber-900/30 dark:text-amber-300">
+        已失效 · 自 {coupon.offlineSince ?? "—"}
+      </span>
     </div>
   );
 }

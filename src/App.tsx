@@ -145,6 +145,10 @@ export default function App() {
 
   const shown = visible.slice(0, limit);
 
+  // 計數行拆分：活碼與殘影分開標示（殘影參與列表後，混合總數會讓「共」大於「全站」）
+  const activeVisible = visible.filter((c) => c.status === "active").length;
+  const ghostVisible = visible.length - activeVisible;
+
   // 回首頁：清除篩選 + 關詳情 + 回頂端（Header logo 按鈕）
   const goHome = () => {
     setState({ ...DEFAULT_STATE });
@@ -315,8 +319,17 @@ export default function App() {
           </div>
         )}
 
-        <p className="mt-4 text-[15px] text-slate-500 dark:text-slate-400">
-          共 {visible.length} 筆優惠(全站 {activeCount} 筆,收藏 {favorites.size} 筆)
+        <p className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-[15px] text-slate-500 dark:text-slate-400">
+          <span>共 {activeVisible} 筆</span>
+          {ghostVisible > 0 && (
+            <span className="text-slate-400 dark:text-slate-500">
+              + {ghostVisible} 筆近期失效
+            </span>
+          )}
+          <Divider />
+          <span>全站 {activeCount} 筆有效</span>
+          <Divider />
+          <span>收藏 {favorites.size} 筆</span>
           {shown.length < visible.length && (
             <span className="ml-2 text-[13px] text-slate-400 dark:text-slate-500">
               已顯示 {shown.length} 筆,往下滑載入更多
