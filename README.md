@@ -28,7 +28,7 @@
 ```
 script/site/fetch_promos.py     抓官網 promotions 頁(plu/dgt, server-rendered 全列表)
 script/site/build_coupons.py    官網列表 → 價格/標籤/通路 → 合併歷史(下架 60 天清除) → public/coupons.js
-script/site/ingest_external.py  官網驗證的外部碼(scan_state)併入 coupons.js
+script/site/ingest_external.py  官網驗證的外部碼(scan_state)併入 coupons.js；判死(dead/empty)標 offline
 script/scan/daily.py            每日掃號三工(confirm/explore/sample)：維護碼池死活 → scan_state
 script/site/enrich_official.py  官方碼 step_2 補全(通路/原價/直連兌換/結構化內容)
 .github/workflows/scan.yml         每日掃號排程(維持 scan_state)

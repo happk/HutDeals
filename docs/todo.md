@@ -39,6 +39,15 @@
 
    驗證：`exp_prob/2026-10-25_search-offline-archive/probe_fix_sim.py`（§3）
 
+3. **`deploy-pages.yml` 失敗不開 issue**
+
+   問題：[`.github/workflows/deploy-pages.yml`](../.github/workflows/deploy-pages.yml) 沒有告警 job。
+   scan/update 兩鏈失敗都會開紅 issue，唯獨部署失敗靜默。
+
+   影響：部署掛掉無推送無記錄，網站可能停在舊版數日無人知。
+
+   修法方向：補失敗告警（開 issue）。歸屬錯誤分級藍圖（2026-10-25 拍板擱置）一起做。
+
 ### 6a7ec13 (2026-10-14)
 
 1. **搜尋查不到卡片上的餐點內容物**
