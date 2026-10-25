@@ -50,6 +50,9 @@ def merge_alive_records(recs: list[dict], source: str) -> tuple[int, int]:
                 rec[f] = r[f]
         rec.update(status="alive", lastSeen=today,
                    lastChecked=r.get("at"), source=source)
+        # 復活清死亡日（cb13be8-2，2026-10-26）：與 daily.py confirm 復活路徑一致——
+        # 殘留 dead_since 會誤導以欄位存在與否判斷的消費端
+        rec.pop("dead_since", None)
         codes[code] = rec
         if old:
             updated += 1

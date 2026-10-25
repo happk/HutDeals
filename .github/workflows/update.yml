@@ -40,17 +40,25 @@ jobs:
         run: python -m script.site.enrich_official
 
       # sitemap:讀當日 coupons.js 活躍券重產（順序須在 ingest/enrich 之後）
+      # !cancelled()：熔斷日（enrich exit 3，coupons.js 已寫部分補全）也重產——
+      # 與 commit step 同條件，避免提交新 coupons.js 卻帶舊 sitemap 的不一致
       - name: Generate sitemap
+        if: ${{ !cancelled() }}
         run: python -m script.site.gen_sitemap
 
       # enrich 的 step2 失敗併入 alerts；同步到 public 供 admin 顯示
+      # !cancelled()：同上——熔斷日新 data/scan_alerts.json 也要發布到 public
       - name: Publish alerts to public
+        if: ${{ !cancelled() }}
         run: |
           if [ -f data/scan_alerts.json ]; then
             cp data/scan_alerts.json public/scan_alerts.json
           fi
 
       - name: Commit if changed
+        # !cancelled()（9f44bb9-1 同款，2026-10-26）：熔斷/步驟失敗時 build/ingest 已寫檔的
+        # 結果照常提交（enrich 熔斷＝部分補全上站，次日 merge 繼承保住）；手動取消不撿半成品
+        if: ${{ !cancelled() }}
         id: commit
         env:
           JOB_NAME: update
@@ -142,7 +150,7 @@ jobs:
               gh issue create \
                 --title "$TITLE" \
                 --label "scrape-failed" \
-                --body "script.site.build_coupons 執行失敗(可能是官網改版)。舊的 public/coupons.js 未被覆蓋,網站仍顯示前一日資料。請查看 Actions log：$RUN_URL"
+                --body "script.site.build_coupons 執行失敗(可能是官網改版)。build 失敗時舊的 public/coupons.js 未被覆蓋；熔斷（exit 3）時已寫檔的部分結果由 commit step 提交（手動取消除外）。請查看 Actions log：$RUN_URL"
             else
               echo "open scrape-failed issue already exists, skip"
             fi
