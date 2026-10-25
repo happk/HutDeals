@@ -43,6 +43,9 @@ export default function App() {
     parseState(new URLSearchParams(window.location.search)),
   );
   const [favorites, toggleFavorite] = useFavorites();
+  // 只看收藏＝篩選快照（2026-10-26 拍板）：開啟瞬間凍結成員；
+  // 期間取消收藏只變按鈕狀態、卡片不消失，下次開啟（或重載）才重新拍照
+  const [favSnapshot, setFavSnapshot] = useState<Set<string> | null>(null);
   const { theme, toggle: toggleTheme } = useTheme();
   const [limit, setLimit] = useState(PAGE_SIZE);
   const [sizeOpen, setSizeOpen] = useState(false);
@@ -58,6 +61,13 @@ export default function App() {
       `${window.location.pathname}${qs ? `?${qs}` : ""}`,
     );
   }, [state]);
+
+  // 快照拍照時機：只在 favOnly 開關轉變的那一瞬間，收藏變動不重拍
+  useEffect(() => {
+    if (state.favOnly) setFavSnapshot((snap) => snap ?? new Set(favorites));
+    else setFavSnapshot(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.favOnly]);
 
   const patch = (partial: Partial<FilterState>) =>
     setState((s) => ({ ...s, ...partial }));
@@ -78,21 +88,24 @@ export default function App() {
     { value: "外帶", label: "自取" },
   ];
 
+  // 列表成員用快照（favOnly 開啟時），收藏按鈕顯示用 live favorites
+  const listFavorites = state.favOnly && favSnapshot ? favSnapshot : favorites;
   const visible = useMemo(
     () =>
       sortCoupons(
-        filterCoupons(data.coupon_list, state, favorites),
+        filterCoupons(data.coupon_list, state, listFavorites),
         state.sort,
         state.sortDir,
       ),
-    [data, state, favorites],
+    [data, state, listFavorites],
   );
 
-  // 篩選條件變動時重置已載入筆數（code 只控詳情窗,不影響列表,排除在 key 外）
+  // 篩選條件變動時重置已載入筆數（code 只控詳情窗,不影響列表,排除在 key 外；
+  // 收藏變動在快照制下不再改變列表,也不重置）
   const filterKey = JSON.stringify({ ...state, code: null });
   useEffect(() => {
     setLimit(PAGE_SIZE);
-  }, [filterKey, favorites]);
+  }, [filterKey]);
 
   // 滾動接近底部時再載入一頁
   useEffect(() => {

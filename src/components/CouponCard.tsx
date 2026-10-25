@@ -34,6 +34,26 @@ function ChanBadges({ orderType }: { orderType?: string | null }) {
   return <ChanBadge label="自取" tone="emerald" />;
 }
 
+/** 星形 SVG(收藏鈕)：已收藏=實心、未收藏=描邊；色彩跟隨 currentColor（文字星跨平台字型不一，2026-10-26 換 SVG） */
+function StarIcon({ filled }: { filled: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="15"
+      height="15"
+      aria-hidden="true"
+      fill={filled ? "currentColor" : "none"}
+      stroke="currentColor"
+      strokeWidth={filled ? 1.2 : 1.8}
+      strokeLinejoin="round"
+      strokeLinecap="round"
+      className="shrink-0"
+    >
+      <path d="M12 3.6l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.9-5.4 2.9 1-6L3.3 10l6-.9z" />
+    </svg>
+  );
+}
+
 /** 打勾 SVG(複製成功) */
 function CheckIcon() {
   return (
@@ -87,8 +107,13 @@ export default function CouponCard({
 
   const card = (
     <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-red-900/10 bg-white/95 p-4 shadow-[0_6px_18px_rgba(240,169,46,0.16)] backdrop-blur-md transition-[transform,border-color,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(240,169,46,0.3)] focus-within:border-red-400 dark:border-white/10 dark:bg-white/[0.07] dark:shadow-[0_4px_16px_rgba(0,0,0,0.35)] dark:hover:border-red-500/40">
-      {/* 標題列:通路(badge) + 品名 + 收藏星 */}
+      {/* 標題列:失效角標(殘影,內嵌文流) + 通路(badge) + 品名 + 收藏鈕 */}
       <div className="flex min-h-6 items-center gap-1.5">
+        {dead && (
+          <span className="shrink-0 rounded-full border border-amber-600/50 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:border-amber-400/40 dark:bg-amber-900/30 dark:text-amber-300">
+            已失效 · 自 {coupon.offlineSince ?? "—"}
+          </span>
+        )}
         <ChanBadges orderType={coupon.orderType} />
         <h2
           onClick={onOpen}
@@ -101,13 +126,14 @@ export default function CouponCard({
           onClick={onToggleFavorite}
           aria-label={isFavorite ? "取消收藏" : "加入收藏"}
           aria-pressed={isFavorite}
-          className={`shrink-0 text-lg leading-none transition-colors ${
+          className={`inline-flex shrink-0 items-center gap-1.5 rounded-[9px] border px-3 py-2 text-[14px] font-semibold transition-colors ${
             isFavorite
-              ? "text-amber-500 dark:text-amber-400"
-              : "text-slate-400 hover:text-amber-500 dark:text-slate-500 dark:hover:text-amber-400"
+              ? "border-amber-500/50 bg-amber-500/10 text-amber-500 dark:border-amber-400/40 dark:bg-amber-400/10 dark:text-amber-400"
+              : "border-slate-400/50 text-slate-400 hover:border-amber-500/60 hover:text-amber-500 dark:border-slate-500/50 dark:text-slate-500 dark:hover:border-amber-400/60 dark:hover:text-amber-400"
           }`}
         >
-          {isFavorite ? "★" : "☆"}
+          {isFavorite ? "已收藏" : "收藏"}
+          <StarIcon filled={isFavorite} />
         </button>
       </div>
 
@@ -187,14 +213,11 @@ export default function CouponCard({
   );
 
   if (!dead) return card;
-  // 殘影卡：灰化降透明＋失效角標（樣式同 2026-10-25 原型方案 C）
+  // 殘影卡：灰化降透明＋琥珀外框；失效角標內嵌標題列（2026-10-26 拍板 A，避免與放大的收藏鈕重疊）
   return (
     <div className="relative h-full">
       <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl border border-amber-600/30 bg-amber-100/10" />
       <div className="h-full opacity-55 grayscale">{card}</div>
-      <span className="absolute right-3 top-3 z-20 rounded-full border border-amber-600/50 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:border-amber-400/40 dark:bg-amber-900/30 dark:text-amber-300">
-        已失效 · 自 {coupon.offlineSince ?? "—"}
-      </span>
     </div>
   );
 }

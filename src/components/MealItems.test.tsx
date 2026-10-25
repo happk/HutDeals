@@ -51,7 +51,7 @@ describe("MealItems 結構化", () => {
     const units = [{ group: "second" as const, groupIdx: 1, cats: ["副食", "飲料"] }];
     const html = renderToStaticMarkup(<MealItems items={items} units={units} />);
     expect(html).toContain("副食/飲料");
-    expect(html).toContain("2 選1");
+    expect(html).toContain("2 選 1");
   });
 
   it("沒有 units 時退回候選 cat 聯集；無 cat 退回 group 名", () => {
