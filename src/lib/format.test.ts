@@ -43,6 +43,17 @@ describe("formatUserTime", () => {
     );
   });
 
+  // now_stamp 寫入端（2026-10-26，使用者指示）：任何時區的工作機寫出的 aware 戳，
+  // 在任何時區的瀏覽器都顯示同一瞬間的當地時間——寫入端不再依賴「無後綴=UTC」約定
+  it("aware stamps from any writer zone render correctly for any viewer", () => {
+    expect(formatUserTime("2026-10-26T01:13:40+08:00", -300)).toBe(
+      "2026-10-25 12:13（UTC-5）",
+    );
+    expect(formatUserTime("2026-10-26T01:13:40+00:00", 480)).toBe(
+      "2026-10-26 09:13（UTC+8）",
+    );
+  });
+
   // 非跨日時段
   it("formats non-midnight-crossing times", () => {
     expect(formatUserTime("2026-09-03T08:00:00", 480)).toBe(

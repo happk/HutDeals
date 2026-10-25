@@ -171,7 +171,7 @@ def main() -> int:
 
     coupons = [enrich(item, tags_table) for item in all_raw]
     merged, stats = merge(existing, coupons, today)
-    last_update = dt.datetime.now().isoformat(timespec="seconds")
+    last_update = coupons_lib.now_stamp()
     coupons_lib.write_coupons_js(merged, last_update)
     coupons_lib.write_coupons_full(merged, last_update)  # admin 分頁全量檔(2-3)
     print(f"coupons: {len(merged)} (stats={stats}) last_update={last_update} -> {COUPONS_JS}")

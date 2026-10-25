@@ -20,7 +20,7 @@ import sys
 import urllib.error
 
 from script.lib.categories import cat_tags, classify_units
-from script.lib.coupons import load_coupons_js, write_coupons_js
+from script.lib.coupons import load_coupons_js, now_stamp, write_coupons_js
 from script.lib.net import is_rate_limited
 from script.lib.orderflow import fetch_and_parse
 from script.lib.pacing import sleep_scan
@@ -66,7 +66,7 @@ def main() -> int:
             failed += 1
             step2_failures.append({"code": code, "title": c.get("name"),
                                    "error": f"HTTP {e.code}",
-                                   "at": dt.datetime.now().isoformat(timespec="seconds")})
+                                   "at": now_stamp()})
             sleep_scan(i, codes)
             continue
         except Exception as err:  # noqa: BLE001
@@ -74,7 +74,7 @@ def main() -> int:
             failed += 1
             step2_failures.append({"code": code, "title": c.get("name"),
                                    "error": str(err)[:150],
-                                   "at": dt.datetime.now().isoformat(timespec="seconds")})
+                                   "at": now_stamp()})
             sleep_scan(i, codes)
             continue
         if r is None:
@@ -82,7 +82,7 @@ def main() -> int:
             failed += 1
             step2_failures.append({"code": code, "title": c.get("name"),
                                    "error": "fetch/parse 失敗",
-                                   "at": dt.datetime.now().isoformat(timespec="seconds")})
+                                   "at": now_stamp()})
             sleep_scan(i, codes)
             continue
         step2_ok.append(code)
@@ -105,7 +105,7 @@ def main() -> int:
         print(f"  + {code} {c['name']} | 通路:{c.get('orderType')} | {c.get('priceNote')}")
         sleep_scan(i, codes)
 
-    last_update = dt.datetime.now().isoformat(timespec="seconds")
+    last_update = now_stamp()
     write_coupons_js(list(coupons.values()), last_update)
     if write_coupons_full is not None:
         write_coupons_full(list(coupons.values()), last_update)

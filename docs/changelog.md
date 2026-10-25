@@ -7,6 +7,18 @@
 
 ## 未分配
 
+- **資料時間戳可信度修復——寫入端執行時帶本地時區**：header「資料最後更新」一度顯示
+  未來時間（2026-10-26 09:13 UTC+8）。根因：`last_update` 為無時區字串，前端
+  `formatUserTime` 視為 UTC；CI runner 時鐘本為 UTC 相安無事，但該檔由本機（UTC+8）
+  重建寫入，台北時間被當 UTC 再 +8h。修復（2026-10-26 使用者指示設計修訂）：新增
+  `script.lib.coupons.now_stamp()`——`datetime.now().astimezone()` 帶出執行環境
+  時差的自描述戳（本機 `+08:00`、CI `+00:00`，工作機在任何時區皆正確），
+  `build_coupons`／`ingest_external`／`enrich_official` 的 `last_update` 與 enrich
+  step2 失敗記錄 `"at"` 共六處改用；讀取端 formatUserTime 本就支援帶 offset 字串、
+  前端零改動。已部署兩資料檔的錯誤戳就地校正（2026-10-26T01:13:40→2026-10-25T17:13:40，
+  即真實 UTC 時刻）。測試：`TestNowStamp` +3（時區無關的時刻正確性——非 UTC 機器上
+  naive 寫法必被抓）；`format.test` +1（任何寫入時區×任何讀者時區）。
+  分析與修復：`exp_prob/2026-10-26_last-update-utc/`。
 - **官券補全欄位每日保留**：`build_coupons.merge()` 對官網列表產的新殼繼承舊券的 enrich
   補全欄位——items＋flavorSets（同進同出，防 flavorIdx 懸空）、units、msrp、orderType、
   orderUrl（cno 直連舊者勝出）。結束「enrich 失敗一天、掉殼一天」——補全結果不再被每日

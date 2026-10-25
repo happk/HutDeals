@@ -196,7 +196,7 @@ def main() -> int:
 
     # 寫檔無條件（原本僅在有活碼時寫）：離線標記也需落盤；enrich 稍後本就會再寫一次
     coupon_list = sorted(coupons.values(), key=coupons_lib.coupon_sort_key)
-    last_update = dt.datetime.now().isoformat(timespec="seconds")
+    last_update = coupons_lib.now_stamp()
     coupons_lib.write_coupons_js(coupon_list, last_update)
     coupons_lib.write_coupons_full(coupon_list, last_update)  # admin 分頁全量檔(2-3)
     print(f"coupons: {len(coupon_list)} (official {len(off_keys)}"

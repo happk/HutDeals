@@ -4,12 +4,13 @@
 ingest_external.load_coupons_js + main 內聯 writer + 內聯 sort 鍵 → 統一收此。
 write_coupons_full 產 admin 分頁用的全量資料檔（2-3，2026-09-05）。
 """
+import datetime as dt
 import json
 from pathlib import Path
 
 __all__ = ["DATA_MARKER", "COUPONS_JS", "load_coupons_js", "write_coupons_js",
            "FULL_DATA_MARKER", "COUPONS_FULL_JS", "write_coupons_full",
-           "coupon_sort_key", "official_keys"]
+           "coupon_sort_key", "official_keys", "now_stamp"]
 
 from script.lib.repo import REPO  # noqa: E402
 
@@ -17,6 +18,18 @@ DATA_MARKER = "window.HUTDEALS_COUPONS = "
 COUPONS_JS = REPO / "public" / "coupons.js"
 FULL_DATA_MARKER = "window.HUTDEALS_FULL = "
 COUPONS_FULL_JS = REPO / "public" / "coupons_full.js"
+
+
+def now_stamp() -> str:
+    """當下時刻——**執行時自動帶出本地時區**的 aware ISO 秒級字串（如 +08:00；CI 為 +00:00）。
+
+    寫入端一律走此函式（2026-10-26 修，使用者指示：不能假設工作機在 +8 時區）。
+    過去各寫入者用本地時鐘寫 naive 字串——前端 formatUserTime 對無時區字串視為 UTC，
+    CI runner 恰為 UTC 相安無事，本機重建則被 +8h 顯示成未來時間（可信度事故）。
+    aware 戳自描述：讀取端（format.ts）本就支援帶 offset 字串，依 offset 解析後
+    轉瀏覽器時區——寫入端在任何時區執行都正確。歷史 naive 戳（CI 寫的 UTC）相容如舊。
+    """
+    return dt.datetime.now().astimezone().isoformat(timespec="seconds")
 # coupons.js 檔頭註解（build + ingest 都寫同一行，避免每輪 commit 震盪）
 _HEADER_COMMENT = (
     "// 由 script/site/build_coupons.py + script/site/ingest_external.py 產生；"

@@ -3,6 +3,7 @@
 執行:python -m unittest discover -s script/tests -v
 """
 
+import datetime as dt
 import json
 import sys
 import unittest
@@ -11,7 +12,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO))
 
-from script.lib.coupons import compact_coupon_items, load_coupons_js, write_coupons_js  # noqa: E402
+from script.lib.coupons import compact_coupon_items, load_coupons_js, now_stamp, write_coupons_js  # noqa: E402
 from script.site.build_coupons import (  # noqa: E402
     build_tags,
     enrich,
@@ -261,6 +262,29 @@ class TestMergeInherit(unittest.TestCase):
         self.assertEqual(it["flavorIdx"], 0)
         self.assertLess(it["flavorIdx"], len(fs))
         tmp.unlink()
+
+
+class TestNowStamp(unittest.TestCase):
+    """last_update＝執行時帶本地時區的 aware 字串（2026-10-26，使用者指示：不能假設
+    工作機在 +8 時區）。歷史事故：本機重建寫 naive 台北時間，前端視為 UTC 再 +8h
+    顯示未來時間（可信度事故）。"""
+
+    def test_format_aware(self):
+        # aware ISO 秒級：帶執行環境時差後綴（+08:00／+00:00／-05:00…）
+        self.assertRegex(now_stamp(), r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$")
+
+    def test_instant_correct_in_any_timezone(self):
+        # 解析後的真實時刻與 UTC 現在差 < 5 分鐘——時區無關，任何機器上必過；
+        # 若退回 naive 本地時鐘寫法，非 UTC 機器上必差數小時、此測試必抓。
+        s = dt.datetime.fromisoformat(now_stamp())
+        self.assertIsNotNone(s.utcoffset())
+        now_utc = dt.datetime.now(dt.timezone.utc)
+        self.assertLess(abs((s - now_utc).total_seconds()), 300)
+
+    def test_offset_is_machine_local(self):
+        # 後綴時差＝執行機器的實際時區（自描述；CI 為 +00:00）
+        s = dt.datetime.fromisoformat(now_stamp())
+        self.assertEqual(s.utcoffset(), dt.datetime.now().astimezone().utcoffset())
 
 
 class TestCouponsJsRoundtrip(unittest.TestCase):
