@@ -77,7 +77,10 @@
    熔斷日的資料只留 runner 工作區，不上 remote。
    [告警 job 的文案](../.github/workflows/scan.yml#L160-L184)寫「已完成部分已由各 job 自行 commit」，與實際不符。
 
-   修法方向：commit step 加 `if: always()`。熔斷 exit 3 時資料已寫檔，可安全提交。
+   修法方向：commit step 加 `if: !cancelled()`——原記 `always()` 經分析修正（`always()` 連手動取消都執行，
+   被取消的進程可能留下截斷檔案被推上 main；`!cancelled()` 熔斷/失敗日照提交、手動取消不撿半成品。
+   見 [todo-analysis/2026-10-26.md](todo-analysis/2026-10-26.md)）。
+   熔斷 exit 3 時資料已寫檔，可安全提交。
    或改 issue body 的措辭。
 
 2. **熔斷日 `public/scan_alerts.json` 停在昨日**
