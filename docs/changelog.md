@@ -7,6 +7,18 @@
 
 ## 未分配
 
+- **熔斷日資料保全與掃尾三項**：①掃號/更新鏈四個 commit step 加 `if: !cancelled()`——
+  熔斷（exit 3）或步驟失敗時已寫檔的當日結果照常提交，手動取消不撿半成品（todo 原記
+  字面 `always()` 經分析修正：`always()` 連手動取消都會提交被取消進程可能留下的截斷檔）。
+  confirm/explore 的 commit 一併發布 `public/scan_alerts.json`（熔斷日 admin 警報不停昨日）；
+  update.yml 同款缺口一併修（enrich 熔斷＝部分補全結果不再丟 runner，配合 merge 繼承次日保住）；
+  sample 發布／update sitemap＋發布三 step 同條件 `!cancelled()`——熔斷日提交的資料與
+  發布產物（public/scan_alerts.json、sitemap.xml）內部一致；
+  兩處告警 issue 文案改如實。②`merge_alive_records` 復活清殘留 `dead_since`（與 confirm
+  復活路徑一致）。③`orderflow.fetch_and_parse` 瞬時失敗每輪留一筆 log（碼號/輪次/例外類型），
+  失敗期間可回溯。測試：`test_coverage_sync_revive` +2、`test_fetch_retry` +1、
+  `exp_prob/2026-10-26_failure-day-data-guard/probe_wf_yaml.py` workflow 快照檢查。分析：
+  `docs/todo-analysis/2026-10-26_潛在漏洞短修盤點.md`。
 - **資料時間戳可信度修復——寫入端執行時帶本地時區**：header「資料最後更新」一度顯示
   未來時間（2026-10-26 09:13 UTC+8）。根因：`last_update` 為無時區字串，前端
   `formatUserTime` 視為 UTC；CI runner 時鐘本為 UTC 相安無事，但該檔由本機（UTC+8）

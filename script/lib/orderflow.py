@@ -201,17 +201,21 @@ def fetch_and_parse(code: str, fetcher=None, retries: int = FETCH_RETRIES,
         except urllib.error.HTTPError as e:
             if is_rate_limited(e):
                 raise  # 熔斷給呼叫端處理（不重試）
+            # 瞬時失敗每輪留一筆 log（9f44bb9-3，2026-10-26）：失敗期間可回溯
+            print(f"  {code}: attempt {attempt + 1}/{retries} HTTP {e.code}，重試")
             if attempt + 1 >= retries:
                 return None
             sleep(attempt + 1)
             continue
-        except Exception:  # noqa: BLE001
+        except Exception as e:  # noqa: BLE001
+            print(f"  {code}: attempt {attempt + 1}/{retries} {type(e).__name__}: {e}")
             if attempt + 1 >= retries:
                 return None
             sleep(attempt + 1)
             continue
         parsed = parse_menu_html(code, html)
         if parsed is None:
+            print(f"  {code}: attempt {attempt + 1}/{retries} 解析失敗（空回應/變體），重試")
             if attempt + 1 >= retries:
                 return None
             sleep(attempt + 1)

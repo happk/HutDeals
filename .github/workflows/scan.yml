@@ -73,17 +73,22 @@ jobs:
           LIMIT: ${{ inputs.smoke && inputs.limit || '0' }}
         run: python -m script.scan.daily confirm --limit "$LIMIT"
       - name: Commit if changed
+        # !cancelled()（9f44bb9-1，2026-10-26）：熔斷/步驟失敗時已寫檔的當日結果照常提交；
+        # 手動取消不提交（被取消的進程可能留下截斷檔案）——失敗要撿、取消不撿
+        if: ${{ !cancelled() }}
         env:
           JOB_NAME: confirm
         run: |
+          # 熔斷日 admin 警報不停昨日（9f44bb9-2）：confirm 也發布 alerts 到 public
+          if [ -f data/scan_alerts.json ]; then cp data/scan_alerts.json public/scan_alerts.json; fi
           if git diff --quiet -- data/scan_state.json data/scan_alerts.json \
-            data/scan-records/scan-history.md; then
+            data/scan-records/scan-history.md public/scan_alerts.json; then
             echo "no changes"
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/scan_state.json data/scan_alerts.json \
-              data/scan-records/scan-history.md
+              data/scan-records/scan-history.md public/scan_alerts.json
             git commit -m "daily scan confirm ($(date -u +%F))"
             # 以最新 remote 為主體重排後再推；真內容衝突則 abort 並留備份分支
             # --autostash：各 job 只 add 部分檔案，workdir 殘留未暫存變更時 rebase 才不會被拒
@@ -136,17 +141,21 @@ jobs:
           LIMIT: ${{ inputs.smoke && inputs.limit || '0' }}
         run: python -m script.scan.daily explore --limit "$LIMIT"
       - name: Commit if changed
+        # !cancelled()：同 confirm——失敗日保已寫檔結果，手動取消不撿半成品
+        if: ${{ !cancelled() }}
         env:
           JOB_NAME: explore
         run: |
+          if [ -f data/scan_alerts.json ]; then cp data/scan_alerts.json public/scan_alerts.json; fi
           if git diff --quiet -- data/scan_state.json data/scan_coverage.json \
-            data/scan_alerts.json \
+            data/scan_alerts.json public/scan_alerts.json \
             data/scan-records/scan-history.md; then
             echo "no changes"
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/scan_state.json data/scan_coverage.json data/scan_alerts.json \
+              public/scan_alerts.json \
               data/scan-records/scan-history.md
             git commit -m "daily scan explore ($(date -u +%F))"
             # 以最新 remote 為主體重排後再推；真內容衝突則 abort 並留備份分支
@@ -200,10 +209,15 @@ jobs:
         run: python -m script.scan.daily sample --limit "$LIMIT"
 
       # admin.html(部署自 public/)讀得到警告檔;sample 是三工最後一工,此時 alerts 已是當日定稿
+      # !cancelled()：熔斷日（python exit 3 已寫檔）也發布——與 commit step 同條件，
+      # 避免提交新 data/scan_alerts.json 卻帶舊 public 版的不一致
       - name: Publish alerts to public
+        if: ${{ !cancelled() }}
         run: cp data/scan_alerts.json public/scan_alerts.json
 
       - name: Commit if changed
+        # !cancelled()：同 confirm——失敗日保已寫檔結果，手動取消不撿半成品
+        if: ${{ !cancelled() }}
         env:
           JOB_NAME: sample
         run: |
@@ -301,7 +315,7 @@ jobs:
               gh issue create \
                 --title "$TITLE" \
                 --label "scan-failed" \
-                --body "script.scan.daily 某工執行失敗（熔斷或官網改版）。已完成部分已由各 job 自行 commit。請看 Actions log：$RUN_URL"
+                --body "script.scan.daily 某工執行失敗（熔斷或官網改版）。熔斷（exit 3）時已寫檔的當日結果已由各 job 的 commit step 提交（手動取消除外）。請看 Actions log：$RUN_URL"
             else
               echo "open scan-failed issue already exists, skip"
             fi

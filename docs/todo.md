@@ -26,20 +26,7 @@
 
    驗證：`exp_prob/2026-10-25_search-offline-archive/probe_fix_sim.py`（§2）
 
-2. **`merge_alive_records` 復活不清殘留 `dead_since`**
-
-   問題：[`script/scan/coverage_sync.py:merge_alive_records()`](../script/scan/coverage_sync.py#L47-L52)
-   以 `dict(old)` 起底、只覆寫 `status="alive"`，舊 `dead_since` 殘留。
-
-   影響：活碼帶死亡日欄位。
-   消費端若以 `dead_since` 存在與否判斷就會誤判
-   （[`script/site/ingest_external.py:_mark_offline_by_state()`](../script/site/ingest_external.py) 已明確以 `status` 為準避開）。
-
-   修法方向：翻活時 `rec.pop("dead_since", None)`，與 confirm 復活路徑（daily.py L236）一致。
-
-   驗證：`exp_prob/2026-10-25_search-offline-archive/probe_fix_sim.py`（§3）
-
-3. **`deploy-pages.yml` 失敗不開 issue**
+2. **`deploy-pages.yml` 失敗不開 issue**
 
    問題：[`.github/workflows/deploy-pages.yml`](../.github/workflows/deploy-pages.yml) 沒有告警 job。
    scan/update 兩鏈失敗都會開紅 issue，唯獨部署失敗靜默。
@@ -66,38 +53,6 @@
    影響：現靠 `price_selling` 撿回。換一張券未必有。
 
    修法方向：放寬 `$` 可選，但要同步標 `priceNote=起`。起價不當固定價。
-
-### 9f44bb9 (2026-09-08)
-
-1. **三工的「Commit if changed」缺 `if: always()`**
-
-   問題：[`.github/workflows/scan.yml`](../.github/workflows/scan.yml) 的 [confirm](../.github/workflows/scan.yml#L73-L84)／[explore](../.github/workflows/scan.yml#L106-L118)／[sample](../.github/workflows/scan.yml#L144-L156) 三個 job，commit step 沒有 `if: always()`。
-
-   影響：step2 層級熔斷或未預期例外使 job 失敗時，[`script/scan/daily.py`](../script/scan/daily.py) 已 `save_state()`、已寫 alerts 的當日結果不會被 commit。
-   熔斷日的資料只留 runner 工作區，不上 remote。
-   [告警 job 的文案](../.github/workflows/scan.yml#L160-L184)寫「已完成部分已由各 job 自行 commit」，與實際不符。
-
-   修法方向：commit step 加 `if: !cancelled()`——原記 `always()` 經分析修正（`always()` 連手動取消都執行，
-   被取消的進程可能留下截斷檔案被推上 main；`!cancelled()` 熔斷/失敗日照提交、手動取消不撿半成品。
-   見 [todo-analysis/2026-10-26.md](todo-analysis/2026-10-26.md)）。
-   熔斷 exit 3 時資料已寫檔，可安全提交。
-   或改 issue body 的措辭。
-
-2. **熔斷日 `public/scan_alerts.json` 停在昨日**
-
-   問題：[`public/scan_alerts.json`](../public/scan_alerts.json) 只在 [sample 尾工](../.github/workflows/scan.yml#L141-L142) 與 [`update.yml`](../.github/workflows/update.yml#L44-L49) 複製。
-
-   影響：confirm 或 explore 熔斷中斷鏈時，public 警報停在昨日。admin 看不出當日熔斷，當日唯一警示是 GitHub issue。
-
-   修法方向：各 job commit 時一併複製，或由 alert job 補一份。
-
-3. **`orderflow` 把程式內部錯誤也當瞬時錯誤重試**
-
-   問題：[`script/lib/orderflow.py:fetch_and_parse()`](../script/lib/orderflow.py#L186-L221) 的 `except Exception` 範圍太寬。
-
-   影響：自身的 bug 也被吞掉，最多重試 3 次。失敗期間沒有任何 log，難以回溯。
-
-   修法方向：限縮可重試的例外類型，或每輪失敗 print 一筆。
 
 ## 架構優化
 

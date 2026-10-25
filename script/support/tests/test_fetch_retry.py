@@ -67,6 +67,20 @@ class TestFetchRetry(unittest.TestCase):
         self.assertIsNone(r)
         self.assertEqual(fetcher.calls, 3)
 
+    def test_transient_failure_logged(self):
+        """瞬時失敗每輪留一筆 log（9f44bb9-3）：失敗期間可回溯。"""
+        import io
+        from contextlib import redirect_stdout
+        fetcher = _Flaky(99, urllib.error.URLError("down"))
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            r = fetch_and_parse("91113", fetcher, sleep=lambda _: None)
+        self.assertIsNone(r)
+        out = buf.getvalue()
+        self.assertEqual(out.count("attempt"), 3)   # 3 輪各一筆
+        self.assertIn("URLError", out)              # 例外類型可辨識
+        self.assertIn("91113", out)                 # 碼可辨識
+
     def test_empty_html_retries_then_none(self):
         """空回應視為瞬時失敗：重試 3 次後回 None。"""
 
