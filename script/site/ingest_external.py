@@ -4,6 +4,8 @@
 寫入/排序三份重複）；official_keys 也進 lib。
 
 資料來源：data/scan_state.json（scan_run 產出，status=alive 且不在官網列表 = 外部碼）。
+判死歸檔（2026-10-25）：scan_state 為 dead/empty 的既有外部碼標 offline（dead/empty 展示不分、
+offlineSince=dead_since；60 天清除由 build_coupons.merge 接手、復活由活碼迴圈翻回）。
 對映（scan_state → Coupon）：
     code         → key/code（5 位碼即 key）
     title        → name；desc_head → description（去「外帶/外送」前綴）
@@ -119,6 +121,33 @@ def external_to_coupon(rec: dict, today: str) -> dict:
     }
 
 
+def _mark_offline_by_state(coupons: dict[str, dict], state_codes: dict, today: str) -> int:
+    """掃號判死的外部碼標 offline（dead/empty 展示不分，2026-10-25 拍板）。
+
+    對帳三規則：
+    - state=dead 或 empty → offline，offlineSince=dead_since（冪等：回填判死當天，
+      每日重跑同值）。缺 dead_since 的遺留形狀退取券的 lastSeen、再沒有取 today。
+    - state=alive → 不動（交給既有活碼迴圈，含復活翻回 offline→active）。
+    - 查無紀錄 → 不動（無證據不判死）。
+    只碰 source=verified-external；官網碼歸 build_coupons.merge 管。
+    回傳翻轉筆數（已 offline 且 offlineSince 相同者不計，保每日 diff 最小）。
+    """
+    flipped = 0
+    for key, coupon in coupons.items():
+        if coupon.get("source") != "verified-external":
+            continue
+        rec = state_codes.get(key)
+        if rec is None or rec.get("status") not in ("dead", "empty"):
+            continue
+        since = rec.get("dead_since") or coupon.get("lastSeen") or today
+        if coupon.get("status") == "offline" and coupon.get("offlineSince") == since:
+            continue
+        coupon["status"] = "offline"
+        coupon["offlineSince"] = since
+        flipped += 1
+    return flipped
+
+
 def main() -> int:
     if not STATE_PATH.exists():
         print("no scan_state.json — run scan_run first", file=sys.stderr)
@@ -129,13 +158,17 @@ def main() -> int:
     coupons = coupons_lib.load_coupons_js()
     off_keys = official_keys(coupons)
 
+    # 判死歸檔走訪：須在「無活碼」早退之前（活碼清零那天離線標記也要落盤）
+    offline_count = _mark_offline_by_state(coupons, state.get("codes", {}), today)
+    if offline_count:
+        print(f"  offline {offline_count} 筆（掃號判死）")
+
     external = [
         {**rec, "code": code} for code, rec in state.get("codes", {}).items()
         if rec.get("status") == "alive" and code not in off_keys
     ]
     if not external:
         print("no external alive codes to ingest")
-        return 0
 
     new_count = 0
     for rec in external:
@@ -161,12 +194,13 @@ def main() -> int:
         tag = f"  <<{coupon['partner']}" if coupon["partner"] else ""
         print(f"  + {code} {coupon['name']} | ${coupon['price']} | {coupon['orderType']}{tag}")
 
+    # 寫檔無條件（原本僅在有活碼時寫）：離線標記也需落盤；enrich 稍後本就會再寫一次
     coupon_list = sorted(coupons.values(), key=coupons_lib.coupon_sort_key)
     last_update = dt.datetime.now().isoformat(timespec="seconds")
     coupons_lib.write_coupons_js(coupon_list, last_update)
     coupons_lib.write_coupons_full(coupon_list, last_update)  # admin 分頁全量檔(2-3)
     print(f"coupons: {len(coupon_list)} (official {len(off_keys)}"
-          f" + external {new_count}) -> {COUPONS_JS}")
+          f" + external {new_count}, offline-marked {offline_count}) -> {COUPONS_JS}")
     return 0
 
 

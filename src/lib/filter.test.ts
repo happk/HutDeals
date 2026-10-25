@@ -34,15 +34,20 @@ const coupons: Coupon[] = [
 ];
 
 describe("filterCoupons", () => {
-  it("always hides offline (no toggle since redesign 2-2)", () => {
+  it("offline coupons participate in filtering (ghost cards, 2026-10-25)", () => {
     expect(filterCoupons(coupons, DEFAULT_STATE, new Set()).map((c) => c.key)).toEqual(
-      ["a", "b", "c", "d"],
+      ["a", "b", "c", "d", "e"],
     );
   });
 
   it("search: multiple space-separated terms all match (case-insensitive)", () => {
     const s = { ...DEFAULT_STATE, q: "比薩 $198" };
     expect(filterCoupons(coupons, s, new Set()).map((c) => c.key)).toEqual(["a"]);
+  });
+
+  it("search: 離線券也搜得到（殘影卡參與搜尋）", () => {
+    const s = { ...DEFAULT_STATE, q: "過期" };
+    expect(filterCoupons(coupons, s, new Set()).map((c) => c.key)).toEqual(["e"]);
   });
 
   it("search: 優惠代碼命中品名不含碼的券（93014 型）", () => {
@@ -67,7 +72,7 @@ describe("filterCoupons", () => {
     const inc = { ...DEFAULT_STATE, includeTags: ["個人比薩", "折扣"] };
     expect(filterCoupons(coupons, inc, new Set()).map((c) => c.key)).toEqual(["b", "c"]);
     const ex = { ...DEFAULT_STATE, excludeTags: ["買一送一"] };
-    expect(filterCoupons(coupons, ex, new Set()).map((c) => c.key)).toEqual(["b", "c", "d"]);
+    expect(filterCoupons(coupons, ex, new Set()).map((c) => c.key)).toEqual(["b", "c", "d", "e"]);
   });
 
   it("orderType filter", () => {
@@ -79,13 +84,13 @@ describe("filterCoupons", () => {
     const minOnly = { ...DEFAULT_STATE, priceMin: 200 };
     expect(filterCoupons(coupons, minOnly, new Set()).map((c) => c.key)).toEqual(["d"]);
     const maxOnly = { ...DEFAULT_STATE, priceMax: 150 };
-    expect(filterCoupons(coupons, maxOnly, new Set()).map((c) => c.key)).toEqual(["b"]);
+    expect(filterCoupons(coupons, maxOnly, new Set()).map((c) => c.key)).toEqual(["b", "e"]);
     const both = { ...DEFAULT_STATE, priceMin: 100, priceMax: 200 };
     expect(filterCoupons(coupons, both, new Set()).map((c) => c.key)).toEqual(["a", "b"]);
-    // null price 不在任何設限範圍
+    // null price 不在任何設限範圍（離線 e=$50 參與價格篩選）
     const nullExcl = { ...DEFAULT_STATE, priceMax: 300 };
     expect(filterCoupons(coupons, nullExcl, new Set()).map((c) => c.key)).toEqual([
-      "a", "b", "d",
+      "a", "b", "d", "e",
     ]);
   });
 
@@ -105,16 +110,17 @@ describe("filterCoupons", () => {
 });
 
 describe("sortCoupons", () => {
-  it("price asc puts null last", () => {
+  it("price asc: null price last among actives, offline ghost always last", () => {
     const s = sortCoupons(coupons, "price", "asc").map((c) => c.key);
-    expect(s[s.length - 1]).toBe("c");
-    expect(s[0]).toBe("e");
+    expect(s[0]).toBe("b");            // 活碼最便宜
+    expect(s[s.length - 2]).toBe("c"); // null 價在活碼中恆最後
+    expect(s[s.length - 1]).toBe("e"); // 離線殘影恆最後（不受欄位/方向影響）
   });
 
-  it("price desc puts null last too", () => {
+  it("price desc: null last too, ghost still last", () => {
     const s = sortCoupons(coupons, "price", "desc").map((c) => c.key);
-    expect(s[s.length - 1]).toBe("c");
     expect(s[0]).toBe("d");
+    expect(s[s.length - 1]).toBe("e");
   });
 
   it("seen sorts by firstSeen (加入時間)", () => {

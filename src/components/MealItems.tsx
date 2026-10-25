@@ -10,7 +10,7 @@ interface LegacyItem {
 /** 尾巴 (N選M) 或 (擇一) 註記（舊格式分類用） */
 function tailPick(s: string): { note: string; rest: string } | null {
   let m = s.match(/[（(]\s*(\d{1,2})\s*選\s*(\d{1,2})\s*[)）]\s*$/);
-  if (m) return { note: `（${m[1]}選${m[2]}）`, rest: s.slice(0, m.index).trim() };
+  if (m) return { note: `（${m[1]} 選 ${m[2]}）`, rest: s.slice(0, m.index).trim() };
   m = s.match(/[（(]擇一[)）]\s*$/);
   if (m) return { note: "（擇一）", rest: s.slice(0, m.index).trim() };
   return null;
@@ -159,8 +159,8 @@ function groupTitle(group: MealItem["group"], cats: string[], count: number): st
     // 舊資料可能有無 group 的固定內容項（如 94555/94666）→ 不可顯示 undefined
     label = GROUP_LABEL[group] ?? "內容";
   }
-  // add(加購) 是「選購」，其餘是「N 選1」
-  return group === "add" ? `${label}（${count} 種）` : `${label}（${count} 選1）`;
+  // add(加購) 是「選購」，其餘是「N 選 1」
+  return group === "add" ? `${label}（${count} 種）` : `${label}（${count} 選 1）`;
 }
 
 /** 取候選的口味清單（flavorIdx → flavorSets 解引用） */

@@ -1,7 +1,8 @@
 # HutDeals 工作流總覽（data pipeline）
 
 > 本檔是**流程圖與現狀的權威文件**（與 `code-structure.md` 同級）；動線改動時同步更新。
-> 更新：2026-09-09（explore 去重、cron-job.org 主要＋GitHub cron 備援讓賢、pacing 中場 30s）。
+> 更新：2026-09-09（explore 去重、cron-job.org 主要＋GitHub cron 備援讓賢、pacing 中場 30s）、
+> 2026-10-25（ingest_external 判死歸檔：dead/empty 標 offline、offlineSince=dead_since）。
 
 ## 1. 全域資料流
 
@@ -14,7 +15,7 @@ flowchart LR
 
   subgraph 資料流["資料流"]
     OFF["官網 promotions 頁"] --> BUILD["build_coupons.py<br/>解析→合併"]
-    STATE[("data/scan_state.json<br/>碼池(活/死/空)")] --> INGEST["ingest_external.py<br/>外部碼併入"]
+    STATE[("data/scan_state.json<br/>碼池(活/死/空)")] --> INGEST["ingest_external.py<br/>外部碼併入＋判死標離線"]
     BUILD --> INGEST
     INGEST --> ENRICH["enrich_official.py<br/>官方碼補全"]
     ENRICH --> OUT[("public/coupons.js")]
@@ -43,7 +44,7 @@ stateDiagram-v2
 | 〃 串行 | `scan.daily explore` | 16/26 潛在碼位 M1 普查（**去重**：剔除當日 confirm 已確認的 alive/dead），新活碼自動入庫 |
 | 〃 串行 | `scan.daily sample` | 潛在未知號段抽樣（2026-09-08 起減半；命中→admin 警告） |
 | scan 成功 dispatch | `site.build_coupons`（update.yml） | 官網列表 → coupons.js 本體 |
-| 〃 | `site.ingest_external` | scan_state 活碼 → coupons.js（外部碼） |
+| 〃 | `site.ingest_external` | scan_state 對帳 → coupons.js（外部碼）：活碼入庫、判死（dead/empty）標 offline（offlineSince=dead_since） |
 | 〃 | `site.enrich_official` | 官方碼 step_2 補全（只補缺不覆蓋） |
 | 〃 | `site.gen_sitemap` | 產 sitemap.xml（主站+券深連結） |
 | update 成功 dispatch | `deploy-pages.yml` | npm build → GitHub Pages（push 亦觸發） |

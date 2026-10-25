@@ -56,8 +56,8 @@ export function filterCoupons(
   favorites: Set<string>,
 ): Coupon[] {
   const terms = state.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  // 離線券（殘影卡，2026-10-25）參與搜尋與全部篩選；活碼恆前的視覺分隔由 sortCoupons 負責
   return coupons.filter((c) => {
-    if (c.status !== "active") return false;
     if (state.favOnly && !favorites.has(c.key)) return false;
     if (terms.length > 0) {
       // 代碼也進搜尋索引：部分券的 name 不含 5 位碼（如 93014「大比薩分享餐$399」）
@@ -85,6 +85,10 @@ export function sortCoupons(
   const m = dir === "asc" ? 1 : -1;
   const list = [...coupons];
   const byKey = (a: Coupon, b: Coupon) => {
+    // 活碼恆在離線券（殘影卡）之前，不受欄位/方向影響
+    const aGhost = a.status !== "active";
+    const bGhost = b.status !== "active";
+    if (aGhost !== bGhost) return aGhost ? 1 : -1;
     if (sort === "price") {
       if (a.price == null && b.price == null) return 0;
       if (a.price == null) return 1; // null 恆在最後

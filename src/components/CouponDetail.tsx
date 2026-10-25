@@ -132,7 +132,9 @@ export default function CouponDetail({
             <div className="flex gap-2 text-amber-600 dark:text-amber-400">
               <dt>狀態</dt>
               <dd>
-                已從官網下架(官網已無此優惠,於 {coupon.offlineSince} 標記)
+                {coupon.source === "verified-external"
+                  ? `掃號已確認失效(自 ${coupon.offlineSince ?? "—"} 起,官網驗證端點已無此碼)`
+                  : `已從官網下架(官網已無此優惠,於 ${coupon.offlineSince ?? "—"} 標記)`}
               </dd>
             </div>
           )}
