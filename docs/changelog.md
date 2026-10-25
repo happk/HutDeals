@@ -7,6 +7,16 @@
 
 ## 未分配
 
+- **dead_since 缺值落地補值**：`cmd_confirm` 的 dead 分支對「`dead_since` 缺有效值」的
+  紀錄補值＝當天（falsy 謂詞：不存在／None／空字串都補，已有有效值不覆蓋）——結束
+  「缺欄位的 dead 永不退役」（runtime 的 `get` default 只讀不寫，days 恆 0；15 筆
+  2026-09-04 遺留首次流經即補值，+7 天自然退役轉 empty），並自癒「存在但 None」形狀
+  的 `fromisoformat(None)` 崩潰炸點。alive／empty 零影響（補值只在 dead 分支執行）。
+  修 todo cb13be8-1（使用者拍板 backfill 語意：觀察窗自補值日重起算，非直接轉 empty）。
+  測試：`test_dead_since_backfill` 9 案例（含 alive 不被補值、復活乾淨、完整生命週期、
+  同日重跑冪等）；`exp_prob/2026-10-26_dead-since-backfill/sim_backfill_snapshot.py`
+  對真實 scan_state 驗證目標 15/15 精確、有效值零覆蓋。計畫：
+  `exp_prob/2026-10-26_dead-since-backfill/`。
 - **熔斷日資料保全與掃尾三項**：①掃號/更新鏈四個 commit step 加 `if: !cancelled()`——
   熔斷（exit 3）或步驟失敗時已寫檔的當日結果照常提交，手動取消不撿半成品（todo 原記
   字面 `always()` 經分析修正：`always()` 連手動取消都會提交被取消進程可能留下的截斷檔）。

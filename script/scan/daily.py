@@ -256,6 +256,14 @@ def cmd_confirm(args) -> int:
                 if d.get("items") is not None:
                     rec["items"] = d["items"]
         elif r.get("m1_success") is False:
+            # dead_since 缺值落地補值（cb13be8-1，2026-10-26）：runtime 的 get default
+            # 只讀不寫，缺欄位的 dead（2026-09-04 遺留 15 筆）days 恆 0 永不退役——
+            # 補值日＝觀察窗起算日，7 天後自然退役；使用 falsy 謂詞，同時防止「欄位存在但 None」
+            # （用「無有效值就補」而非「欄位不存在才補」。
+            # 「欄位存在但值是 None」，那會讓下一行的 fromisoformat(None) 直接崩）。
+            # 已有有效值不覆蓋；alive 碼不流經此分支，不受影響。
+            if not codes[code].get("dead_since"):
+                codes[code]["dead_since"] = today
             since = codes[code].get("dead_since", today)
             days = (dt.date.today() - dt.date.fromisoformat(since)).days
             if days >= DEAD_TO_EMPTY_DAYS:

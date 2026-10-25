@@ -14,19 +14,7 @@
 
 ### cb13be8 (2026-10-25)
 
-1. **`confirm` 退役判斷卡死：dead 缺 `dead_since` 永不轉 empty**
-
-   問題：[`script/scan/daily.py:cmd_confirm()`](../script/scan/daily.py#L258-L268) 的
-   `codes[code].get("dead_since", today)` fallback，遇到缺 `dead_since` 的 dead 紀錄時 days 恆為 0。
-   15 筆 2026-09-04 遺留紀錄全為此形狀（皆不在 coupons.js）。
-
-   影響：這些碼永不退役、每日被 confirm 白白探測一次，也不會被 explore 盯復活。
-
-   修法方向：缺 `dead_since` 的 dead 直接轉 empty（一次性遷移，或改 fallback 判斷）。
-
-   驗證：`exp_prob/2026-10-25_search-offline-archive/probe_fix_sim.py`（§2）
-
-2. **`deploy-pages.yml` 失敗不開 issue**
+1. **`deploy-pages.yml` 失敗不開 issue**
 
    問題：[`.github/workflows/deploy-pages.yml`](../.github/workflows/deploy-pages.yml) 沒有告警 job。
    scan/update 兩鏈失敗都會開紅 issue，唯獨部署失敗靜默。
