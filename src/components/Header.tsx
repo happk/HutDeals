@@ -36,21 +36,57 @@ function hiconCls(active: boolean) {
   }`;
 }
 
-/** 公告（作者訊息）：解析 public/notices.md（## 日期 + 內容，越新越上）。 */
-interface Notice { date: string; body: string }
+/** 公告（作者訊息）：解析 public/notices.md（## 日期 + 內容，越新越上）。
+ * 內容支援輕量語法（2026-10-26）：`### 小節標題`（粗體＋大一級）、
+ * `- `／`* ` 開頭的連續行＝無序圓點列表；其餘非空行＝段落（換行保留）。 */
+type NoticeBlock =
+  | { kind: "p"; text: string }
+  | { kind: "h3"; text: string }
+  | { kind: "ul"; items: string[] };
 
-function parseNotices(md: string): Notice[] {
+interface Notice { date: string; blocks: NoticeBlock[] }
+
+export function parseNotices(md: string): Notice[] {
   const out: Notice[] = [];
   let cur: Notice | null = null;
-  for (const line of md.split("\n")) {
-    const m = /^##\s+(\d{4}-\d{2}-\d{2})/.exec(line.trim());
+  let para: string[] = [];
+  let list: string[] | null = null;
+
+  const flushPara = () => {
+    if (para.length) cur!.blocks.push({ kind: "p", text: para.join("\n") });
+    para = [];
+  };
+  const flushList = () => {
+    if (list) cur!.blocks.push({ kind: "ul", items: list });
+    list = null;
+  };
+
+  for (const raw of md.split("\n")) {
+    const line = raw.trim();
+    const m = /^##\s+(\d{4}-\d{2}-\d{2})/.exec(line);
     if (m) {
+      flushPara();
+      flushList();
       if (cur) out.push(cur);
-      cur = { date: m[1], body: "" };
-    } else if (cur && line.trim()) {
-      cur.body += (cur.body ? "\n" : "") + line.trim();
+      cur = { date: m[1], blocks: [] };
+    } else if (cur && line) {
+      const h = /^###\s+(.+)$/.exec(line);
+      const li = /^[-*]\s+(.+)$/.exec(line);
+      if (h) {
+        flushPara();
+        flushList();
+        cur.blocks.push({ kind: "h3", text: h[1] });
+      } else if (li) {
+        flushPara();
+        (list ??= []).push(li[1]);
+      } else {
+        flushList();
+        para.push(line);
+      }
     }
   }
+  flushPara();
+  flushList();
   if (cur) out.push(cur);
   return out;
 }
@@ -187,7 +223,29 @@ export default function Header({
                     notices.map((n) => (
                       <div key={n.date} className="mb-2.5 border-b border-red-900/5 pb-2.5 last:mb-0 last:border-0 last:pb-0 dark:border-white/5">
                         <div className="text-[12px] font-bold text-red-600 dark:text-red-400">{n.date}</div>
-                        <p className="m-0 mt-0.5 whitespace-pre-line text-slate-600 dark:text-slate-300">{n.body}</p>
+                        <div className="mt-0.5">
+                          {n.blocks.map((b, i) => {
+                            if (b.kind === "h3")
+                              return (
+                                <div key={i} className="mt-1.5 text-[14px] font-bold text-slate-700 dark:text-slate-200">
+                                  {b.text}
+                                </div>
+                              );
+                            if (b.kind === "ul")
+                              return (
+                                <ul key={i} className="my-1 list-disc space-y-0.5 pl-5 text-slate-600 marker:text-red-500 dark:text-slate-300 dark:marker:text-red-400">
+                                  {b.items.map((it, j) => (
+                                    <li key={j}>{it}</li>
+                                  ))}
+                                </ul>
+                              );
+                            return (
+                              <p key={i} className="m-0 whitespace-pre-line text-slate-600 dark:text-slate-300">
+                                {b.text}
+                              </p>
+                            );
+                          })}
+                        </div>
                       </div>
                     ))
                   )}
