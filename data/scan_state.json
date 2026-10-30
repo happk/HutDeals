@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-30T00:59:18",
+  "updatedAt": "2026-10-30T18:06:23",
   "codes": {
     "26975": {
       "firstSeen": "2026-09-04",
@@ -1620,7 +1620,7 @@
     "94199": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 13274,
       "title": "平日外帶-94199超值單點大比薩 / $199",
       "partner": null,
@@ -2176,7 +2176,8 @@
           "groupTitle": null
         }
       ],
-      "contentChangedAt": "2026-10-27"
+      "contentChangedAt": "2026-10-27",
+      "dead_since": "2026-10-30"
     },
     "16054": {
       "firstSeen": "2026-09-04",
@@ -2509,7 +2510,7 @@
     "94299": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 13518,
       "title": "平日外帶-94299人氣單點大比薩$299",
       "partner": null,
@@ -2947,12 +2948,13 @@
           "groupTitle": null
         }
       ],
-      "contentChangedAt": "2026-10-27"
+      "contentChangedAt": "2026-10-27",
+      "dead_since": "2026-10-30"
     },
     "93010": {
       "firstSeen": "2026-09-04",
       "lastSeen": "2026-09-04",
-      "status": "alive",
+      "status": "dead",
       "p_id": 16906,
       "title": "平日外帶限定- 93010私廚系列單點6折",
       "partner": null,
@@ -3444,7 +3446,8 @@
           "groupTitle": null
         }
       ],
-      "contentChangedAt": "2026-10-27"
+      "contentChangedAt": "2026-10-27",
+      "dead_since": "2026-10-30"
     },
     "93020": {
       "firstSeen": "2026-09-04",
@@ -724837,5 +724840,5 @@
       "source": "daily.sample"
     }
   },
-  "lastChangedAt": "2026-10-30T00:59:18"
+  "lastChangedAt": "2026-10-30T18:06:23"
 }
