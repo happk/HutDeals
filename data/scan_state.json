@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-03T00:48:53",
+  "updatedAt": "2026-11-03T02:25:30",
   "codes": {
     "26975": {
       "firstSeen": "2026-09-04",
@@ -748960,7 +748960,3404 @@
       "lastSeen": "2026-10-30",
       "lastChecked": "2026-10-30T19:44:21",
       "source": "daily.sample"
+    },
+    "26303": {
+      "firstSeen": "2026-11-03",
+      "p_id": 19375,
+      "title": "26303屈臣氏年終慶",
+      "channels": [
+        "外帶"
+      ],
+      "price": 298,
+      "msrp": 1060,
+      "desc_head": "外帶 2個9吋鬆厚小比薩(6選2):和風章魚燒或韓式泡菜豬五花或超級總匯或炙燒明太子嫩雞或超級夏威夷或火辣辣墨西哥=NT$298(最高價值NT$1060)",
+      "desc": "外帶 2個9吋鬆厚小比薩(6選2):和風章魚燒或韓式泡菜豬五花或超級總匯或炙燒明太子嫩雞或超級夏威夷或火辣辣墨西哥=NT$298(最高價值NT$1060)",
+      "items": [
+        {
+          "text": "和風章魚燒",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "韓式泡菜豬五花",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "炙燒明太子嫩雞",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "火辣辣墨西哥",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "超級總匯",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "超級夏威夷",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "和風章魚燒",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "韓式泡菜豬五花",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "炙燒明太子嫩雞",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "火辣辣墨西哥",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "超級總匯",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "超級夏威夷",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "BBQ烤雞4翅4腿",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 229,
+          "flavors": [],
+          "add": 229,
+          "groupTitle": null
+        },
+        {
+          "text": "厚燒醬烤BBQ(2腿2排)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 229,
+          "flavors": [],
+          "add": 229,
+          "groupTitle": null
+        },
+        {
+          "text": "德國芝心腸",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 199,
+          "flavors": [],
+          "add": 199,
+          "groupTitle": null
+        },
+        {
+          "text": "黃金和風鱈魚塊(10個)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 199,
+          "flavors": [],
+          "add": 199,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸三味甜不辣",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 79,
+          "flavors": [],
+          "add": 79,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸嫩雞球",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 69,
+          "flavors": [],
+          "add": 69,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸杏鮑菇",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 69,
+          "flavors": [],
+          "add": 69,
+          "groupTitle": null
+        },
+        {
+          "text": "薯金幣(大份)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 79,
+          "flavors": [],
+          "add": 79,
+          "groupTitle": null
+        },
+        {
+          "text": "巴斯克起司蛋糕(4吋)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 159,
+          "flavors": [],
+          "add": 159,
+          "groupTitle": null
+        },
+        {
+          "text": "巧克力QQ球10顆",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 99,
+          "flavors": [],
+          "add": 99,
+          "groupTitle": null
+        },
+        {
+          "text": "百事可樂1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 45,
+          "flavors": [],
+          "add": 45,
+          "groupTitle": null
+        },
+        {
+          "text": "七喜1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 45,
+          "flavors": [],
+          "add": 45,
+          "groupTitle": null
+        },
+        {
+          "text": "原萃綠茶1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 52,
+          "flavors": [],
+          "add": 52,
+          "groupTitle": null
+        }
+      ],
+      "status": "alive",
+      "lastSeen": "2026-11-03",
+      "lastChecked": "2026-11-03T01:51:31",
+      "source": "daily.explore"
+    },
+    "26426": {
+      "firstSeen": "2026-11-03",
+      "p_id": 19383,
+      "title": "26426自由時報椒心",
+      "channels": [
+        "外帶"
+      ],
+      "price": 398,
+      "msrp": 785,
+      "desc_head": "外帶 1個9吋鬆厚小比薩(限NT$410(含)以下口味)+5塊厚燒醬烤腿排或青花椒香麻烤雞4翅4腿(二節翅/翅腿)(2選1)+5顆抹茶可可QQ球或1份黃金雞軟骨(小)(2選1)+1份薯金幣(小)或1瓶1.25L可樂或七喜或2杯玉米濃湯(4選1)=NT$398(最高價值NT$785)",
+      "desc": "外帶 1個9吋鬆厚小比薩(限NT$410(含)以下口味)+5塊厚燒醬烤腿排或青花椒香麻烤雞4翅4腿(二節翅/翅腿)(2選1)+5顆抹茶可可QQ球或1份黃金雞軟骨(小)(2選1)+1份薯金幣(小)或1瓶1.25L可樂或七喜或2杯玉米濃湯(4選1)=NT$398(最高價值NT$785)",
+      "items": [
+        {
+          "text": "松露金薯雙起司",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 35,
+          "flavors": [
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "丸勝日式章魚燒",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 180,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "霸王雙雞",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "極炙厚牛干貝海陸",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 239,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "松露干貝鮮蝦起司",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 229,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "法式海陸盛宴",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 229,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "千島海鮮盛宴",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 209,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "和風章魚燒",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 120,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "費城牛肉起司",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 120,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "韓風醬烤雪花牛",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 120,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "經典海鮮四重奏",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 115,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "韓式泡菜豬五花",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 110,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "鐵板雙牛",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 90,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "炙燒明太子嫩雞",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 70,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "火辣辣墨西哥",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 55,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "超級總匯",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 55,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "超級夏威夷",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 50,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "松露蕈菇起司丁",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 35,
+          "flavors": [
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "彩蔬鮮菇",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 35,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "熱帶鳳梨海鮮總匯",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "雙層美式臘腸",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "夏威夷",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "四小福",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "醬燒鮮蛤田園",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "香濃蒜香海鮮",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "日式照燒雞",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "炙燒豬肉總匯",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "蒜香起司燻雞培根",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "厚燒醬烤腿排-BBQ(5塊)",
+          "group": "second",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [],
+          "add": null,
+          "groupTitle": "請選擇1份副食"
+        },
+        {
+          "text": "黃金雞軟骨(小份)",
+          "group": "second",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [],
+          "add": null,
+          "groupTitle": "請選擇1份副食"
+        },
+        {
+          "text": "薯金幣(小份)",
+          "group": "second",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [],
+          "add": null,
+          "groupTitle": "請選擇1份副食"
+        },
+        {
+          "text": "百事可樂1.25L",
+          "group": "second",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [],
+          "add": null,
+          "groupTitle": "請選擇1份副食"
+        },
+        {
+          "text": "七喜1.25L",
+          "group": "second",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [],
+          "add": null,
+          "groupTitle": "請選擇1份副食"
+        },
+        {
+          "text": "玉米濃湯(含奶製品)2杯",
+          "group": "second",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [],
+          "add": null,
+          "groupTitle": "請選擇1份副食"
+        },
+        {
+          "text": "BBQ烤雞4翅4腿",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 229,
+          "flavors": [],
+          "add": 229,
+          "groupTitle": null
+        },
+        {
+          "text": "厚燒醬烤BBQ(2腿2排)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 229,
+          "flavors": [],
+          "add": 229,
+          "groupTitle": null
+        },
+        {
+          "text": "德國芝心腸",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 199,
+          "flavors": [],
+          "add": 199,
+          "groupTitle": null
+        },
+        {
+          "text": "黃金和風鱈魚塊(10個)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 199,
+          "flavors": [],
+          "add": 199,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸三味甜不辣",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 79,
+          "flavors": [],
+          "add": 79,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸嫩雞球",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 75,
+          "flavors": [],
+          "add": 75,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸杏鮑菇",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 75,
+          "flavors": [],
+          "add": 75,
+          "groupTitle": null
+        },
+        {
+          "text": "薯金幣(大份)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 79,
+          "flavors": [],
+          "add": 79,
+          "groupTitle": null
+        },
+        {
+          "text": "巴斯克起司蛋糕(4吋)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 180,
+          "flavors": [],
+          "add": 180,
+          "groupTitle": null
+        },
+        {
+          "text": "巧克力QQ球10顆",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 99,
+          "flavors": [],
+          "add": 99,
+          "groupTitle": null
+        },
+        {
+          "text": "百事可樂1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 45,
+          "flavors": [],
+          "add": 45,
+          "groupTitle": null
+        },
+        {
+          "text": "七喜1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 45,
+          "flavors": [],
+          "add": 45,
+          "groupTitle": null
+        },
+        {
+          "text": "原萃綠茶1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 52,
+          "flavors": [],
+          "add": 52,
+          "groupTitle": null
+        }
+      ],
+      "status": "alive",
+      "lastSeen": "2026-11-03",
+      "lastChecked": "2026-11-03T01:59:49",
+      "source": "daily.explore"
+    },
+    "26427": {
+      "firstSeen": "2026-11-03",
+      "p_id": 19384,
+      "title": "26427自由時報神氣",
+      "channels": [
+        "外帶"
+      ],
+      "price": 598,
+      "msrp": 1855,
+      "desc_head": "外帶 1個鬆厚大比薩(3選1):和風章魚燒或鐵板雙牛或炙燒明太子嫩雞 +1個鬆厚大比薩(限NT$620(含)以下口味) +1個鬆厚小比薩(7選1):香濃蒜香海鮮或彩蔬鮮菇或夏威夷或日式照燒雞或蒜香起司燻雞培根或炙燒豬肉總匯或四小福=NT$598(最高價值NT$1855)",
+      "desc": "外帶 1個鬆厚大比薩(3選1):和風章魚燒或鐵板雙牛或炙燒明太子嫩雞 +1個鬆厚大比薩(限NT$620(含)以下口味) +1個鬆厚小比薩(7選1):香濃蒜香海鮮或彩蔬鮮菇或夏威夷或日式照燒雞或蒜香起司燻雞培根或炙燒豬肉總匯或四小福=NT$598(最高價值NT$1855)",
+      "items": [
+        {
+          "text": "丸勝日式章魚燒",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 220,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "霸王雙雞",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "極炙厚牛干貝海陸",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 268,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "醬燒鮮蛤田園",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "松露金薯雙起司",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 60,
+          "flavors": [
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "松露干貝鮮蝦起司",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 279,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "法式海陸盛宴",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 279,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "千島海鮮盛宴",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 249,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "和風章魚燒",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 170,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "費城牛肉起司",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 170,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "韓風醬烤雪花牛",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 170,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "經典海鮮四重奏",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 160,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "韓式泡菜豬五花",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 150,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "鐵板雙牛",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 130,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "炙燒明太子嫩雞",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 100,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "超級總匯",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 100,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "火辣辣墨西哥",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 80,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "超級夏威夷",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 70,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "松露蕈菇起司丁",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 60,
+          "flavors": [
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "彩蔬鮮菇",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 60,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "熱帶鳳梨海鮮總匯",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 40,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "香濃蒜香海鮮",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "四小福",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "雙層美式臘腸",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "日式照燒雞",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "炙燒豬肉總匯",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "蒜香起司燻雞培根",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "夏威夷",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "和風章魚燒",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "鐵板雙牛",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "炙燒明太子嫩雞",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "蛤蜊絲瓜火山起司 (8折) ",
+              "priceAdd": 127
+            },
+            {
+              "name": "火山起司",
+              "priceAdd": 149
+            },
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 199
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 115
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 35
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個大比薩"
+        },
+        {
+          "text": "彩蔬鮮菇",
+          "group": "main",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "夏威夷",
+          "group": "main",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "四小福",
+          "group": "main",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "香濃蒜香海鮮",
+          "group": "main",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "日式照燒雞",
+          "group": "main",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "炙燒豬肉總匯",
+          "group": "main",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "蒜香起司燻雞培根",
+          "group": "main",
+          "groupIdx": 3,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "BBQ烤雞4翅4腿",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 229,
+          "flavors": [],
+          "add": 229,
+          "groupTitle": null
+        },
+        {
+          "text": "厚燒醬烤BBQ(2腿2排)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 229,
+          "flavors": [],
+          "add": 229,
+          "groupTitle": null
+        },
+        {
+          "text": "德國芝心腸",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 199,
+          "flavors": [],
+          "add": 199,
+          "groupTitle": null
+        },
+        {
+          "text": "黃金和風鱈魚塊(10個)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 199,
+          "flavors": [],
+          "add": 199,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸三味甜不辣",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 79,
+          "flavors": [],
+          "add": 79,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸嫩雞球",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 69,
+          "flavors": [],
+          "add": 69,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸杏鮑菇",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 69,
+          "flavors": [],
+          "add": 69,
+          "groupTitle": null
+        },
+        {
+          "text": "薯金幣(大份)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 79,
+          "flavors": [],
+          "add": 79,
+          "groupTitle": null
+        },
+        {
+          "text": "巴斯克起司蛋糕(4吋)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 159,
+          "flavors": [],
+          "add": 159,
+          "groupTitle": null
+        },
+        {
+          "text": "巧克力QQ球10顆",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 99,
+          "flavors": [],
+          "add": 99,
+          "groupTitle": null
+        },
+        {
+          "text": "百事可樂1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 45,
+          "flavors": [],
+          "add": 45,
+          "groupTitle": null
+        },
+        {
+          "text": "七喜1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 45,
+          "flavors": [],
+          "add": 45,
+          "groupTitle": null
+        },
+        {
+          "text": "原萃綠茶1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 52,
+          "flavors": [],
+          "add": 52,
+          "groupTitle": null
+        }
+      ],
+      "status": "alive",
+      "lastSeen": "2026-11-03",
+      "lastChecked": "2026-11-03T01:59:52",
+      "source": "daily.explore"
+    },
+    "26428": {
+      "firstSeen": "2026-11-03",
+      "p_id": 19385,
+      "title": "26428自由時報芝心",
+      "channels": [
+        "外帶"
+      ],
+      "price": 498,
+      "msrp": 1265,
+      "desc_head": "外帶(A區+B區+C區各1個)=特價合計NT$498(最高價值NT$1265) A區1個10吋芝心小比薩(6選1):和風章魚燒或韓式泡菜豬五花或超級總匯或炙燒明太子嫩雞或超級夏威夷或火辣辣墨西哥 B區1個9吋鬆厚小比薩(6選1):炙燒豬肉總匯或蒜香起司燻雞培根或熱帶鳳梨海鮮總匯或彩蔬鮮菇或日式照燒雞或醬燒鮮蛤田園比薩 C區1份副食(4選1):6條德國芝心腸或10塊和風鱈魚塊或8條雞柳條或1份黃金雞",
+      "desc": "外帶(A區+B區+C區各1個)=特價合計NT$498(最高價值NT$1265) A區1個10吋芝心小比薩(6選1):和風章魚燒或韓式泡菜豬五花或超級總匯或炙燒明太子嫩雞或超級夏威夷或火辣辣墨西哥 B區1個9吋鬆厚小比薩(6選1):炙燒豬肉總匯或蒜香起司燻雞培根或熱帶鳳梨海鮮總匯或彩蔬鮮菇或日式照燒雞或醬燒鮮蛤田園比薩 C區1份副食(4選1):6條德國芝心腸或10塊和風鱈魚塊或8條雞柳條或1份黃金雞軟骨",
+      "items": [
+        {
+          "text": "和風章魚燒",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "芝心",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "韓式泡菜豬五花",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "芝心",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "炙燒明太子嫩雞",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "芝心",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "火辣辣墨西哥",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "芝心",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "超級總匯",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "芝心",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "超級夏威夷",
+          "group": "main",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "芝心",
+              "priceAdd": 0
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "彩蔬鮮菇",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "熱帶鳳梨海鮮總匯",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "醬燒鮮蛤田園",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "日式照燒雞",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "炙燒豬肉總匯",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "蒜香起司燻雞培根",
+          "group": "main",
+          "groupIdx": 2,
+          "priceAdd": 0,
+          "flavors": [
+            {
+              "name": "火山起司芝心",
+              "priceAdd": 155
+            },
+            {
+              "name": "芝心",
+              "priceAdd": 90
+            },
+            {
+              "name": "鬆厚",
+              "priceAdd": 0
+            },
+            {
+              "name": "手工酸種",
+              "priceAdd": 0
+            },
+            {
+              "name": "薄脆",
+              "priceAdd": 25
+            }
+          ],
+          "add": null,
+          "groupTitle": "請選擇1個小比薩"
+        },
+        {
+          "text": "黃金雞柳條8條",
+          "group": "second",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [],
+          "add": null,
+          "groupTitle": "請選擇1份副食"
+        },
+        {
+          "text": "黃金雞軟骨",
+          "group": "second",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [],
+          "add": null,
+          "groupTitle": "請選擇1份副食"
+        },
+        {
+          "text": "黃金和風鱈魚塊(10塊)",
+          "group": "second",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [],
+          "add": null,
+          "groupTitle": "請選擇1份副食"
+        },
+        {
+          "text": "德國芝心腸(6條)",
+          "group": "second",
+          "groupIdx": 1,
+          "priceAdd": 0,
+          "flavors": [],
+          "add": null,
+          "groupTitle": "請選擇1份副食"
+        },
+        {
+          "text": "BBQ烤雞4翅4腿",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 229,
+          "flavors": [],
+          "add": 229,
+          "groupTitle": null
+        },
+        {
+          "text": "厚燒醬烤BBQ(2腿2排)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 229,
+          "flavors": [],
+          "add": 229,
+          "groupTitle": null
+        },
+        {
+          "text": "德國芝心腸",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 199,
+          "flavors": [],
+          "add": 199,
+          "groupTitle": null
+        },
+        {
+          "text": "黃金和風鱈魚塊(10個)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 199,
+          "flavors": [],
+          "add": 199,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸三味甜不辣",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 79,
+          "flavors": [],
+          "add": 79,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸嫩雞球",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 69,
+          "flavors": [],
+          "add": 69,
+          "groupTitle": null
+        },
+        {
+          "text": "酥炸杏鮑菇",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 69,
+          "flavors": [],
+          "add": 69,
+          "groupTitle": null
+        },
+        {
+          "text": "薯金幣(大份)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 79,
+          "flavors": [],
+          "add": 79,
+          "groupTitle": null
+        },
+        {
+          "text": "巴斯克起司蛋糕(4吋)",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 159,
+          "flavors": [],
+          "add": 159,
+          "groupTitle": null
+        },
+        {
+          "text": "巧克力QQ球10顆",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 99,
+          "flavors": [],
+          "add": 99,
+          "groupTitle": null
+        },
+        {
+          "text": "百事可樂1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 45,
+          "flavors": [],
+          "add": 45,
+          "groupTitle": null
+        },
+        {
+          "text": "七喜1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 45,
+          "flavors": [],
+          "add": 45,
+          "groupTitle": null
+        },
+        {
+          "text": "原萃綠茶1.25L",
+          "group": "add",
+          "groupIdx": 1,
+          "priceAdd": 52,
+          "flavors": [],
+          "add": 52,
+          "groupTitle": null
+        }
+      ],
+      "status": "alive",
+      "lastSeen": "2026-11-03",
+      "lastChecked": "2026-11-03T01:59:57",
+      "source": "daily.explore"
+    },
+    "26764": {
+      "firstSeen": "2026-11-03",
+      "p_id": 19378,
+      "title": "26764寵物公園1送6",
+      "channels": [
+        "外帶",
+        "外送"
+      ],
+      "desc_head": "外帶/外送($690元起)買1個鬆厚大比薩(限$690元(含)以上)送2個鬆厚小比薩(限$410元(含)以下)+1包樂事mini+3條雞柳條或3個德國芝心腸或4塊和風鱈魚塊(3選2)+1份薯金幣(小)或4顆巧克力QQ球或1份雞軟骨(小)或1瓶1.25L可樂(4選1)(最多現省$1060)",
+      "desc": "外帶/外送($690元起)買1個鬆厚大比薩(限$690元(含)以上)送2個鬆厚小比薩(限$410元(含)以下)+1包樂事mini+3條雞柳條或3個德國芝心腸或4塊和風鱈魚塊(3選2)+1份薯金幣(小)或4顆巧克力QQ球或1份雞軟骨(小)或1瓶1.25L可樂(4選1)(最多現省$1060)",
+      "status": "alive",
+      "lastSeen": "2026-11-03",
+      "lastChecked": "2026-11-03T02:20:11",
+      "source": "daily.explore"
     }
   },
-  "lastChangedAt": "2026-11-02T18:07:10"
+  "lastChangedAt": "2026-11-03T02:25:30"
 }
