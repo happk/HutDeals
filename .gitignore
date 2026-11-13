@@ -10,3 +10,7 @@ dist/
 .zcode/
 .agents/
 skills-lock.json
+
+# probe 備份（data 產物不進歷史；.py 腳本不受影響）
+*backup*
+!*backup*.py
