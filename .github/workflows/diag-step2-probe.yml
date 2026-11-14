@@ -7,6 +7,9 @@ name: diag-step2-probe
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - fix/step2-request-403
 
 permissions:
   contents: read
