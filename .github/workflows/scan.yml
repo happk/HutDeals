@@ -37,7 +37,8 @@ jobs:
           # → should_run 為空 → 三工 skip），寧可誤擋一日不放行熔斷日
           OPEN=$(gh issue list --label scan-failed --state open --json number --jq 'length')
           OPEN2=$(gh issue list --label scrape-failed --state open --json number --jq 'length')
-          case "$OPEN$OPEN2" in ""|*[!0-9]*) echo "gh 回應非整數（OPEN=$OPEN, OPEN2=$OPEN2）→ gate 失敗"; exit 1;; esac
+          case "$OPEN"  in ''|*[!0-9]*) echo "OPEN 非整數（OPEN=$OPEN）→ gate 失敗"; exit 1;; esac
+          case "$OPEN2" in ''|*[!0-9]*) echo "OPEN2 非整數（OPEN2=$OPEN2）→ gate 失敗"; exit 1;; esac
           if [ "$OPEN" -gt 0 ] || [ "$OPEN2" -gt 0 ]; then
             echo "有未關閉的失敗告警 issue(scan-failed=$OPEN, scrape-failed=$OPEN2)，禁止今日掃號"
             exit 1
