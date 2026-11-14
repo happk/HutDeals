@@ -1,0 +1,23 @@
+name: diag-step2-probe
+
+# 臨時診斷 workflow（2026-11-14，step2 被拒調查專案）：
+# 只 workflow_dispatch 手動觸發——無 cron、無 gate、不開 issue、不碰 main。
+# 用途：runner IP 上零 M1 前置直接打 10 發 step2 menu GET，
+# 判「第二層長期懲罰是否仍在」與「403 的真面目」（回應體/headers 印進 log）。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: step2 x10 probe (zero M1)
+        run: python exp_prob/2026-11-14_step2-request-403/probe_20261114_runner_step2.py
