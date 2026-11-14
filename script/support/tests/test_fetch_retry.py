@@ -60,6 +60,18 @@ class TestFetchRetry(unittest.TestCase):
             fetch_and_parse("91113", fetcher, sleep=lambda _: None)
         self.assertEqual(fetcher.calls, 1)
 
+    def test_fuse_keyword_no_retry(self):
+        """第 4 案例（③a）：前置關鍵字 RuntimeError 直拋不重試（calls==1）。
+
+        mock 層級＝orderflow 層（daily.py:26 是 from-import，mock daily 層
+        不會執行到 ③a）——fake fetcher 丟關鍵字 RuntimeError、呼叫真實
+        orderflow.fetch_and_parse，斷言直拋＋零重試。
+        """
+        fetcher = _Flaky(99, RuntimeError("step_1_update 失敗: busy page"))
+        with self.assertRaises(RuntimeError):
+            fetch_and_parse("91113", fetcher, sleep=lambda _: None)
+        self.assertEqual(fetcher.calls, 1)
+
     def test_persistent_failure_none(self):
         """持續傳輸失敗 → 3 次後回 None。"""
         fetcher = _Flaky(99, urllib.error.URLError("down"))

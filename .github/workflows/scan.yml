@@ -31,9 +31,13 @@ jobs:
       - id: check
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}  # ⑤：gate 無 checkout，gh 需顯式 repo 才查得到 issue
         run: |
-          OPEN=$(gh issue list --label scan-failed --state open --json number --jq 'length' 2>/dev/null || echo 0)
-          OPEN2=$(gh issue list --label scrape-failed --state open --json number --jq 'length' 2>/dev/null || echo 0)
+          # ⑤ fail-closed（2026-11-14）：移除三處吞錯——gh 失敗讓 step 炸掉（gate 失敗
+          # → should_run 為空 → 三工 skip），寧可誤擋一日不放行熔斷日
+          OPEN=$(gh issue list --label scan-failed --state open --json number --jq 'length')
+          OPEN2=$(gh issue list --label scrape-failed --state open --json number --jq 'length')
+          case "$OPEN$OPEN2" in ""|*[!0-9]*) echo "gh 回應非整數（OPEN=$OPEN, OPEN2=$OPEN2）→ gate 失敗"; exit 1;; esac
           if [ "$OPEN" -gt 0 ] || [ "$OPEN2" -gt 0 ]; then
             echo "有未關閉的失敗告警 issue(scan-failed=$OPEN, scrape-failed=$OPEN2)，禁止今日掃號"
             exit 1
@@ -42,8 +46,8 @@ jobs:
           RUNNING=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?workflow_id=scan.yml&per_page=100" \
             --jq "[.workflow_runs[] | select(.id != ${GITHUB_RUN_ID}) \
                     | select(.event == \"workflow_dispatch\") \
-                    | select(.status == \"in_progress\" or .status == \"queued\")] | length" \
-            2>/dev/null || echo 0)
+                    | select(.status == \"in_progress\" or .status == \"queued\")] | length")
+          case "$RUNNING" in ""|*[!0-9]*) echo "gh api 回應非整數（RUNNING=$RUNNING）→ gate 失敗"; exit 1;; esac
           if [ "$RUNNING" -gt 0 ]; then
             echo "偵測到另一場 workflow_dispatch 掃號在跑，GitHub 排程備援讓賢"
             echo "should_run=false" >> "$GITHUB_OUTPUT"
@@ -81,14 +85,15 @@ jobs:
         run: |
           # 熔斷日 admin 警報不停昨日（9f44bb9-2）：confirm 也發布 alerts 到 public
           if [ -f data/scan_alerts.json ]; then cp data/scan_alerts.json public/scan_alerts.json; fi
-          if git diff --quiet -- data/scan_state.json data/scan_alerts.json \
-            data/scan-records/scan-history.md public/scan_alerts.json; then
+          if git diff --quiet -- data/scan_state.json data/scan_coverage.json \
+            data/scan_alerts.json public/scan_alerts.json \
+            data/scan-records/scan-history.md; then
             echo "no changes"
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/scan_state.json data/scan_alerts.json \
-              data/scan-records/scan-history.md public/scan_alerts.json
+            git add data/scan_state.json data/scan_coverage.json data/scan_alerts.json \
+              public/scan_alerts.json data/scan-records/scan-history.md
             git commit -m "daily scan confirm ($(date -u +%F))"
             # 以最新 remote 為主體重排後再推；真內容衝突則 abort 並留備份分支
             # --autostash：各 job 只 add 部分檔案，workdir 殘留未暫存變更時 rebase 才不會被拒
@@ -310,14 +315,17 @@ jobs:
             gh issue create --title "$TITLE" --label "sync-conflict" --body-file /tmp/sync-body.md
           else
             TITLE="每日掃號失敗 $DATE"
-            COUNT=$(gh issue list --label scan-failed --state open --json number --jq 'length')
-            if [ "$COUNT" -eq 0 ]; then
+            # ⑧（2026-11-14）：連續失敗不再靜默——既有 issue 補 comment（含 run URL）；
+            # jq 取 number，空清單用 // empty 避免 jq 印 "null" 被當成 issue 編號
+            ISSUE=$(gh issue list --label scan-failed --state open --limit 1 \
+              --json number --jq '.[0].number // empty')
+            if [ -z "$ISSUE" ]; then
               gh issue create \
                 --title "$TITLE" \
                 --label "scan-failed" \
                 --body "script.scan.daily 某工執行失敗（熔斷或官網改版）。熔斷（exit 3）時已寫檔的當日結果已由各 job 的 commit step 提交（手動取消除外）。請看 Actions log：$RUN_URL"
             else
-              echo "open scan-failed issue already exists, skip"
+              gh issue comment "$ISSUE" --body "再次失敗 $DATE：$RUN_URL"
             fi
           fi
 
