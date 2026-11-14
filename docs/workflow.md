@@ -1,8 +1,9 @@
 # HutDeals 工作流總覽（data pipeline）
 
 > 本檔是**流程圖與現狀的權威文件**（與 `code-structure.md` 同級）；動線改動時同步更新。
-> 更新：2026-09-09（explore 去重、cron-job.org 主要＋GitHub cron 備援讓賢、pacing 中場 30s）、
-> 2026-10-25（ingest_external 判死歸檔：dead/empty 標 offline、offlineSince=dead_since）。
+> 更新：2026-11-14（熔斷修復：抓詳情三形態全覆蓋；節流統一 base 1s、號段停用；gate 查不到＝擋）。
+> 更新：2026-10-25（ingest_external 判死歸檔：dead/empty 標 offline、offlineSince=dead_since）。
+> 更新：2026-09-09（explore 去重、cron-job.org 主要＋GitHub cron 備援讓賢、pacing 中場 30s）。
 
 ## 1. 全域資料流
 
@@ -50,6 +51,7 @@ stateDiagram-v2
 | update 成功 dispatch | `deploy-pages.yml` | npm build → GitHub Pages（push 亦觸發） |
 
 > 失敗處理：任一步失敗 → 開 `scan-failed`/`scrape-failed` issue → 隔日 gate 見 open issue 即禁掃（防污染）。
+> issue 已存在時補「再次失敗」留言（不重複開單）。gate 查詢為 fail-closed——查不到也擋。
 > **備援讓賢**：GitHub cron 排程觸發時，gate 偵測到另一場 `workflow_dispatch` 掃號在跑/排隊（排除自己）
 > → `should_run=false`，後續 job 全 skip、整場綠色收尾（不會並跑、不會兩邊都讓）。
 
@@ -68,19 +70,27 @@ stateDiagram-v2
 
 ## 4. 請求節奏
 
-掃號對官網驗證端點請求遵守節奏（`lib/pacing`）：每發 ~1s＋隨機浮動 U(0,2s)
-（2026-11-14 節流統一：由 ~2s 減半，M1/step2/enrich 同套——step2 抓詳情迴圈
-同步補 `sleep_scan`，查活→抓詳情切換休息 45s）、換號段休息停用
-（`DEFAULT_SEG_GAP=0`，顯式傳值仍有效）、每 50 發中場休息 ~30s
-（2026-09-09 由 ~90s 調降；`DEFAULT_BREAK_BASE=30`）。
+掃號對官網請求的節奏由 `lib/pacing` 統一（2026-11-14 節流統一：M1/step2/enrich 同套）：
 
-熔斷：429/403 立即停、傳輸失敗記 unknown 不算死。
+- 每發 ~1s＋隨機浮動 U(0,2s)——由 ~2s 減半（策略變更）
+- 抓詳情四個迴圈同步補 `sleep_scan`（此前零節流，密度是查活的 8.6 倍）
+- 查活→抓詳情切換休息 45s
+- 換號段休息停用（`DEFAULT_SEG_GAP=0`，顯式傳值仍有效）
+- 每 50 發中場休息 ~30s（2026-09-09 由 ~90s 調降；`DEFAULT_BREAK_BASE=30`）
+
+熔斷（2026-11-14 起三形態、三階段全覆蓋）——查活／抓詳情／官券補全一致：
+
+1. 403/429 或前置三步失敗（三關鍵字）→ 停手
+2. 已完成的結果照樣存檔
+3. 以 exit 3 結束（區別於一般錯誤的 exit 1）
+
+抓回的頁面須為選單版（`ctidss`＋180KB），忙碌頁視同解析失敗、連續 3 碼熔斷。假成功由上游攔截為「疑似垃圾頁」，三張正常無選項券白名單放行。
+M1 端點傳輸失敗記 unknown 不算死。
 
 ## 5. items 來源（orderflow）
 
 券內容 items 用**訂餐流程選單版結構化爬取**（取代文字 parse_meal，退役至 `archive/parse/`）：
-- `lib/orderflow.py`：4 步 session 流程（配 cookie → 取 llcs → step_1 選門市 → 重抓選單版），
-  `BatchFetcher` K 張共用 session。
+- `lib/orderflow.py`：4 步 session 流程（配 cookie → 取 llcs → step_1 選門市 → 重抓選單版），`BatchFetcher` K 張共用 session。
 - `scan/parse_orderflow.py` + `extract_js.cjs`：選單版內嵌 JS 變數（psidss/pprcss/ctidss）→
   結構化候選 items＋官方組標題 `groupTitle`（scan_state 保持官網原貌，不含我們的分類）。
 - items schema（scan_state）：`{text, group, groupIdx, priceAdd, flavors[], add, groupTitle}`。
@@ -90,9 +100,7 @@ stateDiagram-v2
 - **「項」＝前端一個選項組**（`group`+`groupIdx`）；分類掛在項上，與官網組型無關。
 - 飲料／副食／義大利麵飯 ← **看該項每個候選品名**；大／小／個人／特殊比薩 ← **讀該項官方組標題**
   （候選品名不含尺寸）。官方組標題在品項層不可靠，不可拿來判飲料/副食。
-- 分類只在**產出 coupons.js 時**由 `lib/categories.py` 套用：候選寫回 `cat`、
-  券層寫 `units: [{group, groupIdx, cats}]`（混類項可多類，如 `["副食","飲料"]`），
-  再由項分類產生篩選標籤（含「飲料」）。
+- 分類只在**產出 coupons.js 時**由 `lib/categories.py` 套用：候選寫回 `cat`、券層寫 `units: [{group, groupIdx, cats}]`（混類項可多類，如 `["副食","飲料"]`），再由項分類產生篩選標籤（含「飲料」）。
 - 改分類規則只要重跑 build，不必重掃 545 碼；`daily.py` 內容變更比對用
   「官方組標題＋候選品名」。
 

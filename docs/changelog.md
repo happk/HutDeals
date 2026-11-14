@@ -7,87 +7,99 @@
 
 ## 未分配
 
-- **dead_since 缺值落地補值**：`cmd_confirm` 的 dead 分支對「`dead_since` 缺有效值」的
-  紀錄補值＝當天（falsy 謂詞：不存在／None／空字串都補，已有有效值不覆蓋）——結束
-  「缺欄位的 dead 永不退役」（runtime 的 `get` default 只讀不寫，days 恆 0；15 筆
-  2026-09-04 遺留首次流經即補值，+7 天自然退役轉 empty），並自癒「存在但 None」形狀
-  的 `fromisoformat(None)` 崩潰炸點。alive／empty 零影響（補值只在 dead 分支執行）。
-  修 todo cb13be8-1（使用者拍板 backfill 語意：觀察窗自補值日重起算，非直接轉 empty）。
-  測試：`test_dead_since_backfill` 9 案例（含 alive 不被補值、復活乾淨、完整生命週期、
-  同日重跑冪等）；`exp_prob/2026-10-26_dead-since-backfill/sim_backfill_snapshot.py`
-  對真實 scan_state 驗證目標 15/15 精確、有效值零覆蓋。計畫：
-  `exp_prob/2026-10-26_dead-since-backfill/`。
-- **熔斷日資料保全與掃尾三項**：①掃號/更新鏈四個 commit step 加 `if: !cancelled()`——
-  熔斷（exit 3）或步驟失敗時已寫檔的當日結果照常提交，手動取消不撿半成品（todo 原記
-  字面 `always()` 經分析修正：`always()` 連手動取消都會提交被取消進程可能留下的截斷檔）。
-  confirm/explore 的 commit 一併發布 `public/scan_alerts.json`（熔斷日 admin 警報不停昨日）；
-  update.yml 同款缺口一併修（enrich 熔斷＝部分補全結果不再丟 runner，配合 merge 繼承次日保住）；
-  sample 發布／update sitemap＋發布三 step 同條件 `!cancelled()`——熔斷日提交的資料與
-  發布產物（public/scan_alerts.json、sitemap.xml）內部一致；
-  兩處告警 issue 文案改如實。②`merge_alive_records` 復活清殘留 `dead_since`（與 confirm
-  復活路徑一致）。③`orderflow.fetch_and_parse` 瞬時失敗每輪留一筆 log（碼號/輪次/例外類型），
-  失敗期間可回溯。測試：`test_coverage_sync_revive` +2、`test_fetch_retry` +1、
-  `exp_prob/2026-10-26_failure-day-data-guard/probe_wf_yaml.py` workflow 快照檢查。分析：
-  `docs/todo-analysis/2026-10-26_潛在漏洞短修盤點.md`。
-- **資料時間戳可信度修復——寫入端執行時帶本地時區**：header「資料最後更新」一度顯示
-  未來時間（2026-10-26 09:13 UTC+8）。根因：`last_update` 為無時區字串，前端
-  `formatUserTime` 視為 UTC；CI runner 時鐘本為 UTC 相安無事，但該檔由本機（UTC+8）
-  重建寫入，台北時間被當 UTC 再 +8h。修復（2026-10-26 使用者指示設計修訂）：新增
-  `script.lib.coupons.now_stamp()`——`datetime.now().astimezone()` 帶出執行環境
-  時差的自描述戳（本機 `+08:00`、CI `+00:00`，工作機在任何時區皆正確），
-  `build_coupons`／`ingest_external`／`enrich_official` 的 `last_update` 與 enrich
-  step2 失敗記錄 `"at"` 共六處改用；讀取端 formatUserTime 本就支援帶 offset 字串、
-  前端零改動。已部署兩資料檔的錯誤戳就地校正（2026-10-26T01:13:40→2026-10-25T17:13:40，
-  即真實 UTC 時刻）。測試：`TestNowStamp` +3（時區無關的時刻正確性——非 UTC 機器上
-  naive 寫法必被抓）；`format.test` +1（任何寫入時區×任何讀者時區）。
+- **dead_since 缺值落地補值**：`cmd_confirm` 的 dead 分支對「`dead_since` 缺有效值」的紀錄補值＝當天——結束「缺欄位的 dead 永不退役」。
+
+  - 補值謂詞＝falsy（不存在／None／空字串都補，已有有效值不覆蓋）；alive／empty 零影響（補值只在 dead 分支執行）
+  - 15 筆 2026-09-04 遺留首次流經即補值，+7 天自然退役轉 empty
+  - 自癒「存在但 None」形狀的 `fromisoformat(None)` 崩潰炸點
+  - 修 todo cb13be8-1（使用者拍板 backfill 語意：觀察窗自補值日重起算，非直接轉 empty）
+  - 測試：`test_dead_since_backfill` 9 案例（含 alive 不被補值、復活乾淨、完整生命週期、同日重跑冪等）
+  - 驗證：`exp_prob/2026-10-26_dead-since-backfill/sim_backfill_snapshot.py` 對真實 scan_state 驗證目標 15/15 精確、有效值零覆蓋
+  - 計畫：`exp_prob/2026-10-26_dead-since-backfill/`
+- **熔斷日資料保全與掃尾三項**：
+
+  - ①掃號/更新鏈四個 commit step 加 `if: !cancelled()`——熔斷（exit 3）或步驟失敗時已寫檔的當日結果照常提交，手動取消不撿半成品
+    - todo 原記字面 `always()` 經分析修正：`always()` 連手動取消都會提交被取消進程可能留下的截斷檔
+    - confirm/explore 的 commit 一併發布 `public/scan_alerts.json`（熔斷日 admin 警報不停昨日）
+    - update.yml 同款缺口一併修（enrich 熔斷＝部分補全結果不再丟 runner，配合 merge 繼承次日保住）
+    - sample 發布／update sitemap＋發布三 step 同條件 `!cancelled()`——熔斷日提交的資料與發布產物（public/scan_alerts.json、sitemap.xml）內部一致
+    - 兩處告警 issue 文案改如實
+  - ②`merge_alive_records` 復活清殘留 `dead_since`（與 confirm 復活路徑一致）
+  - ③`orderflow.fetch_and_parse` 瞬時失敗每輪留一筆 log（碼號/輪次/例外類型），失敗期間可回溯
+  - 測試：`test_coverage_sync_revive` +2、`test_fetch_retry` +1、`exp_prob/2026-10-26_failure-day-data-guard/probe_wf_yaml.py` workflow 快照檢查；分析：`docs/todo-analysis/2026-10-26_潛在漏洞短修盤點.md`
+- **資料時間戳可信度修復——寫入端執行時帶本地時區**：header「資料最後更新」一度顯示未來時間（2026-10-26 09:13 UTC+8）。
+  根因：`last_update` 為無時區字串，前端 `formatUserTime` 視為 UTC；CI runner 時鐘本為 UTC 相安無事，但該檔由本機（UTC+8）重建寫入，台北時間被當 UTC 再 +8h。
+  修復（2026-10-26 使用者指示設計修訂）：新增 `script.lib.coupons.now_stamp()`——`datetime.now().astimezone()` 帶出執行環境時差的自描述戳（本機 `+08:00`、CI `+00:00`，工作機在任何時區皆正確）。
+  `build_coupons`／`ingest_external`／`enrich_official` 的 `last_update` 與 enrich step2 失敗記錄 `"at"` 共六處改用。讀取端 formatUserTime 本就支援帶 offset 字串、前端零改動。
+  已部署兩資料檔的錯誤戳就地校正（2026-10-26T01:13:40→2026-10-25T17:13:40，即真實 UTC 時刻）。
+  測試：`TestNowStamp` +3（時區無關的時刻正確性——非 UTC 機器上 naive 寫法必被抓）。
+  `format.test` +1（任何寫入時區×任何讀者時區）。
   分析與修復：`exp_prob/2026-10-26_last-update-utc/`。
-- **官券補全欄位每日保留**：`build_coupons.merge()` 對官網列表產的新殼繼承舊券的 enrich
-  補全欄位——items＋flavorSets（同進同出，防 flavorIdx 懸空）、units、msrp、orderType、
-  orderUrl（cno 直連舊者勝出）。結束「enrich 失敗一天、掉殼一天」——補全結果不再被每日
-  merge 清零；enrich 成功時仍覆寫/補缺，繼承值至多落後一個週期（修 todo c5d1634-1；
-  欄位集合經 exp_prob 實測由 todo 記錄的三欄校正為六欄）。測試：`test_build_coupons`
-  TestMergeInherit +9（含繼承→write→load roundtrip）；快照模擬 `sim_merge_snapshot.py`
-  對真實 coupons.js 驗證補全券 100% 保留、外部券 682 張零變動。分析與計畫：
-  `exp_prob/2026-10-26_merge-inherit-fix/`。
-- **公告面板輕量語法渲染**：notices.md 內容從純文字升級為輕量語法——`### 小節標題`
-  渲染為粗體、字大一級；`- `／`* ` 連續行渲染為無序圓點列表（紅色 marker）；
-  其餘為段落（換行保留）。解析改為區塊化（`parseNotices`：p／h3／ul，`-` 與 `*`
-  可混用併同一列表），檔頭補語法說明；同時新增搜尋升級公告。測試：`Header.test` +6。
-- **搜尋納入餐點內容物**：搜尋索引加入 items 候選品名（前端 WeakMap 懶快取，每券只組一次、
-  之後每鍵零重建）。修復外部碼（description=None、內容只在 items 的 682 券）內容物對搜尋
-  隱形——搜「雞軟骨」由 2 筆增至 363 筆，offline 殘影卡同受惠；每鍵成本反降
-  （0.198→0.067 ms/鍵，723 券實測）。測試：`filter.test` +5（26821 型／跨欄位 AND／
-  offline items／快取冪等／空 items）；新增資料集驗收 `exp_prob` 的
-  `search_cases.test.ts`——11 案例（搜索字→應命中鍵）對真實 coupons.js 跑 filterCoupons，
-  「至少命中」語意不隨每日資料更新破壞。分析、效能基準與計畫：
-  `exp_prob/2026-10-26_search-items-index/`。
+- **官券補全欄位每日保留**：`build_coupons.merge()` 對官網列表產的新殼繼承舊券的 enrich 補全欄位——items＋flavorSets（同進同出，防 flavorIdx 懸空）、units、msrp、orderType、orderUrl（cno 直連舊者勝出）。
+  結束「enrich 失敗一天、掉殼一天」——補全結果不再被每日 merge 清零。enrich 成功時仍覆寫/補缺，繼承值至多落後一個週期（修 todo c5d1634-1——欄位集合經 exp_prob 實測由 todo 記錄的三欄校正為六欄）。
+  測試：`test_build_coupons` TestMergeInherit +9（含繼承→write→load roundtrip）；快照模擬 `sim_merge_snapshot.py` 對真實 coupons.js 驗證補全券 100% 保留、外部券 682 張零變動。
+  分析與計畫：`exp_prob/2026-10-26_merge-inherit-fix/`。
+- **公告面板輕量語法渲染**：notices.md 內容從純文字升級為輕量語法——`### 小節標題`渲染為粗體、字大一級；`- `／`* ` 連續行渲染為無序圓點列表（紅色 marker）；其餘為段落（換行保留）。
+  解析改為區塊化（`parseNotices`：p／h3／ul，`-` 與 `*` 可混用併同一列表），檔頭補語法說明。同時新增搜尋升級公告。
+  測試：`Header.test` +6。
+- **搜尋納入餐點內容物**：搜尋索引加入 items 候選品名（前端 WeakMap 懶快取，每券只組一次、之後每鍵零重建）。
+  修復外部碼（description=None、內容只在 items 的 682 券）內容物對搜尋隱形——搜「雞軟骨」由 2 筆增至 363 筆，offline 殘影卡同受惠；每鍵成本反降（0.198→0.067 ms/鍵，723 券實測）。
+  測試：`filter.test` +5（26821 型／跨欄位 AND／offline items／快取冪等／空 items）。
+  新增資料集驗收 `exp_prob` 的 `search_cases.test.ts`——11 案例（搜索字→應命中鍵）對真實 coupons.js 跑 filterCoupons，「至少命中」語意不隨每日資料更新破壞。
+  分析、效能基準與計畫：`exp_prob/2026-10-26_search-items-index/`。
+
+## v1.1.1（2026-11-14）— 掃號熔斷修復＋節流統一
+
+- **掃號熔斷修復**（11-12/11-13 三場掃號失敗，issue #9/#10 的完整修復——熔斷約定在「抓詳情」階段從未實作）。八處修改＋落地審核追加：
+
+  - ①`BatchFetcher` 熔斷不重配：403/429 不再被誤判 session 過期去重配——限流下重配自己也會被擋，第二發 403 裸拋 exit 1、627 碼查活成果蒸發
+  - ②③daily 四個抓詳情迴圈接住熔斷——撞到就停、已完成結果照樣入庫、exit 3 結束：
+    - 前置失敗三層放行
+    - dead 迴圈熔斷後跳過補抓（復活判定照做）
+  - ④confirm 的 commit 帶 `scan_coverage.json`（不再天天丟）
+  - ⑤gate「查不到＝擋」：
+    - 修復 gh 在無 checkout 環境查不到 issue＋吞錯成「沒有 issue」兩洞
+    - 查詢值整數驗證，空字串也擋（落地審核發現拼接 case 的單邊空字串縫，改兩個獨立 case）
+  - ⑥非選單頁熔斷：
+    - 抓回的頁先驗選單版特徵（`ctidss`＋180KB），忙碌頁視同解析失敗
+    - 忙碌頁「假成功」由 ⑥a′ 上游攔截為「疑似垃圾頁」＋連續 3 碼計數熔斷——解析成功但 items 空、title/channels 靜默清空、exit 0 的垃圾頁不再被當成券
+    - 三張正常無選項券（93015/15596/16348）白名單放行
+  - ⑦節流統一：
+    - 每發 2s→1s（策略變更）
+    - 號段等待停用（常數保留）
+    - 四個抓詳情迴圈補 `sleep_scan`——此前抓詳情密度是查活的 8.6 倍、零節流
+    - 查活→抓詳情切換休息 45s
+  - ⑧alert 連續失敗補 comment（此前靜默 skip）
+
+- 驗收：
+
+  - 測試 134 passed（基線 113＋21）
+  - 注入 403/429 直拋、500/超時不回歸（4/4）
+  - gate 邊界八案例 8/8
+  - 反向測試 run [43545011771](https://github.com/happk/HutDeals/actions/runs/43545011771)——#9/#10 開著時以分支觸發，gate 實證擋下、三工 skip、⑧ 首次實戰（#10 補「再次失敗」留言）
+- 報告：`exp_prob/2026-11-13_403-step2-fuse-gate/`（修復報告 v6 前言自足、附錄含用詞表）
+- 版本：`package.json` 同步至 1.1.1
 
 ## v1.1.0（2026-10-26）
 
-- **UI 打磨批次**：組標題「N 選1」改「N 選 1」；收藏鈕放大到與「查看完整資訊」同級、
-  文字星（☆/★ 跨平台字型不一）換內嵌 SVG（描邊/實心，currentColor 跟隨狀態）；
-  殘影卡「已失效」角標改標題列內嵌（不與放大的收藏鈕重疊）；
-  「只看收藏」改篩選快照語意——開啟瞬間凍結成員，取消收藏僅變按鈕狀態、卡片不消失，
-  下次開啟或重載才排除；收藏變動不再重置無限滾動位置。
-- **外部碼判死歸檔＋殘影卡**：掃號判死的外部碼（scan_state=dead/empty，展示不分）
-  由 `ingest_external` 每日對帳標 `offline`（`offlineSince=dead_since`，冪等），
-  結束「判死後永遠 active」的殭屍狀態（修復上線首日翻轉 38 筆 stale）。
+- **UI 打磨批次**：
+
+  - 組標題「N 選1」改「N 選 1」
+  - 收藏鈕放大到與「查看完整資訊」同級；文字星（☆/★ 跨平台字型不一）換內嵌 SVG（描邊/實心，currentColor 跟隨狀態）
+  - 殘影卡「已失效」角標改標題列內嵌（不與放大的收藏鈕重疊）
+  - 「只看收藏」改篩選快照語意——開啟瞬間凍結成員，取消收藏僅變按鈕狀態、卡片不消失，下次開啟或重載才排除
+  - 收藏變動不再重置無限滾動位置
+- **外部碼判死歸檔＋殘影卡**：掃號判死的外部碼（scan_state=dead/empty，展示不分）由 `ingest_external` 每日對帳標 `offline`（`offlineSince=dead_since`，冪等）——結束「判死後永遠 active」的殭屍狀態（修復上線首日翻轉 38 筆 stale）。
   60 天清除由 `build_coupons.merge` 既有規則接手、復活由既有活碼迴圈翻回，皆零新代碼。
-  前端列表改殘影卡（2026-10-25 原型方案 C）：離線券參與搜尋與全部篩選、
-  灰化＋「已失效 · 自 X」角標、排序恆在活碼之後、卡片無訂購連結（代碼複製保留）；
-  官網下架券同時從完全隱形改為殘影（行為改變）。
+  前端列表改殘影卡（2026-10-25 原型方案 C）：離線券參與搜尋與全部篩選、灰化＋「已失效 · 自 X」角標、排序恆在活碼之後、卡片無訂購連結（代碼複製保留）；官網下架券同時從完全隱形改為殘影（行為改變）。
   詳情橫幅按來源分支：外部碼顯示「掃號已確認失效(自 X 起…)」。
-  sitemap 維持只收 active（死碼退出搜尋引擎、站內殘影可見）；全站統計仍只算 active，
-  列表計數行拆分顯示「共 N 筆 + M 筆近期失效｜全站 X 筆有效」（M=0 省略失效段）。
-  新增 `test_ingest_offline`（標記/fallback/不動範圍/冪等/main 復活 共 5 例），
-  `filter.test` 期望值同步（offline 參與篩選、排序恆後）。
+  sitemap 維持只收 active（死碼退出搜尋引擎、站內殘影可見）。全站統計仍只算 active，列表計數行拆分顯示「共 N 筆 + M 筆近期失效｜全站 X 筆有效」（M=0 省略失效段）。
+  新增 `test_ingest_offline`（標記/fallback/不動範圍/冪等/main 復活 共 5 例），`filter.test` 期望值同步（offline 參與篩選、排序恆後）。
   分析與設計：`exp_prob/2026-10-25_search-offline-archive/`（分析、修復計畫、生命週期三份報告）。
-- **admin「上次更動時間」真時區化**：原 `lastChanged` 是純日期（runner UTC 日），無時刻可轉，
-  瀏覽器把它補成 UTC 午夜換算出假的 `08:00（UTC+8）`。改為每日掃號在池有實質變更時
-  （內容變更／活→死／復活／新碼入池）記 `lastChangedAt`＝該次掃描的 `updatedAt`（完整時刻，
-  無變更不動該欄），admin 卡改顯示 `formatUserTime(lastChangedAt)` 依瀏覽器時區轉換；
-  舊資料在下次有變更的掃號前 fallback 顯示純日期。`formatUserTime` 對純日期改原樣返回
-  （不編造假時刻、跨瀏覽器一致）；admin 掃號警告標題 `updatedAt` 一併補上時區轉換。
+- **admin「上次更動時間」真時區化**：原 `lastChanged` 是純日期（runner UTC 日），無時刻可轉，瀏覽器把它補成 UTC 午夜換算出假的 `08:00（UTC+8）`。
+  改為每日掃號在池有實質變更時（內容變更／活→死／復活／新碼入池）記 `lastChangedAt`＝該次掃描的 `updatedAt`（完整時刻，無變更不動該欄），admin 卡改顯示 `formatUserTime(lastChangedAt)` 依瀏覽器時區轉換。
+  舊資料在下次有變更的掃號前 fallback 顯示純日期。
+  `formatUserTime` 對純日期改原樣返回（不編造假時刻、跨瀏覽器一致）；admin 掃號警告標題 `updatedAt` 一併補上時區轉換。
   測試：Python +4 例（`test_last_changed_at` 3、confirm +1）、`format.test` +1。
 - **搜尋加優惠代碼**：搜尋索引納入 `code`，品名不含 5 位碼的券（如 93014「大比薩分享餐$399」）現在可用代碼搜到；搜尋框提示同步改為「搜尋餐點、優惠代碼或關鍵字」。補 `filter.test` 案例。
 - **admin 散點圖修復**：原價已改存結構化 `msrp` 欄位，散點仍讀舊的 `priceNote`「原價$N」→ 點數 0（只剩座標軸）；改讀 `msrp` 後恢復 436 點。
@@ -99,56 +111,45 @@
   - **資料存放**：`scan_state.json` 回到官網原貌（移除我們的 `cat`）；分類只在產出 `coupons.js` 時套用，券層新增 `units: [{group, groupIdx, cats}]`、候選保留自己的 `cat`。改分類規則只要重跑 build，不必重掃。
   - 篩選標籤由項分類產生（含「飲料」）；`daily.py` 內容變更比對改為「官方組標題＋候選品名」。
   - 一次性遷移 `script/site/migrate_item_units.py`（移除 scan_state 的舊 cat）＋重建 coupons.js。
-- **更新時間改使用者本地時區顯示**：`last_update` 是 runner 寫的 UTC 無時區字串，
-  台灣用戶看到 `2026-09-09T20:33` 會誤判為昨日資料（實為 9/10 04:33 CST 當日凌晨排程）。
-  新增 `src/lib/format.ts` `formatUserTime()`：無時區視為 UTC，按瀏覽器本地時區渲染
-  `YYYY-MM-DD HH:mm`＋動態 UTC 偏移（如 `2026-09-10 04:33（UTC+8）`，半小時時區亦成立）。
-  套用 header／頁尾（原只取 UTC 日期，會差一天）／回報單（附 UTC 原文方便對 CI log）。
-  新增 `format.test.ts` 8 例；寫入端格式不動。
-- **admin 資料改 no-cache 載入**：`coupons_full.js` 檔名永不變，`<script src>` 會命中瀏覽器快取、
-  看起來像沒更新；改 `fetch(..., {cache:"no-cache"})` 解析後啟動（`scan_alerts.json` 同）。
-- **admin 入庫趨勢連續窗口＋區間切換**：舊寫法只取有入庫的日子，0 入庫的日子直接消失
-  （圖上停在舊日期、看起來像沒更新）；改連續日曆窗口、0 補 0 顯示。新增 近14天／近30天／
-  至今 下拉（切換重繪、選擇記 `localStorage`；點多時逐點數值只標峰值）。窗口用 UTC 日曆
-  （`firstSeen` 是 runner 的 UTC 日期）。
-- **admin 爬取進度雙時間**：`state 更新時間` 改名「上次更新時間」（套時區格式）；
-  同框新增「上次更動時間」：`scan_summary()` 新增 `lastChanged`＝全池 `contentChangedAt`／
-  `dead_since`／`firstSeen` 最晚日期，要下次每日更新寫出新 `coupons_full.js` 後才出現。
+- **更新時間改使用者本地時區顯示**：`last_update` 是 runner 寫的 UTC 無時區字串，台灣用戶看到 `2026-09-09T20:33` 會誤判為昨日資料（實為 9/10 04:33 CST 當日凌晨排程）。
+  新增 `src/lib/format.ts` `formatUserTime()`：無時區視為 UTC，按瀏覽器本地時區渲染 `YYYY-MM-DD HH:mm`＋動態 UTC 偏移（如 `2026-09-10 04:33（UTC+8）`，半小時時區亦成立）。
+  套用 header／頁尾（原只取 UTC 日期，會差一天）／回報單（附 UTC 原文方便對 CI log）。新增 `format.test.ts` 8 例；寫入端格式不動。
+- **admin 資料改 no-cache 載入**：`coupons_full.js` 檔名永不變，`<script src>` 會命中瀏覽器快取、看起來像沒更新；改 `fetch(..., {cache:"no-cache"})` 解析後啟動（`scan_alerts.json` 同）。
+- **admin 入庫趨勢連續窗口＋區間切換**：舊寫法只取有入庫的日子，0 入庫的日子直接消失（圖上停在舊日期、看起來像沒更新）。改連續日曆窗口、0 補 0 顯示。
+  新增 近14天／近30天／至今 下拉（切換重繪、選擇記 `localStorage`——點多時逐點數值只標峰值）。窗口用 UTC 日曆（`firstSeen` 是 runner 的 UTC 日期）。
+- **admin 爬取進度雙時間**：`state 更新時間` 改名「上次更新時間」（套時區格式）；同框新增「上次更動時間」——`scan_summary()` 新增 `lastChanged`＝全池 `contentChangedAt`／`dead_since`／`firstSeen` 最晚日期，要下次每日更新寫出新 `coupons_full.js` 後才出現。
 
 ## v1.0.4（2026-09-09）— 掃號去重、cron-job 備援讓賢、節奏調降
 
 **掃號去重**
-- explore 對 confirm 去重：explore 只探 16/26 潛在碼位，剔除當日 confirm 已確認的
-  alive/dead（及當天退役的 empty）；每天省約 551 次 M1 請求（16/26 段約 28%）。
+
+- explore 對 confirm 去重：explore 只探 16/26 潛在碼位，剔除當日 confirm 已確認的 alive/dead（及當天退役的 empty）；每天省約 551 次 M1 請求（16/26 段約 28%）。
   confirm 也順手 `update_coverage`（alive 碼 last_checked 不再只靠 explore）。
 - 新增回歸測試 `test_explore_dedup`（去重集合、當天/昨天 empty 的不同處理）。
 
 **排程備援**
-- GitHub 排程改為 cron-job.org 的備援：gate 偵測到另一場 `workflow_dispatch` 掃號
-  在跑/排隊（排除自己）即讓賢（`should_run=false`），後續 job 全 skip、整場綠色收尾；
-  不會與主要場並跑、也不會兩邊都讓。新增 `actions: read` 權限。
+
+- GitHub 排程改為 cron-job.org 的備援：gate 偵測到另一場 `workflow_dispatch` 掃號在跑/排隊（排除自己）即讓賢（`should_run=false`），後續 job 全 skip、整場綠色收尾；不會與主要場並跑、也不會兩邊都讓。新增 `actions: read` 權限。
   排除自己採 `${GITHUB_RUN_ID}` 內插（避免 jq 當變數 null 而自我讓賢）。
 
 **掃號節奏**
+
 - 中場休息 ~90s → ~30s（`lib/pacing.py` `DEFAULT_BREAK_BASE`；每日約省 1 小時）。
 
 **文件**
-- `docs/code-structure.md` / `docs/workflow.md`：同步 explore 去重、cron-job.org 主要＋
-  GitHub cron 備援讓賢、pacing 30s、repo.py 與新測試檔入樹、移除已不存在的
-  `items-schema.md`/`crawler-data-sources.md` 引用。
+
+- `docs/code-structure.md` / `docs/workflow.md`：同步 explore 去重、cron-job.org 主要＋GitHub cron 備援讓賢、pacing 30s、repo.py 與新測試檔入樹、移除已不存在的 `items-schema.md`/`crawler-data-sources.md` 引用。
 - `docs/todo.md`：9f44bb9 條目行號刷新至現行 scan.yml。
 
 **版本**
+
 - `package.json` 同步至 1.0.4
 
 ## v1.0.3（2026-09-09）— 掃號穩定性修正
 
-- 修 `cmd_confirm` 崩潰：券選項無群組時 `cat`/`groupTitle` 為 `None`，與字串同列
-  `sorted()` 觸發 `TypeError`（每日掃號 confirm 中斷，run 34263828448）。排序加 `key=str`。
-- 修失敗告警 issue 從未發成：`gh label create` 建不出「不存在」的 label、錯誤又被
-  `|| true` 吞掉，`gh issue create --label scan-failed` 因 label 不存在而失敗。
-  改 REST `POST /repos/{repo}/labels`（不存在才建）；`scan.yml`/`update.yml` 同修
-  （`scan-failed`/`scrape-failed`）。
+- 修 `cmd_confirm` 崩潰：券選項無群組時 `cat`/`groupTitle` 為 `None`，與字串同列 `sorted()` 觸發 `TypeError`（每日掃號 confirm 中斷，run 34263828448）。排序加 `key=str`。
+- 修失敗告警 issue 從未發成：`gh label create` 建不出「不存在」的 label、錯誤又被 `|| true` 吞掉，`gh issue create --label scan-failed` 因 label 不存在而失敗。
+  改 REST `POST /repos/{repo}/labels`（不存在才建）；`scan.yml`/`update.yml` 同修（`scan-failed`/`scrape-failed`）。
 - 新增回歸測試 `test_confirm_cats_none`（離線 mock：含 None 的組分類比對不崩潰）。
 - 版本：`package.json` 同步至 1.0.3
 
@@ -174,23 +175,23 @@
 首發版。台灣必勝客優惠整理站（非官方），每日自動同步官網與官網驗證的聯名優惠碼。
 
 **資料**
-- 結構化價格取代 desc 文字：價格取官網結構化欄位（descPrice/套餐價格/price_selling），
-  desc 僅兜底（起價標 priceNote「起」）與備用
-- 券內容 items：訂餐流程選單版結構化爬取（組分類 cat：大/小/個人比薩、特殊比薩、
-  義大利麵/飯、副食/飲料）；只改顯示分類、保留官網原始 group
+
+- 結構化價格取代 desc 文字：價格取官網結構化欄位（descPrice/套餐價格/price_selling），desc 僅兜底（起價標 priceNote「起」）與備用
+- 券內容 items：訂餐流程選單版結構化爬取（組分類 cat：大/小/個人比薩、特殊比薩、義大利麵/飯、副食/飲料）；只改顯示分類、保留官網原始 group
 - 每日掃號維持碼池（confirm/explore/sample）
 
 **網站**
+
 - 搜尋/篩選/排序/收藏、卡片含加價標記、詳情頁加價低→高排序
 - Header 回首頁按鈕、hero 尺寸彩蛋（大13/小9/個人6 吋）
 - 公告通知系統（作者 notices.md → 鈴鐺，新版自動彈出）
 - SEO：OG/canonical/robots/sitemap（含券深連結）；頁尾非官方聲明
 
 **CI（鏈式）**
+
 - scan.yml 每日 01:11 起頭 → 三工成功 dispatch update → update 成功 dispatch deploy
 - gate 熔斷：有未關失敗 issue 即禁掃；update/deploy 無固定 cron
 
 ## 開發期（2026-09-07 前）
 
-內部開發階段（資料端結構化重構、前端建置、掃號架構），詳細 commit 對照見本地正本
-（20260903 私有 repo，不公開）。
+內部開發階段（資料端結構化重構、前端建置、掃號架構），詳細 commit 對照見本地正本（20260903 私有 repo，不公開）。

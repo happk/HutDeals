@@ -14,7 +14,7 @@ script/
 │   ├── __init__.py
 │   ├── net.py                # UA/HEADERS、fetch_html、m1_probe、fetch_step2_html
 │   ├── orderflow.py          # 訂餐流程 session（OrderFlowSession/BatchFetcher/fetch_and_parse）
-│   ├── pacing.py             # sleep_scan()：jitter/seg-gap/中場休息
+│   ├── pacing.py             # sleep_scan()：jitter/號段等待（已停用）/中場休息
 │   ├── state.py              # load_state / save_state（data/scan_state.json）
 │   ├── repo.py               # REPO（repo 根 Path；資料檔路徑基準）
 │   ├── coupons.py            # load_coupons_js / write_coupons_js / DATA_MARKER / 排序鍵
@@ -51,13 +51,14 @@ script/
         ├── test_fetch_retry.py        # orderflow 抓取重試退避
         ├── test_ingest_offline.py     # ingest_external 判死歸檔（dead/empty 標 offline）
         ├── test_step2_visibility.py   # step2 失敗寫 alerts/顯示於 admin
+        ├── test_step2_fuse.py         # 熔斷三形態 cmd 層＋dead 防護＋節流呼叫（2026-11-14）
+        ├── test_pacing.py             # sleep_scan 節流參數（base 1.0／號段停用／中場）
         └── fixtures/         # plu_pdpop.html + step2/*.html + orderflow/*.html（官網真實抓取）
 ```
 
 ## archive/（退役區）
 
-文字 items 產線退役實體移至 repo 根 `archive/parse/`：`parse_meal.py`（被 orderflow 取代）、
-`parse-rules.md`、`refresh_meal_parse.py`、`test_parse_meal_items.py`。
+文字 items 產線退役實體移至 repo 根 `archive/parse/`：`parse_meal.py`（被 orderflow 取代）、`parse-rules.md`、`refresh_meal_parse.py`、`test_parse_meal_items.py`。
 新 items schema（`{text, group, groupIdx, priceAdd, flavors[], cat}`）見 `docs/workflow.md` §5。
 
 ## 執行方式（套件化後統一）
@@ -76,7 +77,7 @@ script/
 | deploy-pages.yml | push main + update 成功 repository_dispatch | npm（無 python） |
 
 > 鏈式：scan 三工全成功 → dispatch `scan-complete` → update；update 成功 → dispatch `update-complete` → deploy。
-> 任一步失敗 → 開 `scan-failed`/`scrape-failed` issue → 隔日 scan gate 見 open issue 即禁掃。
+> 任一步失敗 → 開 `scan-failed`/`scrape-failed` issue → 隔日 scan gate 見 open issue 即禁掃（issue 已存在補留言——查不到＝擋）。
 > gate job = 熔斷檢查（open 失敗 issue 禁掃）＋ **備援讓賢**：偵測到另一場 `workflow_dispatch`
 > 掃號在跑/排隊（排除自己）→ `should_run=false`，後續 job 全 skip、整場綠色收尾。
 > explore 對 confirm 去重：只探 16/26 潛在碼位（剔除當日 confirm 已確認的 alive/dead，見 daily.py `cmd_explore`）。
