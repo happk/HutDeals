@@ -20,10 +20,14 @@ import datetime as dt
 import json
 import random
 import sys
+import time
 import urllib.error
 
 from script.lib.net import is_rate_limited, m1_probe
-from script.lib.orderflow import BatchFetcher, fetch_and_parse
+from script.lib.orderflow import (BatchFetcher, bump_parse_streak,
+                                  fetch_and_parse, FUSE_PARSE_STREAK,
+                                  is_fuse_message, ITEMS_NONE_WHITELIST,
+                                  MARK_GARBAGE_PAGE, MARK_PARSE_FAIL)
 from script.lib.pacing import sleep_scan
 from script.lib.repo import REPO
 from script.lib.state import STATE_PATH, load_state, merge_step2_failures, save_state
@@ -93,12 +97,22 @@ def step2_of(rec: dict, fetcher: BatchFetcher | None = None) -> dict | None:
     except urllib.error.HTTPError:
         raise  # 熔斷（fetch_and_parse 已只放行 rate-limited）
     except Exception as err:  # noqa: BLE001
+        # ③b：前置三關鍵字＝熔斷形態——不記 step2_error，直拋給 cmd 層
+        if isinstance(err, RuntimeError) and is_fuse_message(err):
+            raise
         log(f"  {rec['code']} step_2 FAIL {err}")
         rec["step2_error"] = str(err)[:150]
         rec["step2At"] = now
         return None
     if r is None:
-        rec["step2_error"] = "fetch/parse 失敗"
+        rec["step2_error"] = MARK_PARSE_FAIL
+        rec["step2At"] = now
+        return None
+    # ⑥a′：繞過頁形態（is_menu_page 過了但 meta 無 items）＝疑似垃圾頁——上游攔下，
+    # 假成功到不了 cmd 層/state（白名單三碼為正常無選項券）
+    if r.get("items") is None and rec["code"] not in ITEMS_NONE_WHITELIST:
+        log(f"  {rec['code']} 疑似垃圾頁（meta 無 items）")
+        rec["step2_error"] = MARK_GARBAGE_PAGE
         rec["step2At"] = now
         return None
     rec.pop("step2_error", None)
@@ -175,7 +189,12 @@ def cmd_confirm(args) -> int:
     step2_failures: list[dict] = []
     step2_ok: list[str] = []
     step2_clear: list[str] = []
-    for code in alive:
+    # ⑦c：查活→抓詳情的階段切換休息（事故 log 顯示 M1 末筆→step2 首發僅隔 2.9s，
+    # 滾動窗口假說下的唯一無緩衝接縫；enrich 為獨立 job 不適用）
+    log("查活完成，抓詳情前休息 45s")
+    time.sleep(45)
+    fail_streak = 0  # ⑥b：連續解析失敗計數（各迴圈獨立）
+    for i, code in enumerate(alive):  # ⑦b：i 供 sleep_scan 節流
         r = by_code.get(code)
         rec = codes[code]
         if r is None:
@@ -191,8 +210,23 @@ def cmd_confirm(args) -> int:
             continue
         if r.get("m1_success") is None:
             continue
-        d = step2_of(r, fetcher)
+        try:
+            d = step2_of(r, fetcher)
+        except (urllib.error.HTTPError, RuntimeError) as e:
+            # ③c：熔斷形態（403/429 或前置三關鍵字）→ 停手，已完成部分仍入庫
+            if (isinstance(e, urllib.error.HTTPError) and is_rate_limited(e)) or \
+               (isinstance(e, RuntimeError) and is_fuse_message(e)):
+                blown = True
+                break
+            raise
+        sleep_scan(i, alive)  # ⑦b：step2 節流（M1/step2 同套參數，比照 probe_batch）
         if d is None:
+            # ⑥b：連續解析失敗計數（雙標記）——整站忙碌頁的熔斷門檻
+            fail_streak = bump_parse_streak(fail_streak, r)
+            if fail_streak >= FUSE_PARSE_STREAK:
+                log(f"ABORT: 連續 {fail_streak} 碼解析失敗（疑似整站忙碌頁，熔斷，已完成部分仍入庫）")
+                blown = True
+                break
             # step2 失敗留痕（state + alerts 可見；2026-09-08，不再靜默）
             if r.get("step2_error"):
                 rec["step2_error"] = r["step2_error"]
@@ -200,6 +234,7 @@ def cmd_confirm(args) -> int:
                 step2_failures.append({"code": code, "title": rec.get("title"),
                                        "error": r["step2_error"], "at": r["step2At"]})
             continue
+        fail_streak = 0  # ⑥b：真成功歸零
         rec.pop("step2_error", None)
         rec.pop("step2At", None)
         step2_ok.append(code)
@@ -226,7 +261,8 @@ def cmd_confirm(args) -> int:
                             "diff": {k: v for k, v in diff.items()}})
             log(f"  {code} 內容更動: {list(diff)}")
 
-    for code in dead:
+    fail_streak = 0  # ⑥b：各迴圈 streak 獨立（dead 分母小於 N，同形為一致性保留）
+    for i, code in enumerate(dead):  # ⑦b：i 供 sleep_scan 節流
         r = by_code.get(code)
         if r is None:
             continue
@@ -239,22 +275,38 @@ def cmd_confirm(args) -> int:
             # 復活當次即補 step_2：內容不落後一天（2026-09-08 拍板，取代 todo 條目）。
             # 成功覆寫內容欄位；失敗留 step2_error/step2At（隔日 alive 迴圈會重試）。
             # 復活本身已記錄，跨死亡期的內容差異不當「內容更動」alert。
-            d = step2_of(r, fetcher)
-            if d is None:
-                if r.get("step2_error"):
-                    rec["step2_error"] = r["step2_error"]
-                    rec["step2At"] = r["step2At"]
-                    step2_failures.append({"code": code, "title": rec.get("title"),
-                                           "error": r["step2_error"], "at": r["step2At"]})
-            else:
-                rec.pop("step2_error", None)
-                rec.pop("step2At", None)
-                step2_ok.append(code)
-                for f in CONTENT_FIELDS:
-                    if d.get(f) is not None:
-                        rec[f] = d[f]
-                if d.get("items") is not None:
-                    rec["items"] = d["items"]
+            # ③c dead 防護：熔斷後不做 revive 補抓（復活判定照做，補抓隔日 alive 迴圈重試）
+            if not blown:
+                try:
+                    d = step2_of(r, fetcher)
+                except (urllib.error.HTTPError, RuntimeError) as e:
+                    if (isinstance(e, urllib.error.HTTPError) and is_rate_limited(e)) or \
+                       (isinstance(e, RuntimeError) and is_fuse_message(e)):
+                        blown = True
+                        break
+                    raise
+                sleep_scan(i, dead)  # ⑦b：revive 分支同套節流
+                if d is None:
+                    fail_streak = bump_parse_streak(fail_streak, r)
+                    if fail_streak >= FUSE_PARSE_STREAK:
+                        log(f"ABORT: 連續 {fail_streak} 碼解析失敗（疑似整站忙碌頁，熔斷，已完成部分仍入庫）")
+                        blown = True
+                        break
+                    if r.get("step2_error"):
+                        rec["step2_error"] = r["step2_error"]
+                        rec["step2At"] = r["step2At"]
+                        step2_failures.append({"code": code, "title": rec.get("title"),
+                                               "error": r["step2_error"], "at": r["step2At"]})
+                else:
+                    fail_streak = 0  # ⑥b：真成功歸零
+                    rec.pop("step2_error", None)
+                    rec.pop("step2At", None)
+                    step2_ok.append(code)
+                    for f in CONTENT_FIELDS:
+                        if d.get(f) is not None:
+                            rec[f] = d[f]
+                    if d.get("items") is not None:
+                        rec["items"] = d["items"]
         elif r.get("m1_success") is False:
             # dead_since 缺值落地補值（cb13be8-1，2026-10-26）：runtime 的 get default
             # 只讀不寫，缺欄位的 dead（2026-09-04 遺留 15 筆）days 恆 0 永不退役——
@@ -320,16 +372,34 @@ def cmd_explore(args) -> int:
     if fresh:
         log(f"新活碼 {len(fresh)}，補 step_2")
         fetcher = BatchFetcher()
-        for r in fresh:
-            d = step2_of(r, fetcher)
+        codes_fresh = [r["code"] for r in fresh]  # ⑦b：rec dict 清單須先轉字串清單（直接傳 sleep_scan 會 KeyError）
+        fail_streak = 0  # ⑥b：各迴圈 streak 獨立
+        for i, r in enumerate(fresh):  # ⑦b
+            try:
+                d = step2_of(r, fetcher)
+            except (urllib.error.HTTPError, RuntimeError) as e:
+                # ③c：同 alive——熔斷形態停手，已完成部分仍入庫
+                if (isinstance(e, urllib.error.HTTPError) and is_rate_limited(e)) or \
+                   (isinstance(e, RuntimeError) and is_fuse_message(e)):
+                    blown = True
+                    break
+                raise
+            sleep_scan(i, codes_fresh)
             if d:
+                fail_streak = 0  # ⑥b：真成功歸零
                 r.update(d)
                 step2_ok.append(r["code"])
                 new_alerts.append({"code": r["code"], "title": d.get("title"),
                                    "partner": d.get("partner")})
-            elif r.get("step2_error"):
-                step2_failures.append({"code": r["code"], "error": r["step2_error"],
-                                       "at": r["step2At"]})
+            else:
+                fail_streak = bump_parse_streak(fail_streak, r)
+                if fail_streak >= FUSE_PARSE_STREAK:
+                    log(f"ABORT: 連續 {fail_streak} 碼解析失敗（疑似整站忙碌頁，熔斷，已完成部分仍入庫）")
+                    blown = True
+                    break
+                if r.get("step2_error"):
+                    step2_failures.append({"code": r["code"], "error": r["step2_error"],
+                                           "at": r["step2At"]})
     merge_step2_failures(step2_failures, step2_ok)
     added, updated = merge_alive_records(recs, "daily.explore")
     update_alerts("new_codes", new_alerts)
@@ -362,17 +432,35 @@ def cmd_sample(args) -> int:
     if hits:
         log(f"未知號段命中 {len(hits)}，補 step_2")
         fetcher = BatchFetcher()
-        for r in hits:
-            d = step2_of(r, fetcher)
+        codes_hits = [r["code"] for r in hits]  # ⑦b：rec dict 清單須先轉字串清單
+        fail_streak = 0  # ⑥b：各迴圈 streak 獨立（hits 極少，同形為一致性保留）
+        for i, r in enumerate(hits):  # ⑦b
+            try:
+                d = step2_of(r, fetcher)
+            except (urllib.error.HTTPError, RuntimeError) as e:
+                # ③c：同 alive——熔斷形態停手，已完成部分仍入庫
+                if (isinstance(e, urllib.error.HTTPError) and is_rate_limited(e)) or \
+                   (isinstance(e, RuntimeError) and is_fuse_message(e)):
+                    blown = True
+                    break
+                raise
+            sleep_scan(i, codes_hits)
             if d:
+                fail_streak = 0  # ⑥b：真成功歸零
                 r.update(d)
                 step2_ok.append(r["code"])
                 hit_alerts.append({"code": r["code"], "title": d.get("title"),
                                    "partner": d.get("partner"),
                                    "zone": SAMPLE_PLAN.get(r["code"][:2], ("", "?"))[1]})
-            elif r.get("step2_error"):
-                step2_failures.append({"code": r["code"], "error": r["step2_error"],
-                                       "at": r["step2At"]})
+            else:
+                fail_streak = bump_parse_streak(fail_streak, r)
+                if fail_streak >= FUSE_PARSE_STREAK:
+                    log(f"ABORT: 連續 {fail_streak} 碼解析失敗（疑似整站忙碌頁，熔斷，已完成部分仍入庫）")
+                    blown = True
+                    break
+                if r.get("step2_error"):
+                    step2_failures.append({"code": r["code"], "error": r["step2_error"],
+                                           "at": r["step2At"]})
     merge_step2_failures(step2_failures, step2_ok)
     added, updated = merge_alive_records(recs, "daily.sample")
     update_alerts("unknown_hits", hit_alerts)

@@ -22,7 +22,9 @@ import urllib.error
 from script.lib.categories import cat_tags, classify_units
 from script.lib.coupons import load_coupons_js, now_stamp, write_coupons_js
 from script.lib.net import is_rate_limited
-from script.lib.orderflow import fetch_and_parse
+from script.lib.orderflow import (bump_parse_streak, fetch_and_parse,
+                                  FUSE_PARSE_STREAK, is_fuse_message,
+                                  MARK_GARBAGE_PAGE, MARK_PARSE_FAIL)
 from script.lib.pacing import sleep_scan
 from script.lib.repo import REPO
 from script.lib.state import merge_step2_failures
@@ -48,6 +50,7 @@ def main() -> int:
     codes = [c["code"] for c in targets]
     filled = failed = 0
     blown = False
+    fail_streak = 0  # ⑥b：連續解析失敗計數
     step2_failures: list[dict] = []
     step2_ok: list[str] = []
     for i, c in enumerate(targets):
@@ -70,6 +73,11 @@ def main() -> int:
             sleep_scan(i, codes)
             continue
         except Exception as err:  # noqa: BLE001
+            # ③c：前置三關鍵字＝熔斷形態——中止補全（形狀差異刻意：非熔斷照舊 SKIP）
+            if isinstance(err, RuntimeError) and is_fuse_message(err):
+                print(f"  ABORT {code}: {err}（熔斷，中止補全）")
+                blown = True
+                break
             print(f"  SKIP {code}: step_2 FAIL {err}")
             failed += 1
             step2_failures.append({"code": code, "title": c.get("name"),
@@ -77,14 +85,22 @@ def main() -> int:
                                    "at": now_stamp()})
             sleep_scan(i, codes)
             continue
-        if r is None:
-            print(f"  SKIP {code}: step_2 空回應")
+        if r is None or r.get("items") is None:
+            # ⑥a′ 同形：r None＝fetch/parse 失敗；items None＝疑似垃圾頁（繞過頁）
+            mark = MARK_PARSE_FAIL if r is None else MARK_GARBAGE_PAGE
+            print(f"  SKIP {code}: step_2 {mark}")
             failed += 1
             step2_failures.append({"code": code, "title": c.get("name"),
-                                   "error": "fetch/parse 失敗",
-                                   "at": now_stamp()})
+                                   "error": mark, "at": now_stamp()})
+            # ⑥b：連續解析失敗計數（雙標記）
+            fail_streak = bump_parse_streak(fail_streak, {"step2_error": mark})
+            if fail_streak >= FUSE_PARSE_STREAK:
+                print(f"  ABORT: 連續 {fail_streak} 碼解析失敗（疑似整站忙碌頁，熔斷，中止補全）")
+                blown = True
+                break
             sleep_scan(i, codes)
             continue
+        fail_streak = 0  # ⑥b：items 非 None 歸零
         step2_ok.append(code)
         d = r["meta"]
         if d.get("channels") and not c.get("orderType"):

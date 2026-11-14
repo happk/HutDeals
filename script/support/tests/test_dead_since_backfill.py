@@ -16,6 +16,7 @@ import sys
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest import mock
 
 REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO))
@@ -57,7 +58,7 @@ class DeadSinceBackfillTest(unittest.TestCase):
         self._orig = {k: getattr(daily, k) for k in (
             "load_state", "save_state", "update_alerts", "history_row",
             "merge_step2_failures", "update_coverage", "probe_batch",
-            "fetch_and_parse")}
+            "fetch_and_parse", "sleep_scan")}
         daily.load_state = lambda: self.state
         self.saved = {}
         daily.save_state = lambda path, s: self.saved.update(s)
@@ -68,6 +69,12 @@ class DeadSinceBackfillTest(unittest.TestCase):
         self.probed: list[str] = []
         daily.probe_batch = self._probe_batch
         daily.fetch_and_parse = lambda code, fetcher: _content()
+        # ⑦（2026-11-14 節流統一）離線化：⑦b sleep_scan 不真睡；⑦c 的 45s 切換
+        # 休息以 mock.patch 攔截（addCleanup 自動還原）
+        daily.sleep_scan = lambda i, codes: None
+        sleep_patcher = mock.patch("script.scan.daily.time.sleep")
+        sleep_patcher.start()
+        self.addCleanup(sleep_patcher.stop)
 
     def tearDown(self):
         for k, v in self._orig.items():

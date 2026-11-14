@@ -37,7 +37,7 @@ class ExploreDedupTest(unittest.TestCase):
         self._orig = {k: getattr(daily, k) for k in (
             "load_state", "save_state", "update_alerts", "history_row",
             "merge_alive_records", "merge_step2_failures", "update_coverage",
-            "probe_batch")}
+            "probe_batch", "sleep_scan")}
         daily.load_state = lambda: state
         self.saved = {}
         daily.save_state = lambda path, s: self.saved.update(s)
@@ -53,6 +53,7 @@ class ExploreDedupTest(unittest.TestCase):
             return ([{"code": c, "at": "t", "m1_success": False}
                      for c in codes], False)
         daily.probe_batch = _probe
+        daily.sleep_scan = lambda i, codes: None  # ⑦b：離線測試不真睡（新活碼才會走到）
 
     def tearDown(self):
         for k, v in self._orig.items():

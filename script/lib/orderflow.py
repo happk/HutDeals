@@ -53,6 +53,47 @@ def _sleep_retry(attempt: int) -> None:
     time.sleep(attempt * 1.0 + random.uniform(0, 0.5))
 
 
+# ③（2026-11-14）非 HTTP 熔斷形態：prepare() 前置 1-3 失敗丟的 RuntimeError 訊息
+# 關鍵字（配 cookie／llcs／step_1_update）——整站忙碌頁的特徵，重試與退避只會多打。
+# 呼叫端判 is_fuse_message → 熔斷處理。
+FUSE_KEYWORDS = ("step_1_update", "users_session_id", "llcs")
+
+
+def is_fuse_message(err: BaseException) -> bool:
+    """例外訊息含任一前置熔斷關鍵字 → True（呼叫端熔斷）。"""
+    msg = str(err)
+    return any(kw in msg for kw in FUSE_KEYWORDS)
+
+
+# ⑥（2026-11-14）非選單頁／垃圾頁熔斷——解析失敗標記（單一事實源：
+# step2_error 設定處與 ⑥b 計數處都用這組常數，勿再寫字面值）
+MARK_PARSE_FAIL = "fetch/parse 失敗"
+MARK_GARBAGE_PAGE = "疑似垃圾頁"
+PARSE_FAIL_MARKS = frozenset({MARK_PARSE_FAIL, MARK_GARBAGE_PAGE})
+# 連續 N 碼解析失敗判熔斷（獨立常數勿與 FETCH_RETRIES 耦合——語意不同：
+# 這裡是整站忙碌的判斷門檻，FETCH_RETRIES 是單碼瞬時錯誤的重試上限）
+FUSE_PARSE_STREAK = 3
+# ⑥a′ 白名單：items=None 的正常無選項券（state 實測三碼互不相鄰）；
+# 93015 的 items=[] 條目今天是 no-op，保留供日後判定改 not items 時使用
+ITEMS_NONE_WHITELIST = frozenset({"93015", "15596", "16348"})
+
+
+def bump_parse_streak(streak: int, rec: dict) -> int:
+    """⑥b：rec 的 step2_error 命中解析失敗標記 → streak+1；其他錯誤歸零。"""
+    if rec.get("step2_error") in PARSE_FAIL_MARKS:
+        return streak + 1
+    return 0
+
+
+def is_menu_page(html: str) -> bool:
+    """選單版判定：含 ctidss 且夠長（文字版 ~134KB）。
+
+    2026-11-14 由 OrderFlowSession 方法改模組函式（原方法版全 repo 零呼叫者，
+    ⑥a 閘門需要模組層呼叫）。
+    """
+    return len(html) > MENU_MIN_LEN and "ctidss" in html
+
+
 class OrderFlowSession:
     """一個可服務 K 張券的訂餐 session（前置做一次，逐券只 fetch step_2）。"""
 
@@ -130,10 +171,6 @@ class OrderFlowSession:
             self.prepare(code)
             return self._request(ORDER_URL.format(code=code), timeout=timeout)
 
-    def is_menu_page(self, html: str) -> bool:
-        """選單版判定：含 ctidss 且夠長（文字版 ~134KB）。"""
-        return len(html) > MENU_MIN_LEN and "ctidss" in html
-
 
 def fetch_menu_single(code: str, store: str = DEFAULT_STORE) -> str:
     """單碼完整流程（每碼一個新 session，含前置）。給手動/少量用。"""
@@ -208,14 +245,23 @@ def fetch_and_parse(code: str, fetcher=None, retries: int = FETCH_RETRIES,
             sleep(attempt + 1)
             continue
         except Exception as e:  # noqa: BLE001
+            # ③a：前置三關鍵字失敗＝疑似整站忙碌頁——重試只會多打，直拋給呼叫端
+            if isinstance(e, RuntimeError) and is_fuse_message(e):
+                raise
             print(f"  {code}: attempt {attempt + 1}/{retries} {type(e).__name__}: {e}")
             if attempt + 1 >= retries:
                 return None
             sleep(attempt + 1)
             continue
         parsed = parse_menu_html(code, html)
-        if parsed is None:
-            print(f"  {code}: attempt {attempt + 1}/{retries} 解析失敗（空回應/變體），重試")
+        if parsed is None or not is_menu_page(html):
+            # ⑥a 門檻：分三種原因 log（Phase 8 觀測忙碌頁形態用）
+            if not html:
+                print(f"  {code}: attempt {attempt + 1}/{retries} 解析失敗（空回應），重試")
+            elif not is_menu_page(html):
+                print(f"  {code}: attempt {attempt + 1}/{retries} 解析失敗（非選單版/忙碌頁），重試")
+            else:
+                print(f"  {code}: attempt {attempt + 1}/{retries} 解析失敗（變體），重試")
             if attempt + 1 >= retries:
                 return None
             sleep(attempt + 1)
@@ -243,8 +289,12 @@ class BatchFetcher:
             self._roll(code)
         try:
             html = self._session.fetch_menu(code)
-        except Exception:
-            # session 過期/其他錯誤 → 重配一次；若仍錯往上拋（含 429/403 熔斷）
+        except Exception as e:
+            # ①（2026-11-14）：403/429 熔斷不是 session 過期——重配只會再吃一發，
+            # 原樣直拋給呼叫端（11-12/11-13 事故：誤判→_roll 再吃 403→exit 1）
+            if isinstance(e, urllib.error.HTTPError) and is_rate_limited(e):
+                raise
+            # session 過期/其他錯誤 → 重配一次；若仍錯往上拋
             self._roll(code)
             html = self._session.fetch_menu(code)
         self._count += 1
