@@ -1,20 +1,24 @@
-"""probe_20261114_runner_step2.py — runner 端 step2×10 診斷（零 M1 前置）。
+"""probe_20261114_runner_step2.py — runner 端決定性實驗：M1×627→45s→step2×10。
 
-目的：runner IP 上直接走生產 session 鏈打 10 發 step2 menu GET（前置 3 發共用
-session），判「第二層長期懲罰是否仍在」與「403 的真面目」——回應體與 headers
-完整印進 Actions log（生產代碼只留狀態碼，這裡補全）。
+目的：完全重現今晨（11-14 03:26 UTC）失敗場的 step2 前置序列——
+M1×627（生產 probe_batch 同款迴圈：m1_probe＋sleep_scan 節流，含每 50 發
+中場休息）→ ⑦c 45s → step2×10（前 10 個 alive 碼、共用 session、prepare 3 發）。
 
-重現方式＝本地 probe 同款：繼承生產 OrderFlowSession（prepare/fetch_menu 用
-生產方法，payload 順序零改動），MonitoredSession 類別從
-probe_20261114_step2_first_request.py 載入（同一份擷取邏輯）。
+與生產 confirm 的唯一差異＝step2 截斷到 10 碼（今晨觸發點在前幾發，10 碼足以
+觀察）＋不做 coverage/state 寫入、commit、dead 迴圈復活補抓（現狀零請求）。
+M1 逐碼 log 改每 50 發一行（log 可讀性；請求序列與生產逐位一致）。
+M1 若也被 403＝重大發現，停止 M1 但仍走完 step2 段（僅多 13 發，觀察用）。
 
-跑法：由 .github/workflows/diag-step2-probe.yml 於手動 dispatch 時執行
-（checkout 本分支，cwd=repo 根）。
-請求預算：前置 3＋menu 10＝13 發 step2 形態、零 M1（上限 40，容許內部重配）。
+判讀：step2 被擋＝量型實錘（403 回應體/headers 完整印進 log）；全過＝今晨是
+衰減中的計數器，機制更微妙。
+
+跑法：由 .github/workflows/diag-step2-probe.yml 於 push 自動觸發
+（checkout 本分支，cwd=repo 根）。時長估計 ~30-40 分。
 """
 import importlib.util
 import json
 import sys
+import time
 import urllib.error
 from pathlib import Path
 
@@ -24,48 +28,96 @@ PROBE_DIR = Path(__file__).resolve().parent
 REPO = PROBE_DIR.parent.parent
 sys.path.insert(0, str(REPO))
 
+from script.lib.net import is_rate_limited, m1_probe  # noqa: E402
 from script.lib.pacing import sleep_scan  # noqa: E402
 
-# 載入本地 probe 的 MonitoredSession／is_menu_page／CAPTURES（同一份擷取邏輯）
 spec = importlib.util.spec_from_file_location(
     "probe_local", PROBE_DIR / "probe_20261114_step2_first_request.py")
 probe_local = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(probe_local)
 probe_local.REQUEST_CAP = 40  # 3 前置＋10 menu＋容許 fetch_menu 內部重配一次
 
+M1_REST_SECONDS = 45  # ⑦c 生產同款
+
+
+def m1_phase(codes: list[str]) -> dict:
+    """生產 probe_batch 同款迴圈（m1_probe＋sleep_scan，請求序列逐位一致）。"""
+    t0 = time.monotonic()
+    ok = dead = err = blocked = 0
+    m1_blocked = False
+    for i, code in enumerate(codes):
+        try:
+            r = m1_probe(code)
+            if r.get("success") is True:
+                ok += 1
+            elif r.get("success") is False:
+                dead += 1
+            else:
+                err += 1
+        except urllib.error.HTTPError as e:
+            if is_rate_limited(e):
+                blocked += 1
+                m1_blocked = True
+                print(f"ABORT: {code} HTTP {e.code}——M1 也被擋（重大發現，停止 M1 階段）")
+                break
+            err += 1
+        except Exception as e:  # noqa: BLE001
+            err += 1
+            print(f"[M1 {i + 1}/{len(codes)}] {code}: {type(e).__name__}: {str(e)[:80]}")
+        if (i + 1) % 50 == 0 or i + 1 == len(codes):
+            print(f"[M1 {i + 1}/{len(codes)}] t={int(time.monotonic() - t0)}s "
+                  f"alive={ok} dead={dead} err={err}")
+        sleep_scan(i, codes)
+    return {"sent": ok + dead + err + blocked, "alive": ok, "dead": dead,
+            "err": err, "blocked_403": blocked, "elapsed_s": round(time.monotonic() - t0, 1),
+            "m1_blocked": m1_blocked}
+
 
 def main() -> int:
     state = json.loads((REPO / "data" / "scan_state.json").read_text(encoding="utf-8"))
-    alive = sorted(c for c, r in state["codes"].items()
-                   if r.get("status") == "alive")[:10]
-    print("=== runner diag：step2×10、零 M1 前置 ===")
-    print(f"codes={alive}\n")
+    alive_all = sorted(c for c, r in state["codes"].items()
+                       if r.get("status") == "alive")
+    dead_all = sorted(c for c, r in state["codes"].items()
+                      if r.get("status") == "dead")
+    m1_codes = alive_all + dead_all  # 生產同款：probe_batch(alive + dead)
+    step2_codes = alive_all[:10]
+    print("=== runner 決定性實驗：M1×全部 → 45s → step2×10 ===")
+    print(f"M1 對象 {len(m1_codes)} 碼（alive {len(alive_all)}＋dead {len(dead_all)}，"
+          f"生產同款順序）")
+    print(f"step2 對象 {len(step2_codes)} 碼＝{step2_codes}\n")
+
+    m1 = m1_phase(m1_codes)
+    print(f"\nM1 階段摘要：{m1}\n")
+
+    print(f"⑦c 抓詳情前休息 {M1_REST_SECONDS}s（生產同款）…")
+    time.sleep(M1_REST_SECONDS)
+    print("45s 休息完成，開始 step2 段\n")
 
     s = probe_local.MonitoredSession(probe_local.DEFAULT_STORE)
     ok = blocked = other = 0
     try:
-        s.prepare(alive[0])
+        s.prepare(step2_codes[0])
         print("prepare 前置 1-3：OK\n")
     except urllib.error.HTTPError as e:
         print(f"prepare 階段即 HTTP {e.code}——連 step2-form 的 session GET 都被擋\n")
     except Exception as e:  # noqa: BLE001
         print(f"prepare 失敗：{type(e).__name__}: {e}\n")
 
-    for i, code in enumerate(alive):
+    for i, code in enumerate(step2_codes):
         try:
             html = s.fetch_menu(code)
-            print(f"[{i + 1}/10] {code}: 200 len={len(html)} "
+            print(f"[{i + 1}/{len(step2_codes)}] {code}: 200 len={len(html)} "
                   f"is_menu_page={probe_local.is_menu_page(html)}")
             ok += 1
         except urllib.error.HTTPError as e:
-            print(f"[{i + 1}/10] {code}: HTTP {e.code} ←被擋")
+            print(f"[{i + 1}/{len(step2_codes)}] {code}: HTTP {e.code} ←被擋")
             blocked += 1
         except Exception as e:  # noqa: BLE001
-            print(f"[{i + 1}/10] {code}: {type(e).__name__}: {e}")
+            print(f"[{i + 1}/{len(step2_codes)}] {code}: {type(e).__name__}: {e}")
             other += 1
-        sleep_scan(i, alive)
+        sleep_scan(i, step2_codes)
 
-    print(f"\n=== 總結：200×{ok}、被擋×{blocked}、其他錯誤×{other} ===")
+    print(f"\n=== 總結：step2 200×{ok}、被擋×{blocked}、其他錯誤×{other} ===")
     print("\n=== 逐步紀錄 ===")
     for r in s.records:
         mk = r.get("markers") or {}
@@ -82,9 +134,14 @@ def main() -> int:
             "utf-8", errors="replace")
         print(f"--- 回應體前 2000 字 ---\n{body[:2000]}")
 
-    verdict = ("BLOCKED（runner 仍被擋＝第二層長期懲罰與量無關）" if blocked
-               else "PASS（runner 可打 step2＝懲罰已衰解除）" if ok == 10
-               else "MIXED（部分過部分拒——形態見上方逐步紀錄）")
+    if m1["m1_blocked"]:
+        verdict = "M1 即被擋（形態升級——M1 端點也進入被擋）"
+    elif blocked:
+        verdict = "BLOCKED：M1×全部→step2 觸發被擋＝量型實錘（今晨形態重現）"
+    elif ok == len(step2_codes):
+        verdict = "PASS：同形態下 runner 沒事——指向今晨是衰減中的計數器"
+    else:
+        verdict = "MIXED（見逐步紀錄）"
     print(f"\noutcome：{verdict}")
     return 0
 
