@@ -20,6 +20,7 @@ import datetime as dt
 import json
 import random
 import sys
+import time
 import urllib.error
 
 from script.lib.net import is_rate_limited, m1_probe
@@ -175,7 +176,11 @@ def cmd_confirm(args) -> int:
     step2_failures: list[dict] = []
     step2_ok: list[str] = []
     step2_clear: list[str] = []
-    for code in alive:
+    # ⑦c：查活→抓詳情的階段切換休息（事故 log 顯示 M1 末筆→step2 首發僅隔 2.9s，
+    # 滾動窗口假說下的唯一無緩衝接縫；enrich 為獨立 job 不適用）
+    log("查活完成，抓詳情前休息 45s")
+    time.sleep(45)
+    for i, code in enumerate(alive):  # ⑦b：i 供 sleep_scan 節流
         r = by_code.get(code)
         rec = codes[code]
         if r is None:
@@ -192,6 +197,7 @@ def cmd_confirm(args) -> int:
         if r.get("m1_success") is None:
             continue
         d = step2_of(r, fetcher)
+        sleep_scan(i, alive)  # ⑦b：step2 節流（M1/step2 同套參數，比照 probe_batch）
         if d is None:
             # step2 失敗留痕（state + alerts 可見；2026-09-08，不再靜默）
             if r.get("step2_error"):
@@ -226,7 +232,7 @@ def cmd_confirm(args) -> int:
                             "diff": {k: v for k, v in diff.items()}})
             log(f"  {code} 內容更動: {list(diff)}")
 
-    for code in dead:
+    for i, code in enumerate(dead):  # ⑦b：i 供 sleep_scan 節流
         r = by_code.get(code)
         if r is None:
             continue
@@ -240,6 +246,7 @@ def cmd_confirm(args) -> int:
             # 成功覆寫內容欄位；失敗留 step2_error/step2At（隔日 alive 迴圈會重試）。
             # 復活本身已記錄，跨死亡期的內容差異不當「內容更動」alert。
             d = step2_of(r, fetcher)
+            sleep_scan(i, dead)  # ⑦b：revive 分支同套節流
             if d is None:
                 if r.get("step2_error"):
                     rec["step2_error"] = r["step2_error"]
@@ -320,8 +327,10 @@ def cmd_explore(args) -> int:
     if fresh:
         log(f"新活碼 {len(fresh)}，補 step_2")
         fetcher = BatchFetcher()
-        for r in fresh:
+        codes_fresh = [r["code"] for r in fresh]  # ⑦b：rec dict 清單須先轉字串清單（直接傳 sleep_scan 會 KeyError）
+        for i, r in enumerate(fresh):  # ⑦b
             d = step2_of(r, fetcher)
+            sleep_scan(i, codes_fresh)
             if d:
                 r.update(d)
                 step2_ok.append(r["code"])
@@ -362,8 +371,10 @@ def cmd_sample(args) -> int:
     if hits:
         log(f"未知號段命中 {len(hits)}，補 step_2")
         fetcher = BatchFetcher()
-        for r in hits:
+        codes_hits = [r["code"] for r in hits]  # ⑦b：rec dict 清單須先轉字串清單
+        for i, r in enumerate(hits):  # ⑦b
             d = step2_of(r, fetcher)
+            sleep_scan(i, codes_hits)
             if d:
                 r.update(d)
                 step2_ok.append(r["code"])
